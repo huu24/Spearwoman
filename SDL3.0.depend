@@ -1,0 +1,120 @@
+# depslib dependency file v1.0
+1680770674 source:d:\codeblocks\sdl3.0\baseobject.cpp
+	"BaseObject.h"
+
+1680770674 d:\codeblocks\sdl3.0\baseobject.h
+	"CommonFunc.h"
+
+1681701399 d:\codeblocks\sdl3.0\commonfunc.h
+	<vector>
+	<algorithm>
+	<fstream>
+	<iostream>
+	<string>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
+
+1679133661 source:d:\codeblocks\sdl3.0\commonfunc.cpp
+	"CommonFunc.h"
+
+1681744012 source:d:\codeblocks\sdl3.0\main.cpp
+	"CommonFunc.h"
+	"BaseObject.h"
+	"game_map.h"
+	"Player.h"
+	"Skeleton.h"
+
+1681744012 source:d:\codeblocks\sdl3.0\game_map.cpp
+	"game_map.h"
+
+1681744012 d:\codeblocks\sdl3.0\game_map.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1681699908 d:\codeblocks\sdl3.0\player.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"Skeleton.h"
+
+1681700078 source:d:\codeblocks\sdl3.0\player.cpp
+	"Player.h"
+
+1679833251 source:d:\codeblocks\sdl3.0\demon.cpp
+	"Demon.h"
+
+1679833322 d:\codeblocks\sdl3.0\demon.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1681739373 source:d:\codeblocks\sdl3.0\skeleton.cpp
+	"Skeleton.h"
+
+1681739396 d:\codeblocks\sdl3.0\skeleton.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1681030439 source:d:\codeblocks\sdl3.0\boss.cpp
+	"Boss.h"
+
+1681047979 d:\codeblocks\sdl3.0\boss.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1680770674 source:d:\codeblocks\game\spearwoman\baseobject.cpp
+	"BaseObject.h"
+
+1680770674 d:\codeblocks\game\spearwoman\baseobject.h
+	"CommonFunc.h"
+
+1681701399 d:\codeblocks\game\spearwoman\commonfunc.h
+	<vector>
+	<algorithm>
+	<fstream>
+	<iostream>
+	<string>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
+
+1681030439 source:d:\codeblocks\game\spearwoman\boss.cpp
+	"Boss.h"
+
+1681047979 d:\codeblocks\game\spearwoman\boss.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1679133661 source:d:\codeblocks\game\spearwoman\commonfunc.cpp
+	"CommonFunc.h"
+
+1681744012 source:d:\codeblocks\game\spearwoman\game_map.cpp
+	"game_map.h"
+
+1681744012 d:\codeblocks\game\spearwoman\game_map.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1681744012 source:d:\codeblocks\game\spearwoman\main.cpp
+	"CommonFunc.h"
+	"BaseObject.h"
+	"game_map.h"
+	"Player.h"
+	"Skeleton.h"
+
+1681699908 d:\codeblocks\game\spearwoman\player.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"Skeleton.h"
+
+1681739396 d:\codeblocks\game\spearwoman\skeleton.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1681700078 source:d:\codeblocks\game\spearwoman\player.cpp
+	"Player.h"
+
+1681739373 source:d:\codeblocks\game\spearwoman\skeleton.cpp
+	"Skeleton.h"
+
