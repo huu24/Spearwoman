@@ -30,18 +30,18 @@ const int RENDER_DRAW_COLOR = 255;
 #define BLANK_TILE 0
 #define TILE_SIZE 64
 
-#define MAX_MAP_X 400
-#define MAX_MAP_Y 10
+#define MAX_MAP_X 100
+#define MAX_MAP_Y 20
 
 struct Map
 {
-        int start_x_;
-        int start_y_;
+        int current_x_pos;
+        int current_y_pos;
 
         int max_x_;
         int max_y_;
 
-        int tile[MAX_MAP_Y][MAX_MAP_X];
+        int TileType[MAX_MAP_Y][MAX_MAP_X];
         string file_name_;
 
 };

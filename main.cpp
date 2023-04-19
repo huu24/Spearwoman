@@ -86,12 +86,11 @@ int main(int argc, char* argv[])
         }
 
         GameMap game_map;
-        game_map.LoadFileMap("map//map01.dat");
+        game_map.LoadFileMap("map\\map.txt");
         game_map.LoadTiles(g_screen);
 
         Player MyPlayer;
-        MyPlayer.LoadImg("image\\Game\\Spearwoman.png", g_screen);
-//        MyPlayer.LoadImg("image\\Game\\PlayerHP.png", g_screen);
+        MyPlayer.LoadImg("image\\Game\\Spearwoman-export.png", g_screen);
         MyPlayer.set_clips();
 
 //        Boss boss;
@@ -120,15 +119,14 @@ int main(int argc, char* argv[])
 
 
                 Map map_data = game_map.getMap();
-                Threat.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox());
-                Threat.Show(g_screen, MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
-                Threat.RenderHP(g_screen, MyPlayer.Map_x(), MyPlayer.Map_y());
+
 //                boss.Move();
 //                boss.Show(g_screen);
 
-                MyPlayer.SetMapXY(map_data.start_x_, map_data.start_y_);
+                MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
                 MyPlayer.Move(map_data);
                 //MyPlayer.Move(map_data);
+                Threat.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
 
                 game_map.SetMap(map_data);
                 game_map.RenderMap(g_screen);
@@ -136,6 +134,8 @@ int main(int argc, char* argv[])
                 MyPlayer.RenderPlayer(g_screen, Threat.getAttackStatus());
                 MyPlayer.RenderHP(g_screen);
 
+                Threat.Show(g_screen, MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
+                Threat.RenderHP(g_screen, MyPlayer.Map_x(), MyPlayer.Map_y());
 
                 //SDL_Delay(50);
 

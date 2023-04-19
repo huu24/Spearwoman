@@ -11,11 +11,6 @@ public:
         Player();
         ~Player();
 
-        enum WalkType
-        {
-                WALK_RIGHT = 0,
-                WALK_LEFT = 1,
-        };
         bool LoadImg(std::string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect& a, SDL_Rect& b);

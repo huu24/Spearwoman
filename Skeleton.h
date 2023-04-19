@@ -13,7 +13,7 @@ public:
         bool LoadImg(std::string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect a, SDL_Rect b);
-        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox);
+        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y);
         void Show(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
         void RenderHP(SDL_Renderer* des, int map_x, int map_y);
         SDL_Rect GetSkeletonBox() {return SkeletonBox;}
