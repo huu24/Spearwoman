@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />
+		<Unit filename="Bomb.cpp" />
+		<Unit filename="Bomb.h" />
 		<Unit filename="Boss.cpp" />
 		<Unit filename="Boss.h" />
 		<Unit filename="CommonFunc.cpp" />

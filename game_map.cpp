@@ -67,70 +67,34 @@ void GameMap::LoadTiles(SDL_Renderer* screen)
         }
 }
 
-//void GameMap::RenderMap(SDL_Renderer* screen)
-//{
-//int x1 = 0;
-//int x2 = 0;
-//
-//    int y1 = 0;
-//    int y2 = 0;
-//
-//    int map_x = 0;
-//    int map_y = 0;
-//
-//    map_x = game_map_.current_x_pos / TILE_SIZE;
-//    x1 = (game_map_.current_x_pos % TILE_SIZE) * (-1);
-//    x2 = x1 + SCREEN_WIDTH + (x1 == 0 ? 0 : TILE_SIZE);
-//
-//    map_y = game_map_.current_y_pos / TILE_SIZE;
-//    y1 = (game_map_.current_y_pos % TILE_SIZE) * (-1);
-//    y2 = y1 + SCREEN_HEIGHT + (y1 == 0 ? 0 : TILE_SIZE);
-//
-//    for(int i = y1; i < y2; i += TILE_SIZE)
-//    {
-//            map_x = game_map_.current_x_pos / TILE_SIZE;
-//            for(int j = x1; j < x2; j += TILE_SIZE)
-//            {
-//                    int value = game_map_.TileType[map_y][map_x];
-//                    if(value > 0)
-//                    {
-//                            tile_mat[value].SetRect(j, i);
-//                            tile_mat[value].Render(screen);
-//                    }
-//                    map_x++;
-//            }
-//            map_y++;
-//    }
-//}
-
 void GameMap::RenderMap(SDL_Renderer* screen)
 {
-    // tinh vi tri ban dau cua map tren cua so game(o thu may)
-    int map_x = game_map_.current_x_pos / TILE_SIZE;
-    int x1 = (game_map_.current_x_pos % TILE_SIZE) * (-1);
-    int x2 = x1 + SCREEN_WIDTH + (x1 == 0 ? 0 : TILE_SIZE);
-    int map_y = game_map_.current_y_pos / TILE_SIZE;
-    int y1 = (game_map_.current_y_pos % TILE_SIZE) * (-1);
-    int y2 = y1 + SCREEN_HEIGHT + (y1 == 0 ? 0 : TILE_SIZE);
+        // tinh vi tri ban dau cua map tren cua so game(o thu may)
+        int map_x = game_map_.current_x_pos / TILE_SIZE;
+        int x1 = (game_map_.current_x_pos % TILE_SIZE) * (-1);
+        int x2 = x1 + SCREEN_WIDTH + (x1 == 0 ? 0 : TILE_SIZE);
+        int map_y = game_map_.current_y_pos / TILE_SIZE;
+        int y1 = (game_map_.current_y_pos % TILE_SIZE) * (-1);
+        int y2 = y1 + SCREEN_HEIGHT + (y1 == 0 ? 0 : TILE_SIZE);
 
-    // render tung o TileType len cua so game
-    for(int i = y1; i < y2; i += TILE_SIZE)
-    {
-        map_x = game_map_.current_x_pos / TILE_SIZE;
-        for(int j = x1; j < x2; j += TILE_SIZE)
+        // render tung o TileType len cua so game
+        for(int i = y1; i < y2; i += TILE_SIZE)
         {
-            //lay gia tri cua o TileType tai vi tri hien tai tren map
-            int value = game_map_.TileType[map_y][map_x];
+                map_x = game_map_.current_x_pos / TILE_SIZE;
+                for(int j = x1; j < x2; j += TILE_SIZE)
+                {
+                //lay gia tri cua o TileType tai vi tri hien tai tren map
+                int value = game_map_.TileType[map_y][map_x];
 
-            //neu o TileType co gia tri > 0 (tuc la o TileType khong rong)
-            if(value > -1)
-            {
-                //dat vi tri va render len cua so game
-                tile_mat[value].SetRect(j, i);
-                tile_mat[value].Render(screen);
-            }
-            map_x++;
+                //neu o TileType co gia tri > 0 (tuc la o TileType khong rong)
+                if(value > -1)
+                {
+                        //dat vi tri va render len cua so game
+                        tile_mat[value].SetRect(j, i);
+                        tile_mat[value].Render(screen);
+                }
+                map_x++;
+                }
+                map_y++;
         }
-        map_y++;
-    }
 }

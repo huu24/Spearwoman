@@ -14,7 +14,7 @@ public:
         void set_clips();
         bool CheckCollision(SDL_Rect a, SDL_Rect b);
         void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y);
-        void Show(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
+        void Render(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
         void RenderHP(SDL_Renderer* des, int map_x, int map_y);
         SDL_Rect GetSkeletonBox() {return SkeletonBox;}
         SDL_Rect GetSkeletonAttackBox() {return SkeletonAttackBox;}
@@ -27,13 +27,9 @@ private:
         const int TAKEHIT_FRAMES = 3;
         const int DEATH_FRAMES = 4;
         int HP;
-        int cntIdle;
         float VelX, VelY;
         float x_pos, max_x, min_x;
         float y_pos, max_y, min_y;
-
-        int width_frame;
-        int height_frame;
 
         SDL_Rect Idle_clip[4];
         SDL_Rect Walk_clip[4];
@@ -43,6 +39,7 @@ private:
         SDL_Rect HP_clip[4];
 
         Input input_type;
+
         int attack_frame, idle_frame, run_frame, takehit_frame, death_frame;
 
         bool isWalking, isAttacking, isDead, isIdling, isAttacked;

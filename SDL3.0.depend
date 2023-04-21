@@ -62,13 +62,13 @@
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1681810981 source:d:\codeblocks\game\spearwoman\baseobject.cpp
+1681902782 source:d:\codeblocks\game\spearwoman\baseobject.cpp
 	"BaseObject.h"
 
-1681810981 d:\codeblocks\game\spearwoman\baseobject.h
+1682098116 d:\codeblocks\game\spearwoman\baseobject.h
 	"CommonFunc.h"
 
-1681888044 d:\codeblocks\game\spearwoman\commonfunc.h
+1681915170 d:\codeblocks\game\spearwoman\commonfunc.h
 	<vector>
 	<algorithm>
 	<fstream>
@@ -89,32 +89,39 @@
 1679133661 source:d:\codeblocks\game\spearwoman\commonfunc.cpp
 	"CommonFunc.h"
 
-1681890535 source:d:\codeblocks\game\spearwoman\game_map.cpp
+1681902782 source:d:\codeblocks\game\spearwoman\game_map.cpp
 	"game_map.h"
 
 1681889337 d:\codeblocks\game\spearwoman\game_map.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1681890518 source:d:\codeblocks\game\spearwoman\main.cpp
+1682101027 source:d:\codeblocks\game\spearwoman\main.cpp
 	"CommonFunc.h"
 	"BaseObject.h"
 	"game_map.h"
 	"Player.h"
 	"Skeleton.h"
+	"Bomb.h"
 
-1681830294 d:\codeblocks\game\spearwoman\player.h
-	"CommonFunc.h"
-	"BaseObject.h"
-	"Skeleton.h"
-
-1681830133 d:\codeblocks\game\spearwoman\skeleton.h
+1682101137 d:\codeblocks\game\spearwoman\player.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1681889616 source:d:\codeblocks\game\spearwoman\player.cpp
+1682090029 d:\codeblocks\game\spearwoman\skeleton.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1682101225 source:d:\codeblocks\game\spearwoman\player.cpp
 	"Player.h"
 
-1681874967 source:d:\codeblocks\game\spearwoman\skeleton.cpp
+1682098116 source:d:\codeblocks\game\spearwoman\skeleton.cpp
 	"Skeleton.h"
+
+1682101027 source:d:\codeblocks\game\spearwoman\bomb.cpp
+	"Bomb.h"
+
+1682101027 d:\codeblocks\game\spearwoman\bomb.h
+	"BaseObject.h"
+	"CommonFunc.h"
 

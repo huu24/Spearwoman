@@ -49,7 +49,6 @@ struct Map
 struct Input
 {
         bool left, right, up, down,  attack1, attack2, attack3, take_hit, death;
-
 };
 
 #endif // COMMON_FUNCTION_H_

@@ -3,6 +3,7 @@
 #include "game_map.h"
 #include "Player.h"
 #include "Skeleton.h"
+#include "Bomb.h"
 //#include "Boss.h"
 
 BaseObject g_background;
@@ -101,6 +102,10 @@ int main(int argc, char* argv[])
         Threat.LoadImg("image\\Game\\Skeleton.png", g_screen);
         Threat.set_clips();
 
+        Bomb bomb;
+        bomb.LoadImg("image\\Game\\Bomb.png", g_screen);
+        bomb.set_clips();
+
         bool quit = false;
         while(!quit)
         {
@@ -125,19 +130,20 @@ int main(int argc, char* argv[])
 
                 MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
                 MyPlayer.Move(map_data);
-                //MyPlayer.Move(map_data);
                 Threat.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
 
                 game_map.SetMap(map_data);
                 game_map.RenderMap(g_screen);
 
-                MyPlayer.RenderPlayer(g_screen, Threat.getAttackStatus());
+                MyPlayer.RenderPlayer(g_screen, Threat.getAttackStatus(), bomb.getBombStatus());
                 MyPlayer.RenderHP(g_screen);
 
-                Threat.Show(g_screen, MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
+                SDL_Rect a = MyPlayer.GetPlayerBox();
+                bomb.RenderBomb(g_screen, a, MyPlayer.Map_x(), MyPlayer.Map_y());
+
+                Threat.Render(g_screen, MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
                 Threat.RenderHP(g_screen, MyPlayer.Map_x(), MyPlayer.Map_y());
 
-                //SDL_Delay(50);
 
                 SDL_RenderPresent(g_screen);
 

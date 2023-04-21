@@ -37,21 +37,6 @@ void BaseObject::Render(SDL_Renderer* des, SDL_Rect* clip)
         SDL_Rect renderquad = {mBox.x, mBox.y, mBox.w, mBox.h};
         SDL_RenderCopy(des, p_object_, clip, &renderquad);
 }
-void BaseObject::gRender( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
-{
-	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, mBox.w, mBox.h };
-
-	//Set clip rendering dimensions
-	if( clip != NULL )
-	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}
-
-	//Render to screen
-	SDL_RenderCopyEx( g_screen, p_object_, clip, &renderQuad, angle, center, flip );
-}
 
 void BaseObject::Free()
 {

@@ -3,7 +3,7 @@
 
 #include "CommonFunc.h"
 #include "BaseObject.h"
-#include "Skeleton.h"
+
 
 class Player : public BaseObject
 {
@@ -11,13 +11,13 @@ public:
         Player();
         ~Player();
 
-        bool LoadImg(std::string path, SDL_Renderer* screen);
+        bool LoadImg(string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect& a, SDL_Rect& b);
         void Handle(SDL_Event events);
         void Move(Map& map_data);
         void CollisionWithMap(Map& map_data);
-        void RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking);
+        void RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking, bool bomb);
         void RenderHP(SDL_Renderer* des);
         void SetMapXY(const int x, const int y) {map_x = x, map_y = y;}
         void SetCamera(Map& map_data);
@@ -28,11 +28,8 @@ public:
         int Map_x() {return map_x;}
         int Map_y() {return map_y;}
 
-
-
-
 private:
-        const float PlayerSpeed = 0.4;
+        const float PlayerSpeed = 1.0;
         const int IDLE_FRAMES = 8;
         const int WALK_FRAMES = 8;
         const int ATTACK1_FRAMES = 6;
@@ -43,12 +40,7 @@ private:
         int HP;
 
         float VelX, VelY;
-
-        float x_pos;
-        float y_pos;
-
-        int width_frame;
-        int height_frame;
+        float x_pos, y_pos;
 
         int map_x, map_y;
 
@@ -62,15 +54,13 @@ private:
         SDL_Rect HP_clip[6];
 
         Input input_type;
+
         int idle_frame, attack1_frame, attack2_frame, run_frame, takehit_frame, death_frame;
-        bool isAttacking, dead, isAttacked;
+        bool isAttacking, isWalking, dead, isAttacked;
 
         SDL_RendererFlip FlipType;
         SDL_Rect PlayerBox;
         SDL_Rect PlayerAttackBox;
-
 };
-
-
 
 #endif // PLAYER_H

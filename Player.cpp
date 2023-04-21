@@ -4,25 +4,14 @@ Player::Player()
 {
         HP = 5;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
-        VelX = 0;
-        VelY = 0;
+        VelX = VelY = 0;
         x_pos = 0;
         y_pos = 500;
-        width_frame = 0;
-        height_frame = 0;
-        map_x = 0;
-        map_y = 0;
-        input_type.left = false;
-        input_type.right = false;
-        input_type.up = false;
-        input_type.down = false;
-        input_type.attack1 = false;
-        input_type.attack2 = false;
-        input_type.take_hit = false;
-        input_type.death = false;
-        isAttacking = isAttacked = false;
-        dead = false;
+        map_x = map_y = 0;
+        input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
+        = input_type.death = isAttacking  = isWalking = isAttacked = dead = false;
         FlipType = SDL_FLIP_NONE;
+        PlayerAttackBox.w = PlayerAttackBox.h = 0;
 }
 
 Player::~Player()
@@ -33,19 +22,17 @@ Player::~Player()
 bool Player::CheckCollision(SDL_Rect& a, SDL_Rect& b)
 {
         int x, y, u, v;
-        x = std::max(a.x, b.x);
-        y = std::max(a.y, b.y);
-        u = std::min(a.x + a.w, b.x + b.w);
-        v = std::min(a.y + a.h, b.y + b.h);
-        if (x < u && y < v)
-                return true;
+        x = max(a.x, b.x);
+        y = max(a.y, b.y);
+        u = min(a.x + a.w, b.x + b.w);
+        v = min(a.y + a.h, b.y + b.h);
+        if (x < u && y < v) return true;
         return false;
 }
 
-bool Player::LoadImg(std::string path, SDL_Renderer* screen)
+bool Player::LoadImg(string path, SDL_Renderer* screen)
 {
         bool res = BaseObject::LoadImg(path, screen);
-
         return res;
 }
 
@@ -57,8 +44,6 @@ void Player::set_clips()
                 Idle_clip[i] = {x, 0, 320, 480};
                 x += 320;
         }
-        PlayerAttackBox.w = 64;
-        PlayerAttackBox.h = 92;
         x = 0;
         for(int i = 0; i < WALK_FRAMES; i++)
         {
@@ -77,6 +62,8 @@ void Player::set_clips()
                 Attack2_clip[i] = {x, 1440, 800, 480};
                 x += 800;
         }
+        PlayerAttackBox.w = 160;
+        PlayerAttackBox.h = 92;
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
@@ -128,7 +115,7 @@ void Player::Handle(SDL_Event events)
                         break;
                 }
         }
-        else if(events.type == SDL_KEYUP)
+        else if(events.type == SDL_KEYUP && events.key.repeat == 0)
         {
                 switch(events.key.keysym.sym)
                 {
@@ -152,24 +139,42 @@ void Player::Move(Map& map_data)
         if(input_type.left)
         {
                 VelX = -PlayerSpeed;
+                isWalking = true;
         }
         else if(input_type.right)
         {
                 VelX = PlayerSpeed;
+                isWalking = true;
         }
-        else VelX = 0;
+        else
+        {
+                VelX = 0;
+                isWalking = false;
+        }
         if(input_type.up)
         {
                 VelY = -PlayerSpeed;
+                isWalking = true;
         }
         else if(input_type.down)
         {
                 VelY = PlayerSpeed;
+                isWalking = true;
         }
-        else VelY = 0;
+        else
+        {
+                VelY = 0;
+                isWalking = false;
+        }
 
         x_pos += VelX;
         y_pos += VelY;
+
+        PlayerBox.x = x_pos;
+        PlayerBox.y = y_pos;
+
+        PlayerAttackBox.x = x_pos;
+        PlayerAttackBox.y = y_pos;
 
         CollisionWithMap(map_data);
         SetCamera(map_data);
@@ -177,20 +182,18 @@ void Player::Move(Map& map_data)
 
 void Player::CollisionWithMap(Map& map_data)
 {
-//
-////        y1x1..........y1x2
-////        .
-////        .
-////        y2x1..........y2x2
-int x1 = 0, x2 = 0;
+        int x1 = 0, x2 = 0;
         int y1 = 0, y2 = 0;
 
         //check horizontal
-        x1 = (x_pos + VelX) / TILE_SIZE;
-        x2 = (x_pos + VelX + PlayerBox.w - 1) / TILE_SIZE;
 
-        y1 = y_pos / TILE_SIZE;
-        y2 = (y_pos + PlayerBox.h - 1) / TILE_SIZE;
+        int min_height = min(TILE_SIZE, PlayerBox.h);
+
+        x1 = (x_pos) / TILE_SIZE;
+        x2 = (x_pos + PlayerBox.w) / TILE_SIZE;
+
+        y1 = (y_pos + PlayerBox.h - min_height) / TILE_SIZE;
+        y2 = (y_pos + PlayerBox.h) / TILE_SIZE;
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
         {
@@ -214,8 +217,8 @@ int x1 = 0, x2 = 0;
         x1 = x_pos / TILE_SIZE;
         x2 = (x_pos + PlayerBox.w) / TILE_SIZE;
 
-        y1 = (y_pos + VelY) / TILE_SIZE;
-        y2 = (y_pos + VelY + PlayerBox.h - 1) / TILE_SIZE;
+        y1 = (y_pos + PlayerBox.h - min_height) / TILE_SIZE;
+        y2 = (y_pos + PlayerBox.h) / TILE_SIZE;
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
         {
@@ -269,24 +272,18 @@ void Player::SetCamera(Map& map_data)
         map_y = map_data.current_y_pos;
 }
 
-void Player::RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking)
+void Player::RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking, bool bomb)
 {
-        if(SkeletonIsAttacking)
+        if(SkeletonIsAttacking || bomb)
         {
                 isAttacked = true;
                 --HP;
         }
 
-        PlayerBox.x = x_pos;
-        PlayerBox.y = y_pos;
-
-        PlayerAttackBox.x = x_pos;
-        PlayerAttackBox.y = y_pos;
-
         SDL_Rect* current_clip;
         int current_frame;
 
-        if(input_type.left || input_type.right || input_type.up || input_type.down )
+        if(isWalking)
         {
                 current_frame = WALK_FRAMES;
                 current_clip = &Walk_clip[run_frame / 30];

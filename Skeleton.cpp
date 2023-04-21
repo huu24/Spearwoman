@@ -10,11 +10,9 @@ Demon::Demon()
         min_y = y_pos - 200;
         VelX = 0, VelY = 0;
         idle_frame = run_frame = attack_frame = takehit_frame = death_frame = 0;
-        width_frame = 0;
-        height_frame = 0;
         input_type.attack1 = 0;
         FlipType = SDL_FLIP_HORIZONTAL;
-        isWalking = isAttacking = isDead = false;
+        isWalking = isAttacking = isDead = isAttacked = false;
         isIdling = true;
 }
 Demon::~Demon()
@@ -22,7 +20,7 @@ Demon::~Demon()
 
 }
 
-bool Demon::LoadImg(std::string path, SDL_Renderer* screen)
+bool Demon::LoadImg(string path, SDL_Renderer* screen)
 {
         bool res = BaseObject::LoadImg(path, screen);
         return res;
@@ -36,6 +34,8 @@ void Demon::set_clips()
                 Idle_clip[i] = {x, 0 , 48, 51};
                 x += 48;
         }
+        SkeletonBox.h = 51;
+        SkeletonBox.w = 48;
         x = 0;
         for(int i = 0; i < WALK_FRAMES; i++)
         {
@@ -74,10 +74,10 @@ void Demon::set_clips()
 bool Demon::CheckCollision(SDL_Rect a, SDL_Rect b)
 {
         int x, y, u, v;
-        x = std::max(a.x, b.x);
-        y = std::max(a.y, b.y);
-        u = std::min(a.x + a.w, b.x + b.w);
-        v = std::min(a.y + a.h, b.y + b.h);
+        x = max(a.x, b.x);
+        y = max(a.y, b.y);
+        u = min(a.x + a.w, b.x + b.w);
+        v = min(a.y + a.h, b.y + b.h);
         if (x < u && y < v)
                 return true;
         return false;
@@ -118,6 +118,7 @@ void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int ma
                 if(CheckCollision(SkeletonBox, PlayerBox))
                 {
                         VelX = 0;
+                        isWalking = false;
                 }
 
         }
@@ -131,7 +132,7 @@ void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int ma
         }
         else
         {
-                if(SkeletonBox.y  - 36 < PlayerBox.y) VelY = DemonSpeed;
+                if(SkeletonBox.y  + SkeletonBox.h < PlayerBox.y + PlayerBox.h) VelY = DemonSpeed;
                 else VelY = - DemonSpeed;
 
         }
@@ -151,13 +152,13 @@ void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int ma
         }
 }
 
-void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y)
+void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y)
 {
         SDL_Rect* current_clip;
         int current_frame;
 
-        SkeletonBox.x = x_pos - map_x;
-        SkeletonBox.y = y_pos - map_y;
+        SkeletonBox.x = x_pos;
+        SkeletonBox.y = y_pos;
 
         SkeletonAttackBox.x = x_pos;
         SkeletonAttackBox.y = y_pos;
@@ -171,7 +172,7 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
                 if(death_frame >= current_frame * 40) death_frame = current_frame * 40;
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
-                SDL_Rect RenderQuad = {SkeletonBox.x, SkeletonBox.y,SkeletonBox.w ,SkeletonBox.h };
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y,SkeletonBox.w ,SkeletonBox.h };
                 SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(CheckCollision(SkeletonBox, PlayerAttackBox))
@@ -194,7 +195,7 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
                         if(HP <= 0) HP = 0;
                         SkeletonBox.w = current_clip->w;
                         SkeletonBox.h = current_clip->h;
-                        SDL_Rect RenderQuad = {SkeletonBox.x, SkeletonBox.y - 4,SkeletonBox.w ,SkeletonBox.h };
+                        SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 4,SkeletonBox.w ,SkeletonBox.h };
                         SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                 }
                 else if(CheckCollision(SkeletonAttackBox, PlayerBox))
@@ -207,7 +208,7 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
                                 if(idle_frame >= current_frame * 40) idle_frame = 0;
                                 SkeletonBox.w = current_clip->w;
                                 SkeletonBox.h = current_clip->h;
-                                SDL_Rect RenderQuad = {SkeletonBox.x, SkeletonBox.y, SkeletonBox.w ,SkeletonBox.h };
+                                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w ,SkeletonBox.h };
                                 SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                         }
                         else
@@ -226,12 +227,12 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
 
                                 if(FlipType == SDL_FLIP_HORIZONTAL)
                                 {
-                                        SDL_Rect RenderQuad = {SkeletonBox.x - 38, SkeletonBox.y - 6, SkeletonBox.w, SkeletonBox.h };
+                                        SDL_Rect RenderQuad = {SkeletonBox.x - map_x - 38, SkeletonBox.y - map_y - 6, SkeletonBox.w, SkeletonBox.h };
                                         SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                                 }
                                 else
                                 {
-                                        SDL_Rect RenderQuad = {SkeletonBox.x - 7, SkeletonBox.y, SkeletonBox.w, SkeletonBox.h };
+                                        SDL_Rect RenderQuad = {SkeletonBox.x - map_x - 7, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
                                         SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                                 }
                         }
@@ -244,7 +245,7 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
                         if(idle_frame >= current_frame * 40) idle_frame = 0;
                         SkeletonBox.w = current_clip->w;
                         SkeletonBox.h = current_clip->h;
-                        SDL_Rect RenderQuad = {SkeletonBox.x, SkeletonBox.y, SkeletonBox.w, SkeletonBox.h };
+                        SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
                         SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                 }
         }
@@ -256,7 +257,7 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
                 if(run_frame >= current_frame * 60) run_frame = 0;
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
-                SDL_Rect RenderQuad = {SkeletonBox.x, SkeletonBox.y, SkeletonBox.w, SkeletonBox.h };
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
                 SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else
@@ -267,7 +268,7 @@ void Demon::Show(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox
                 if(idle_frame >= current_frame * 40) idle_frame = 0;
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
-                SDL_Rect RenderQuad = {SkeletonBox.x, SkeletonBox.y, SkeletonBox.w, SkeletonBox.h };
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
                 SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
 }
@@ -277,7 +278,7 @@ void Demon::RenderHP(SDL_Renderer* des, int map_x, int map_y)
         if(!isDead)
         {
                 SDL_Rect* current_clip = &HP_clip[HP];
-                SDL_Rect renderQuad = {SkeletonBox.x, SkeletonBox.y - 14, current_clip->w, current_clip->h};
+                SDL_Rect renderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 14, current_clip->w, current_clip->h};
                 SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }
 }

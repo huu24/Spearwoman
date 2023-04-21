@@ -13,7 +13,7 @@ public:
         SDL_Rect GetRect() const {return mBox;}
         SDL_Texture* GetObject() const {return p_object_;}
 
-        virtual bool LoadImg(std::string path, SDL_Renderer* screen);
+        virtual bool LoadImg(string path, SDL_Renderer* screen);
         void Render(SDL_Renderer* des, SDL_Rect* clip = NULL);
         void gRender(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip);
         void Free();
