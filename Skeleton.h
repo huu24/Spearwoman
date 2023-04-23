@@ -7,13 +7,14 @@
 class Demon : public BaseObject
 {
 public:
-        Demon();
+        Demon(float x, float y);
         ~Demon();
 
         bool LoadImg(std::string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect a, SDL_Rect b);
-        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y);
+        void CollisionWithMap(Map& map_data);
+        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data);
         void Render(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
         void RenderHP(SDL_Renderer* des, int map_x, int map_y);
         SDL_Rect GetSkeletonBox() {return SkeletonBox;}
@@ -42,11 +43,27 @@ private:
 
         int attack_frame, idle_frame, run_frame, takehit_frame, death_frame;
 
-        bool isWalking, isAttacking, isDead, isIdling, isAttacked;
+        bool isWalking, isAttacking, isDead, isIdling, isAttacked, attack;
 
         SDL_RendererFlip FlipType;
         SDL_Rect SkeletonBox;
         SDL_Rect SkeletonAttackBox;
+};
+
+class SkeletonArmy
+{
+public:
+        SkeletonArmy();
+        ~SkeletonArmy();
+
+        bool LoadImg(std::string path, SDL_Renderer* screen);
+        void set_clips();
+        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data);
+        void Render(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
+        void RenderHP(SDL_Renderer* des, int map_x, int map_y);
+        bool getAttackStatus();
+private:
+        vector<Demon> skeleton;
 };
 
 #endif // DEMON_H

@@ -62,8 +62,8 @@ void Player::set_clips()
                 Attack2_clip[i] = {x, 1440, 800, 480};
                 x += 800;
         }
-        PlayerAttackBox.w = 160;
-        PlayerAttackBox.h = 92;
+        PlayerAttackBox.w = 0;
+        PlayerAttackBox.h = 0;
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
@@ -136,36 +136,32 @@ void Player::Handle(SDL_Event events)
 }
 void Player::Move(Map& map_data)
 {
+        isWalking = true;
         if(input_type.left)
         {
                 VelX = -PlayerSpeed;
-                isWalking = true;
         }
         else if(input_type.right)
         {
                 VelX = PlayerSpeed;
-                isWalking = true;
         }
         else
         {
                 VelX = 0;
-                isWalking = false;
         }
         if(input_type.up)
         {
                 VelY = -PlayerSpeed;
-                isWalking = true;
         }
         else if(input_type.down)
         {
                 VelY = PlayerSpeed;
-                isWalking = true;
         }
         else
         {
                 VelY = 0;
-                isWalking = false;
         }
+        if(VelX  == 0 && VelY == 0) isWalking = false;
 
         x_pos += VelX;
         y_pos += VelY;
@@ -386,8 +382,9 @@ void Player::RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking, bool bomb
                 SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
-        else if(HP == 0)
+        else if(HP <= 0)
         {
+                isAttacked = false;
                 dead = true;
                 current_frame = DEATH_FRAMES;
                 current_clip = &Death_clip[death_frame / 30];

@@ -90,6 +90,8 @@ int main(int argc, char* argv[])
         game_map.LoadFileMap("map\\map.txt");
         game_map.LoadTiles(g_screen);
 
+        Map map_data = game_map.getMap();
+
         Player MyPlayer;
         MyPlayer.LoadImg("image\\Game\\Spearwoman-export.png", g_screen);
         MyPlayer.set_clips();
@@ -98,11 +100,12 @@ int main(int argc, char* argv[])
 //        boss.LoadImg("image\\Game\\Boss-export.png", g_screen);
 //        boss.set_clips();
 
-        Demon Threat;
-        Threat.LoadImg("image\\Game\\Skeleton.png", g_screen);
-        Threat.set_clips();
+        SkeletonArmy skeleton;
 
-        Bomb bomb;
+        skeleton.LoadImg("image\\Game\\Skeleton.png", g_screen);
+        skeleton.set_clips();
+
+        BombList bomb;
         bomb.LoadImg("image\\Game\\Bomb.png", g_screen);
         bomb.set_clips();
 
@@ -122,27 +125,24 @@ int main(int argc, char* argv[])
 
                 g_background.Render(g_screen, NULL);
 
-
-                Map map_data = game_map.getMap();
-
 //                boss.Move();
 //                boss.Show(g_screen);
 
                 MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
                 MyPlayer.Move(map_data);
-                Threat.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
+                skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y(), map_data);
 
                 game_map.SetMap(map_data);
                 game_map.RenderMap(g_screen);
 
-                MyPlayer.RenderPlayer(g_screen, Threat.getAttackStatus(), bomb.getBombStatus());
+                MyPlayer.RenderPlayer(g_screen, skeleton.getAttackStatus(), bomb.getBombStatus());
                 MyPlayer.RenderHP(g_screen);
 
                 SDL_Rect a = MyPlayer.GetPlayerBox();
                 bomb.RenderBomb(g_screen, a, MyPlayer.Map_x(), MyPlayer.Map_y());
 
-                Threat.Render(g_screen, MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
-                Threat.RenderHP(g_screen, MyPlayer.Map_x(), MyPlayer.Map_y());
+                skeleton.Render(g_screen, a, MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
+                skeleton.RenderHP(g_screen, MyPlayer.Map_x(), MyPlayer.Map_y());
 
 
                 SDL_RenderPresent(g_screen);

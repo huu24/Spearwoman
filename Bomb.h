@@ -7,7 +7,7 @@
 class Bomb : public BaseObject
 {
 public:
-        Bomb();
+        Bomb(int x, int y);
         ~Bomb();
         bool LoadImg(string path, SDL_Renderer* screen);
         void set_clips();
@@ -15,12 +15,28 @@ public:
         void RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int map_y);
         bool getBombStatus() {return bomb;}
 private:
-        float bomb_x, bomb_y;
+        int bomb_x, bomb_y;
         const int BOMB_FRAMES = 14;
         int bomb_frame;
         SDL_Rect Bomb_clip[14];
         SDL_Rect BombBox;
         bool bomb;
+};
+
+class BombList
+{
+public:
+        BombList();
+        ~BombList();
+
+        bool LoadImg(string path, SDL_Renderer* screen);
+        void set_clips();
+        void RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int map_y);
+        bool getBombStatus();
+
+private:
+        const int TOTAL_BOMB = 50;
+        vector<Bomb> bomblist;
 };
 
 #endif // BOMB_H

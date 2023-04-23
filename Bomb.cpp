@@ -1,9 +1,9 @@
 #include "Bomb.h"
 
-Bomb::Bomb()
+Bomb::Bomb(int x, int y)
 {
-        bomb_x = 200;
-        bomb_y = 200;
+        bomb_x = x;
+        bomb_y = y;
         bomb_frame = 0;
         bomb = false;
 }
@@ -59,8 +59,54 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int m
                 if(bomb_frame == 1) bomb = true;
                 else bomb = false;
                 if(bomb_frame >= BOMB_FRAMES * 30)
-                        bomb_frame = BOMB_FRAMES * 30;
+                        bomb_frame = 0;
                 SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w * 2, Bomb_clip->h * 2};
                 SDL_RenderCopyEx(screen, p_object_, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }
+}
+
+BombList::BombList()
+{
+        srand(time(NULL));
+        int max_num_x = MAX_MAP_X * TILE_SIZE, max_num_y = MAX_MAP_Y * TILE_SIZE;
+        for(int i = 0; i < TOTAL_BOMB; i++)
+        {
+                int bomb_x = rand() % max_num_x;
+                int bomb_y = rand() % max_num_y;
+                bomblist.push_back(Bomb(bomb_x, bomb_y));
+        }
+}
+BombList::~BombList()
+{
+
+}
+
+bool BombList::LoadImg(string path, SDL_Renderer* screen)
+{
+        for(int i = 0; i < bomblist.size(); i++)
+        {
+                bomblist[i].LoadImg(path, screen);
+        }
+}
+void BombList::set_clips()
+{
+        for(int i = 0; i < bomblist.size(); i++)
+        {
+                bomblist[i].set_clips();
+        }
+}
+void BombList::RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int map_y)
+{
+        for(int i = 0; i < bomblist.size(); i++)
+        {
+                bomblist[i].RenderBomb(screen, PlayerBox, map_x, map_y);
+        }
+}
+bool BombList::getBombStatus()
+{
+        for(int i = 0; i < bomblist.size(); i++)
+        {
+                if(bomblist[i].getBombStatus()) return true;
+        }
+        return false;
 }
