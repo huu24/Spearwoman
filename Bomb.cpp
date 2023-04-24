@@ -5,7 +5,7 @@ Bomb::Bomb(int x, int y)
         bomb_x = x;
         bomb_y = y;
         bomb_frame = 0;
-        bomb = false;
+        bomb = collide = false;
 }
 
 Bomb::~Bomb()
@@ -54,12 +54,21 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int m
         tmp.h = 5;
         if(CheckCollision(BombBox, tmp))
         {
-                SDL_Rect* current_clip = &Bomb_clip[bomb_frame / 30];
+                collide = true;
+        }
+        if(collide)
+        {
+                SDL_Rect* current_clip = &Bomb_clip[bomb_frame / 60];
                 bomb_frame++;
-                if(bomb_frame == 1) bomb = true;
+                if(CheckCollision(PlayerBox, BombBox) && bomb_frame == 3 * 60)
+                {
+                        bomb = true;
+                }
                 else bomb = false;
-                if(bomb_frame >= BOMB_FRAMES * 30)
-                        bomb_frame = 0;
+                if(bomb_frame >= BOMB_FRAMES * 60)
+                {
+                        collide = false;
+                }
                 SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w * 2, Bomb_clip->h * 2};
                 SDL_RenderCopyEx(screen, p_object_, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }

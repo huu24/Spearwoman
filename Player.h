@@ -29,7 +29,7 @@ public:
         int Map_y() {return map_y;}
 
 private:
-        const float PlayerSpeed = 1.0;
+        const float PlayerSpeed = 3;
         const int IDLE_FRAMES = 8;
         const int WALK_FRAMES = 8;
         const int ATTACK1_FRAMES = 6;

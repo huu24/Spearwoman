@@ -20,7 +20,7 @@ private:
         int bomb_frame;
         SDL_Rect Bomb_clip[14];
         SDL_Rect BombBox;
-        bool bomb;
+        bool bomb, collide;
 };
 
 class BombList

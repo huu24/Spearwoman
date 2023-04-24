@@ -275,24 +275,41 @@ void Player::RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking, bool bomb
                 isAttacked = true;
                 --HP;
         }
+        if(HP <= 0) dead = true;
 
         SDL_Rect* current_clip;
         int current_frame;
 
-        if(isWalking)
+        if(isAttacked)
         {
-                current_frame = WALK_FRAMES;
-                current_clip = &Walk_clip[run_frame / 30];
+                isWalking = false;
+                current_frame = TAKEHIT_FRAMES;
+                current_clip = &Takehit_clip[takehit_frame / 30];
 
                 PlayerBox.w = current_clip->w / 5;
                 PlayerBox.h = current_clip->h / 5;
 
-                run_frame++;
-                if(run_frame >= current_frame * 30) run_frame = 0;
-
+                takehit_frame++;
+                if(takehit_frame >= current_frame * 30)
+                {
+                        takehit_frame = 0;
+                        isAttacked = false;
+                }
                 SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, FlipType);
+        }
+        else if(dead)
+        {
+                current_frame = DEATH_FRAMES;
+                current_clip = &Death_clip[death_frame / 30];
 
+                PlayerBox.w = current_clip->w / 5;
+                PlayerBox.h = current_clip->h / 5;
+
+                death_frame++;
+                if(death_frame >= current_frame * 30) death_frame = (current_frame - 1) * 60;
+                SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
+                SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
         else if(input_type.attack1)
         {
@@ -365,37 +382,20 @@ void Player::RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking, bool bomb
                         SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, FlipType);
                 }
         }
-        else if(isAttacked)
+        else if(isWalking)
         {
-                current_frame = TAKEHIT_FRAMES;
-                current_clip = &Takehit_clip[takehit_frame / 30];
+                current_frame = WALK_FRAMES;
+                current_clip = &Walk_clip[run_frame / 30];
 
                 PlayerBox.w = current_clip->w / 5;
                 PlayerBox.h = current_clip->h / 5;
 
-                takehit_frame++;
-                if(takehit_frame >= current_frame * 30)
-                {
-                        takehit_frame = 0;
-                        isAttacked = false;
-                }
+                run_frame++;
+                if(run_frame >= current_frame * 30) run_frame = 0;
+
                 SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, FlipType);
-        }
-        else if(HP <= 0)
-        {
-                isAttacked = false;
-                dead = true;
-                current_frame = DEATH_FRAMES;
-                current_clip = &Death_clip[death_frame / 30];
 
-                PlayerBox.w = current_clip->w / 5;
-                PlayerBox.h = current_clip->h / 5;
-
-                death_frame++;
-                if(death_frame >= current_frame * 30) death_frame = (current_frame - 1) * 60;
-                SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
-                SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
         else
         {
