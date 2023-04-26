@@ -6,7 +6,9 @@
 #include "Bomb.h"
 //#include "Boss.h"
 
-BaseObject g_background;
+BaseObject SkeletonTexture;
+BaseObject BombTexture;
+BaseObject PlayerTexture;
 
 bool init()
 {
@@ -52,17 +54,32 @@ bool init()
         return success;
 }
 
-bool LoadBackground()
+bool LoadImage()
 {
-        bool res = g_background.LoadImg("image\\game\\Nebula Blue.png", g_screen);
+        bool res = SkeletonTexture.LoadImg("image\\game\\Skeleton.png", g_screen);
         if(res == false)
+        {
+                cout << "can not load Skeleton image!\n";
                 return false;
+        }
+        bool res1 = BombTexture.LoadImg("image\\game\\Bomb.png", g_screen);
+        if(res1 == false)
+        {
+                cout << "can not load Bomb image!\n";
+                return false;
+        }
+        bool res2 = PlayerTexture.LoadImg("image\\game\\SpearWoman-export.png", g_screen);
+        if(res2 == false)
+        {
+                cout << "can not load Player image!\n";
+                return false;
+        }
         return true;
 }
 
 void close()
 {
-        g_background.Free();
+        SkeletonTexture.Free();
 
         SDL_DestroyRenderer(g_screen);
         g_screen = NULL;
@@ -81,7 +98,7 @@ int main(int argc, char* argv[])
                 return -1;
         }
 
-        if(LoadBackground() == false)
+        if(LoadImage() == false)
         {
                 return -1;
         }
@@ -93,7 +110,6 @@ int main(int argc, char* argv[])
         Map map_data = game_map.getMap();
 
         Player MyPlayer;
-        MyPlayer.LoadImg("image\\Game\\Spearwoman-export.png", g_screen);
         MyPlayer.set_clips();
 
 //        Boss boss;
@@ -101,12 +117,9 @@ int main(int argc, char* argv[])
 //        boss.set_clips();
 
         SkeletonArmy skeleton;
-
-        skeleton.LoadImg("image\\Game\\Skeleton.png", g_screen);
         skeleton.set_clips();
 
         BombList bomb;
-        bomb.LoadImg("image\\Game\\Bomb.png", g_screen);
         bomb.set_clips();
 
         bool quit = false;
@@ -123,27 +136,23 @@ int main(int argc, char* argv[])
                 SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
                 SDL_RenderClear(g_screen);
 
-                g_background.Render(g_screen, NULL);
-
 //                boss.Move();
 //                boss.Show(g_screen);
 
                 MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
                 MyPlayer.Move(map_data);
-                skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y(), map_data);
+                skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
 
                 game_map.SetMap(map_data);
                 game_map.RenderMap(g_screen);
 
-                MyPlayer.RenderPlayer(g_screen, skeleton.getAttackStatus(), bomb.getBombStatus());
-                MyPlayer.RenderHP(g_screen);
+                MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus());
+                MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
 
-                SDL_Rect a = MyPlayer.GetPlayerBox();
-                bomb.RenderBomb(g_screen, a, MyPlayer.Map_x(), MyPlayer.Map_y());
+                bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
 
-                skeleton.Render(g_screen, a, MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
+                skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
                 skeleton.RenderHP(g_screen, MyPlayer.Map_x(), MyPlayer.Map_y());
-
 
                 SDL_RenderPresent(g_screen);
 

@@ -11,14 +11,13 @@ public:
         Player();
         ~Player();
 
-        bool LoadImg(string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect& a, SDL_Rect& b);
         void Handle(SDL_Event events);
         void Move(Map& map_data);
         void CollisionWithMap(Map& map_data);
-        void RenderPlayer(SDL_Renderer* des, bool SkeletonIsAttacking, bool bomb);
-        void RenderHP(SDL_Renderer* des);
+        void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb);
+        void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
         void SetMapXY(const int x, const int y) {map_x = x, map_y = y;}
         void SetCamera(Map& map_data);
         SDL_Rect GetPlayerBox() {return PlayerBox;}
@@ -29,7 +28,7 @@ public:
         int Map_y() {return map_y;}
 
 private:
-        const float PlayerSpeed = 3;
+        const float PlayerSpeed = 5;
         const int IDLE_FRAMES = 8;
         const int WALK_FRAMES = 8;
         const int ATTACK1_FRAMES = 6;
@@ -37,7 +36,7 @@ private:
         const int ATTACK3_FRAMES = 5;
         const int TAKEHIT_FRAMES = 4;
         const int DEATH_FRAMES = 8;
-        int HP;
+        int HP, ENERGY;
 
         float VelX, VelY;
         float x_pos, y_pos;
@@ -52,6 +51,7 @@ private:
         SDL_Rect Takehit_clip[4];
         SDL_Rect Death_clip[8];
         SDL_Rect HP_clip[6];
+        SDL_Rect Energy_clip[4];
 
         Input input_type;
 

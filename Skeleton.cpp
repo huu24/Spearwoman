@@ -4,10 +4,10 @@ Demon::Demon(float x, float y)
 {
         HP = 3;
         x_pos = x, y_pos = y;
-        max_x = x_pos + 200;
-        min_x = x_pos - 200;
-        max_y = y_pos + 200;
-        min_y = y_pos - 200;
+        max_x = x_pos + 300;
+        min_x = x_pos - 300;
+        max_y = y_pos + 300;
+        min_y = y_pos - 300;
         VelX = 0, VelY = 0;
         idle_frame = run_frame = attack_frame = takehit_frame = death_frame = 0;
         input_type.attack1 = 0;
@@ -18,12 +18,6 @@ Demon::Demon(float x, float y)
 Demon::~Demon()
 {
 
-}
-
-bool Demon::LoadImg(string path, SDL_Renderer* screen)
-{
-        bool res = BaseObject::LoadImg(path, screen);
-        return res;
 }
 
 void Demon::set_clips()
@@ -48,8 +42,6 @@ void Demon::set_clips()
                 Attack_clip[i] = {x, 102, 96, 57};
                 x += 96;
         }
-        SkeletonAttackBox.w = 96;
-        SkeletonAttackBox.h = 57;
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
@@ -100,9 +92,6 @@ void Demon::CollisionWithMap(Map& map_data)
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
         {
-                //        x1y1------x2y1
-                //
-                //        x1y2------x2y2
                 if(VelX > 0)
                 {
                         if(map_data.TileType[y1][x2] >= 4 || map_data.TileType[y2][x2] >= 4)
@@ -163,9 +152,24 @@ void Demon::CollisionWithMap(Map& map_data)
         }
 }
 
-void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data)
+void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack)
 {
-        if(isDead || isAttacked || isAttacking || PlayerBox.x <= min_x || PlayerBox.x >= max_x || PlayerBox.y >= max_y || PlayerBox.y <= min_y)
+        if(PlayerIsAttack)
+        {
+                if(CheckCollision(SkeletonBox, PlayerAttackBox))
+                {
+                        --HP;
+                        isAttacked = true;
+                }
+        }
+        else
+        {
+                if(!PlayerIsDead && CheckCollision(SkeletonBox, PlayerBox))
+                {
+                        attack = true;
+                }
+        }
+        if(isDead || isAttacked || attack || PlayerBox.x <= min_x || PlayerBox.x >= max_x || PlayerBox.y >= max_y || PlayerBox.y <= min_y)
         {
                 isWalking = false;
                 return;
@@ -235,23 +239,8 @@ void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int ma
         y_pos += VelY;
 }
 
-void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y)
+void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y)
 {
-        if(PlayerIsAttack)
-        {
-                if(CheckCollision(SkeletonBox, PlayerBox))
-                {
-                        --HP;
-                        isAttacked = true;
-                }
-        }
-        else
-        {
-                if(!PlayerIsDead && CheckCollision(SkeletonBox, PlayerBox))
-                {
-                        attack = true;
-                }
-        }
         if(HP <= 0) isDead = true;
 
         SDL_Rect* current_clip;
@@ -272,7 +261,7 @@ void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackB
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y,SkeletonBox.w ,SkeletonBox.h };
-                SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
+                SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(isAttacked)
         {
@@ -288,7 +277,7 @@ void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackB
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 4,SkeletonBox.w ,SkeletonBox.h };
-                SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
+                SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(attack)
         {
@@ -302,19 +291,13 @@ void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackB
                         attack_frame = 0;
                         attack = false;
                 }
-                SkeletonBox.w = current_clip->w;
-                SkeletonBox.h = current_clip->h;
+                SkeletonAttackBox.x = x_pos + ((FlipType == SDL_FLIP_NONE) ? -7 : -38);
+                SkeletonAttackBox.y = y_pos + ((FlipType == SDL_FLIP_NONE) ? 0 : -7);
+                SkeletonAttackBox.w = current_clip->w;
+                SkeletonAttackBox.h = current_clip->h;
 
-                if(FlipType == SDL_FLIP_HORIZONTAL)
-                {
-                        SDL_Rect RenderQuad = {SkeletonBox.x - map_x - 38, SkeletonBox.y - map_y - 6, SkeletonBox.w, SkeletonBox.h };
-                        SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-                }
-                else
-                {
-                        SDL_Rect RenderQuad = {SkeletonBox.x - map_x - 7, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
-                        SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-                }
+                SDL_Rect RenderQuad = {SkeletonAttackBox.x - map_x, SkeletonAttackBox.y - map_y, SkeletonAttackBox.w, SkeletonAttackBox.h };
+                SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(isWalking)
         {
@@ -325,7 +308,7 @@ void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackB
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
-                SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
+                SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else
         {
@@ -336,17 +319,17 @@ void Demon::Render(SDL_Renderer* des, SDL_Rect PlayerBox, SDL_Rect PlayerAttackB
                 SkeletonBox.w = current_clip->w;
                 SkeletonBox.h = current_clip->h;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
-                SDL_RenderCopyEx(des, p_object_, current_clip, &RenderQuad, 0.0, NULL, FlipType);
+                SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
 }
 
-void Demon::RenderHP(SDL_Renderer* des, int map_x, int map_y)
+void Demon::RenderHP(SDL_Renderer* screen, int map_x, int map_y)
 {
         if(!isDead)
         {
                 SDL_Rect* current_clip = &HP_clip[HP];
                 SDL_Rect renderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 14, current_clip->w, current_clip->h};
-                SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+                SDL_RenderCopyEx(screen, BaseObject::GetTexture(), current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }
 }
 
@@ -360,7 +343,57 @@ SkeletonArmy::SkeletonArmy()
         skeleton.push_back(Demon(1500, 1500));
         skeleton.push_back(Demon(700, 1100));
         skeleton.push_back(Demon(800, 1100));
-        //skeleton.push_back(Demon())
+        skeleton.push_back(Demon(23*64, 14*64));
+        skeleton.push_back(Demon(22*64, 16*64));
+        skeleton.push_back(Demon(22*64, 16*64));
+        skeleton.push_back(Demon(29*64, 8*64));
+        skeleton.push_back(Demon(38*64, 4*64));
+        skeleton.push_back(Demon(39*64, 10*64));
+        skeleton.push_back(Demon(30*64, 17*64));
+        skeleton.push_back(Demon(40*64, 17*64));
+        skeleton.push_back(Demon(27*64, 6*64));
+        skeleton.push_back(Demon(44*64, 9*64));
+        skeleton.push_back(Demon(44*64, 10*64));
+        skeleton.push_back(Demon(45*64, 7*64));
+        skeleton.push_back(Demon(47*64, 7*64));
+        skeleton.push_back(Demon(49*64, 7*64));
+        skeleton.push_back(Demon(51*64, 7*64));
+        skeleton.push_back(Demon(53*64, 7*64));
+        skeleton.push_back(Demon(46*64, 11*64));
+        skeleton.push_back(Demon(48*64, 12*64));
+        skeleton.push_back(Demon(50*64, 11*64));
+        skeleton.push_back(Demon(52*64, 12*64));
+        skeleton.push_back(Demon(54*64, 11*64));
+        skeleton.push_back(Demon(20*64, 1*64));
+        skeleton.push_back(Demon(25*64, 3*64));
+        skeleton.push_back(Demon(27*64, 2*64));
+        skeleton.push_back(Demon(57*64, 14*64));
+        skeleton.push_back(Demon(60*64, 16*64));
+        skeleton.push_back(Demon(68*64, 13*64));
+        skeleton.push_back(Demon(68*64, 18*64));
+        skeleton.push_back(Demon(87*64, 1*64));
+        skeleton.push_back(Demon(87*64, 2*64));
+        skeleton.push_back(Demon(87*64, 3*64));
+        skeleton.push_back(Demon(77*64, 7*64));
+        skeleton.push_back(Demon(77*64, 9*64));
+        skeleton.push_back(Demon(77*64, 11*64));
+        skeleton.push_back(Demon(77*64, 13*64));
+        skeleton.push_back(Demon(81*64, 7*64));
+        skeleton.push_back(Demon(81*64, 9*64));
+        skeleton.push_back(Demon(81*64, 11*64));
+        skeleton.push_back(Demon(81*64, 13*64));
+        skeleton.push_back(Demon(79*64, 10*64));
+        skeleton.push_back(Demon(75*64, 17*64));
+        skeleton.push_back(Demon(78*64, 17*64));
+        skeleton.push_back(Demon(81*64, 17*64));
+        skeleton.push_back(Demon(84*64, 17*64));
+        skeleton.push_back(Demon(90*64, 5*64));
+        skeleton.push_back(Demon(90*64, 15*64));
+        skeleton.push_back(Demon(93*64, 10*64));
+        skeleton.push_back(Demon(99*64, 10*64));
+        skeleton.push_back(Demon(96*64, 7*64));
+        skeleton.push_back(Demon(96*64, 13*64));
+
 }
 
 SkeletonArmy::~SkeletonArmy()
@@ -368,13 +401,13 @@ SkeletonArmy::~SkeletonArmy()
 
 }
 
-bool SkeletonArmy::LoadImg(std::string path, SDL_Renderer* screen)
-{
-        for(int i = 0; i < skeleton.size(); i++)
-        {
-                skeleton[i].LoadImg(path, screen);
-        }
-}
+//bool SkeletonArmy::LoadImg(std::string path, SDL_Renderer* screen)
+//{
+//        for(int i = 0; i < skeleton.size(); i++)
+//        {
+//                skeleton[i].LoadImg(path, screen);
+//        }
+//}
 
 void SkeletonArmy::set_clips()
 {
@@ -384,26 +417,26 @@ void SkeletonArmy::set_clips()
         }
 }
 
-void SkeletonArmy::Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data)
+void SkeletonArmy::Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack)
 {
         for(int i = 0; i < skeleton.size(); i++)
         {
-                //skeleton[i].Move(PlayerBox, PlayerAttackBox, map_x, map_y, map_data);
+                skeleton[i].Move(PlayerBox, PlayerAttackBox, map_x, map_y, map_data, PlayerIsDead, PlayerIsAttack);
         }
 }
 
-void SkeletonArmy::Render(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y)
+void SkeletonArmy::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y)
 {
         for(int i = 0; i < skeleton.size(); i++)
         {
-                skeleton[i].Render(des, PlayerBox, PlayerAttackBox, PlayerIsAttack, PlayerIsDead, map_x, map_y);
+                skeleton[i].Render(screen, SkeTexture,PlayerBox, PlayerAttackBox, PlayerIsAttack, PlayerIsDead, map_x, map_y);
         }
 }
-void SkeletonArmy::RenderHP(SDL_Renderer* des, int map_x, int map_y)
+void SkeletonArmy::RenderHP(SDL_Renderer* screen, int map_x, int map_y)
 {
         for(int i = 0; i < skeleton.size(); i++)
         {
-                skeleton[i].RenderHP(des, map_x, map_y);
+                skeleton[i].RenderHP(screen, map_x, map_y);
         }
 }
 

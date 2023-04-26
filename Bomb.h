@@ -9,10 +9,9 @@ class Bomb : public BaseObject
 public:
         Bomb(int x, int y);
         ~Bomb();
-        bool LoadImg(string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect a, SDL_Rect b);
-        void RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int map_y);
+        void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int map_x, int map_y);
         bool getBombStatus() {return bomb;}
 private:
         int bomb_x, bomb_y;
@@ -29,13 +28,12 @@ public:
         BombList();
         ~BombList();
 
-        bool LoadImg(string path, SDL_Renderer* screen);
         void set_clips();
-        void RenderBomb(SDL_Renderer* screen, SDL_Rect PlayerBox, int map_x, int map_y);
+        void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int map_x, int map_y);
         bool getBombStatus();
 
 private:
-        const int TOTAL_BOMB = 50;
+        const int TOTAL_BOMB = 100;
         vector<Bomb> bomblist;
 };
 

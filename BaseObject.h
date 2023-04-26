@@ -11,7 +11,7 @@ public:
 
         void SetRect(const int& x, const int& y) {mBox.x = x, mBox.y = y;}
         SDL_Rect GetRect() const {return mBox;}
-        SDL_Texture* GetObject() const {return p_object_;}
+        SDL_Texture* GetTexture() const {return p_object_;}
 
         virtual bool LoadImg(string path, SDL_Renderer* screen);
         void Render(SDL_Renderer* des, SDL_Rect* clip = NULL);

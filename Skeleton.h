@@ -10,18 +10,17 @@ public:
         Demon(float x, float y);
         ~Demon();
 
-        bool LoadImg(std::string path, SDL_Renderer* screen);
         void set_clips();
         bool CheckCollision(SDL_Rect a, SDL_Rect b);
         void CollisionWithMap(Map& map_data);
-        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data);
-        void Render(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
-        void RenderHP(SDL_Renderer* des, int map_x, int map_y);
+        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
+        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
+        void RenderHP(SDL_Renderer* screen, int map_x, int map_y);
         SDL_Rect GetSkeletonBox() {return SkeletonBox;}
         SDL_Rect GetSkeletonAttackBox() {return SkeletonAttackBox;}
         bool getAttackStatus() {return isAttacking;}
 private:
-        const float DemonSpeed = 0.3;
+        const float DemonSpeed = 0.25;
         const int IDLE_FRAMES = 4;
         const int WALK_FRAMES = 4;
         const int ATTACK_FRAMES = 8;
@@ -56,11 +55,10 @@ public:
         SkeletonArmy();
         ~SkeletonArmy();
 
-        bool LoadImg(std::string path, SDL_Renderer* screen);
         void set_clips();
-        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data);
-        void Render(SDL_Renderer* des, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
-        void RenderHP(SDL_Renderer* des, int map_x, int map_y);
+        void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
+        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture,  SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);
+        void RenderHP(SDL_Renderer* screen, int map_x, int map_y);
         bool getAttackStatus();
 private:
         vector<Demon> skeleton;
