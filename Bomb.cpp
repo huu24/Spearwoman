@@ -64,6 +64,8 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
                         collide = false;
                         BombBox.h = 0;
                         BombBox.w = 0;
+                        BombBox.x = 0;
+                        BombBox.y = 0;
                 }
                 SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w * 2, Bomb_clip->h * 2};
                 SDL_RenderCopyEx(screen, BombTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
