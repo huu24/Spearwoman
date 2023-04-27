@@ -25,40 +25,40 @@ void Demon::set_clips()
         int x = 0;
         for(int i = 0; i < IDLE_FRAMES; i++)
         {
-                Idle_clip[i] = {x, 0 , 48, 51};
-                x += 48;
+                Idle_clip[i] = {x, 0 , 48*3, 51*3};
+                x += 48*3;
         }
-        SkeletonBox.h = 51;
-        SkeletonBox.w = 48;
+        SkeletonBox.h = 51*3;
+        SkeletonBox.w = 48*3;
         x = 0;
         for(int i = 0; i < WALK_FRAMES; i++)
         {
-                Walk_clip[i] = {x, 52, 48, 53};
-                x += 48;
+                Walk_clip[i] = {x, 52*3, 48*3, 53*3};
+                x += 48*3;
         }
         x = 0;
         for(int i = 0; i < ATTACK_FRAMES; i++)
         {
-                Attack_clip[i] = {x, 102, 96, 57};
-                x += 96;
+                Attack_clip[i] = {x, 102*3, 96*3, 57*3};
+                x += 96*3;
         }
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
-                TakeHit_clip[i] = {x, 159, 48, 53};
-                x += 48;
+                TakeHit_clip[i] = {x, 159*3, 48*3, 53*3};
+                x += 48*3;
         }
         x = 0;
         for(int i = 0; i < DEATH_FRAMES; i++)
         {
-                Death_clip[i] = {x, 212, 48, 60};
-                x += 48;
+                Death_clip[i] = {x, 212*3, 48*3, 60*3};
+                x += 48*3;
         }
         x = 0;
         for(int i = 1; i <= 3; i++)
         {
-                HP_clip[i] = {x, 263, 48, 6};
-                x += 48;
+                HP_clip[i] = {x, 263*3, 48*3, 6*3};
+                x += 48*3;
         }
         x = 0;
 }
@@ -258,9 +258,9 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 current_frame = DEATH_FRAMES;
                 death_frame++;
                 if(death_frame >= current_frame * 40) death_frame = current_frame * 40;
-                SkeletonBox.w = current_clip->w;
-                SkeletonBox.h = current_clip->h;
-                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y,SkeletonBox.w ,SkeletonBox.h };
+                SkeletonBox.w = current_clip->w / 3;
+                SkeletonBox.h = current_clip->h / 3;
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y,SkeletonBox.w / 3 ,SkeletonBox.h / 3 };
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(isAttacked)
@@ -274,9 +274,9 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                         isAttacked = false;
                 }
                 if(HP <= 0) HP = 0;
-                SkeletonBox.w = current_clip->w;
-                SkeletonBox.h = current_clip->h;
-                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 4,SkeletonBox.w ,SkeletonBox.h };
+                SkeletonBox.w = current_clip->w / 3;
+                SkeletonBox.h = current_clip->h / 3;
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 4,SkeletonBox.w ,SkeletonBox.h};
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(attack)
@@ -293,10 +293,10 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 }
                 SkeletonAttackBox.x = x_pos + ((FlipType == SDL_FLIP_NONE) ? -7 : -38);
                 SkeletonAttackBox.y = y_pos + ((FlipType == SDL_FLIP_NONE) ? 0 : -7);
-                SkeletonAttackBox.w = current_clip->w;
-                SkeletonAttackBox.h = current_clip->h;
+                SkeletonAttackBox.w = current_clip->w / 3;
+                SkeletonAttackBox.h = current_clip->h / 3;
 
-                SDL_Rect RenderQuad = {SkeletonAttackBox.x - map_x, SkeletonAttackBox.y - map_y, SkeletonAttackBox.w, SkeletonAttackBox.h };
+                SDL_Rect RenderQuad = {SkeletonAttackBox.x - map_x, SkeletonAttackBox.y - map_y, SkeletonAttackBox.w, SkeletonAttackBox.h};
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(isWalking)
@@ -305,9 +305,9 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 current_frame = WALK_FRAMES;
                 run_frame++;
                 if(run_frame >= current_frame * 60) run_frame = 0;
-                SkeletonBox.w = current_clip->w;
-                SkeletonBox.h = current_clip->h;
-                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
+                SkeletonBox.w = current_clip->w / 3;
+                SkeletonBox.h = current_clip->h / 3;
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w , SkeletonBox.h };
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else
@@ -316,20 +316,20 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 current_frame = IDLE_FRAMES;
                 idle_frame++;
                 if(idle_frame >= current_frame * 40) idle_frame = 0;
-                SkeletonBox.w = current_clip->w;
-                SkeletonBox.h = current_clip->h;
+                SkeletonBox.w = current_clip->w / 3;
+                SkeletonBox.h = current_clip->h / 3;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
 }
 
-void Demon::RenderHP(SDL_Renderer* screen, int map_x, int map_y)
+void Demon::RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int map_x, int map_y)
 {
         if(!isDead)
         {
                 SDL_Rect* current_clip = &HP_clip[HP];
-                SDL_Rect renderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 14, current_clip->w, current_clip->h};
-                SDL_RenderCopyEx(screen, BaseObject::GetTexture(), current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+                SDL_Rect renderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 14, current_clip->w / 3, current_clip->h / 3};
+                SDL_RenderCopyEx(screen, SkeletonTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }
 }
 
@@ -401,14 +401,6 @@ SkeletonArmy::~SkeletonArmy()
 
 }
 
-//bool SkeletonArmy::LoadImg(std::string path, SDL_Renderer* screen)
-//{
-//        for(int i = 0; i < skeleton.size(); i++)
-//        {
-//                skeleton[i].LoadImg(path, screen);
-//        }
-//}
-
 void SkeletonArmy::set_clips()
 {
         for(int i = 0; i < skeleton.size(); i++)
@@ -432,11 +424,11 @@ void SkeletonArmy::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rec
                 skeleton[i].Render(screen, SkeTexture,PlayerBox, PlayerAttackBox, PlayerIsAttack, PlayerIsDead, map_x, map_y);
         }
 }
-void SkeletonArmy::RenderHP(SDL_Renderer* screen, int map_x, int map_y)
+void SkeletonArmy::RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int map_x, int map_y)
 {
         for(int i = 0; i < skeleton.size(); i++)
         {
-                skeleton[i].RenderHP(screen, map_x, map_y);
+                skeleton[i].RenderHP(screen, SkeletonTexture, map_x, map_y);
         }
 }
 

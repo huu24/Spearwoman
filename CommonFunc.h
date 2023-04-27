@@ -28,7 +28,6 @@ const int COLOR_KEY_B = 0;
 
 const int RENDER_DRAW_COLOR = 255;
 
-#define BLANK_TILE 0
 #define TILE_SIZE 64
 
 #define MAX_MAP_X 200

@@ -18,8 +18,8 @@ void Bomb::set_clips()
         int x = 0;
         for(int i = 0; i < BOMB_FRAMES; i++)
         {
-                Bomb_clip[i] = {x, 0, 80, 64};
-                x += 80;
+                Bomb_clip[i] = {x, 0, 80*2, 64*2};
+                x += 80*2;
         }
         x = 0;
         BombBox.x = bomb_x;
@@ -67,9 +67,11 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
                         BombBox.x = 0;
                         BombBox.y = 0;
                 }
-                SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w * 2, Bomb_clip->h * 2};
+                SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w, Bomb_clip->h};
                 SDL_RenderCopyEx(screen, BombTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+                SDL_RenderDrawRect(screen, &renderQuad);
         }
+        SDL_RenderDrawRect(screen, &BombBox);
 }
 
 BombList::BombList()

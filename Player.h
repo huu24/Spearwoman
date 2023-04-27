@@ -20,15 +20,15 @@ public:
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
         void SetMapXY(const int x, const int y) {map_x = x, map_y = y;}
         void SetCamera(Map& map_data);
-        SDL_Rect GetPlayerBox() {return PlayerBox;}
-        SDL_Rect GetPlayerAttackBox() {return PlayerAttackBox;}
+        SDL_Rect GetPlayerBox() const {return PlayerBox;}
+        SDL_Rect GetPlayerAttackBox() const {return PlayerAttackBox;}
         bool GetAttackStatus() {return isAttacking;}
         bool PlayerStatus() {return dead;}
         int Map_x() {return map_x;}
         int Map_y() {return map_y;}
 
 private:
-        const float PlayerSpeed = 5;
+        const float PlayerSpeed = 5.0;
         const int IDLE_FRAMES = 8;
         const int WALK_FRAMES = 8;
         const int ATTACK1_FRAMES = 6;
@@ -39,7 +39,7 @@ private:
         int HP, ENERGY;
 
         float VelX, VelY;
-        float x_pos, y_pos;
+        float xPos, yPos;
 
         int map_x, map_y;
 

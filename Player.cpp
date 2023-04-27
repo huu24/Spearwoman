@@ -5,9 +5,9 @@ Player::Player()
         HP = 5;
         ENERGY = 3;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
-        VelX = VelY = 0;
-        x_pos = 0;
-        y_pos = 500;
+        VelX = VelY = 0.0;
+        xPos = 0.0;
+        yPos = 500.0;
         map_x = map_y = 0;
         input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
         = input_type.death = isAttacking  = isWalking = isAttacked = dead = false;
@@ -36,52 +36,50 @@ void Player::set_clips()
         int x = 0;
         for(int i = 0; i < IDLE_FRAMES; i++)
         {
-                Idle_clip[i] = {x, 0, 320, 480};
-                x += 320;
+                Idle_clip[i] = {x, 0, 32*8, 48*8};
+                x += 32*8;
         }
         x = 0;
         for(int i = 0; i < WALK_FRAMES; i++)
         {
-                Walk_clip[i] = {x, 490, 320, 480};
-                x += 320;
+                Walk_clip[i] = {x, 49*8, 32*8, 48*8};
+                x += 32*8;
         }
         x = 0;
         for(int i = 0; i < ATTACK1_FRAMES; i++)
         {
-                Attack1_clip[i] = {x, 970, 800, 480};
-                x += 800;
+                Attack1_clip[i] = {x, 97*8, 80*8, 48*8};
+                x += 80*8;
         }
         x = 0;
         for(int i = 0; i < ATTACK2_FRAMES; i++)
         {
-                Attack2_clip[i] = {x, 1440, 800, 480};
-                x += 800;
+                Attack2_clip[i] = {x, 144*8, 80*8, 48*8};
+                x += 80*8;
         }
-        PlayerAttackBox.w = 0;
-        PlayerAttackBox.h = 0;
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
-                Takehit_clip[i] = {x, 1930, 480, 480};
-                x += 480;
+                Takehit_clip[i] = {x, 193*8, 48*8, 48*8};
+                x += 48*8;
         }
         x = 0;
         for(int i = 0; i < DEATH_FRAMES; i++)
         {
-                Death_clip[i] = {x, 2410, 480, 480};
-                x += 480;
+                Death_clip[i] = {x, 241*8, 48*8, 48*8};
+                x += 48*8;
         }
         x = 0;
         for(int i = 1; i <= 5; i++)
         {
-                HP_clip[i] = {x, 3480, 490, 80};
-                x += 490;
+                HP_clip[i] = {x, 348*8, 49*8, 8*8};
+                x += 49*8;
         }
         x = 0;
         for(int i = 0; i < 4; i++)
         {
-                Energy_clip[i] = {x, 3560, 480, 90};
-                x += 480;
+                Energy_clip[i] = {x, 356*8, 48*8, 9*8};
+                x += 48*8;
         }
         x = 0;
 }
@@ -165,14 +163,30 @@ void Player::Move(Map& map_data)
         }
         if(VelX  == 0 && VelY == 0) isWalking = false;
 
-        x_pos += VelX;
-        y_pos += VelY;
-
-        PlayerBox.x = x_pos;
-        PlayerBox.y = y_pos;
-
+        xPos += VelX;
+        yPos += VelY;
         CollisionWithMap(map_data);
         SetCamera(map_data);
+
+        if(xPos <= 0)
+        {
+                xPos = 0;
+        }
+        else if(xPos + PlayerBox.w > map_data.max_x_)
+        {
+                xPos = map_data.max_x_ - PlayerBox.w;
+        }
+        if(yPos < 0)
+        {
+                yPos = 0;
+        }
+        else if(yPos + PlayerBox.h > map_data.max_y_)
+        {
+                yPos = map_data.max_y_ - PlayerBox.h;
+        }
+
+        PlayerBox.x = xPos;
+        PlayerBox.y = yPos;
 }
 
 void Player::CollisionWithMap(Map& map_data)
@@ -184,11 +198,11 @@ void Player::CollisionWithMap(Map& map_data)
 
         int min_height = min(TILE_SIZE, PlayerBox.h);
 
-        x1 = (x_pos) / TILE_SIZE;
-        x2 = (x_pos + PlayerBox.w) / TILE_SIZE;
+        x1 = (xPos) / TILE_SIZE;
+        x2 = (xPos + PlayerBox.w) / TILE_SIZE;
 
-        y1 = (y_pos + PlayerBox.h - min_height) / TILE_SIZE;
-        y2 = (y_pos + PlayerBox.h) / TILE_SIZE;
+        y1 = (yPos + PlayerBox.h - min_height) / TILE_SIZE;
+        y2 = (yPos + PlayerBox.h) / TILE_SIZE;
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
         {
@@ -196,24 +210,24 @@ void Player::CollisionWithMap(Map& map_data)
                 {
                         if(map_data.TileType[y1][x2] >= 4 || map_data.TileType[y2][x2] >= 4)
                         {
-                                x_pos -= VelX;
+                                xPos -= VelX;
                         }
                 }
                 else if(VelX < 0)
                 {
                         if(map_data.TileType[y1][x1] >= 4 || map_data.TileType[y2][x1] >= 4)
                         {
-                                x_pos -= VelX;
+                                xPos -= VelX;
                         }
                 }
         }
 
         //check_vertical
-        x1 = x_pos / TILE_SIZE;
-        x2 = (x_pos + PlayerBox.w) / TILE_SIZE;
+        x1 = xPos / TILE_SIZE;
+        x2 = (xPos + PlayerBox.w) / TILE_SIZE;
 
-        y1 = (y_pos + PlayerBox.h - min_height) / TILE_SIZE;
-        y2 = (y_pos + PlayerBox.h) / TILE_SIZE;
+        y1 = (yPos + PlayerBox.h - min_height) / TILE_SIZE;
+        y2 = (yPos + PlayerBox.h) / TILE_SIZE;
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
         {
@@ -221,41 +235,23 @@ void Player::CollisionWithMap(Map& map_data)
                 {
                         if(map_data.TileType[y2][x1] >= 4 || map_data.TileType[y2][x2] >= 4)
                         {
-                                y_pos -= VelY;
+                                yPos -= VelY;
                         }
                 }
                 else if(VelY < 0)
                 {
                         if(map_data.TileType[y1][x1] >= 4 || map_data.TileType[y1][x2] >= 4)
                         {
-                                y_pos -= VelY;
+                                yPos -= VelY;
                         }
                 }
-        }
-
-        if(x_pos < 0)
-        {
-                x_pos = 0;
-        }
-        else if(x_pos + PlayerBox.w > map_data.max_x_)
-        {
-                x_pos = map_data.max_x_ - PlayerBox.w;
-        }
-
-        if(y_pos < 0)
-        {
-                y_pos = 0;
-        }
-        else if(y_pos + PlayerBox.h > map_data.max_y_)
-        {
-                y_pos = map_data.max_y_ - PlayerBox.h;
         }
 }
 
 void Player::SetCamera(Map& map_data)
 {
-        map_data.current_x_pos = (x_pos) - SCREEN_WIDTH / 2;
-        map_data.current_y_pos = (y_pos) - SCREEN_HEIGHT / 2;
+        map_data.current_x_pos = (xPos) - SCREEN_WIDTH / 2;
+        map_data.current_y_pos = (yPos) - SCREEN_HEIGHT / 2;
 
         if(map_data.current_x_pos < 0) map_data.current_x_pos = 0;
         if(map_data.current_x_pos + SCREEN_WIDTH > map_data.max_x_) map_data.current_x_pos = map_data.max_x_ -  SCREEN_WIDTH;
@@ -285,8 +281,8 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 current_frame = TAKEHIT_FRAMES;
                 current_clip = &Takehit_clip[takehit_frame / 30];
 
-                PlayerBox.w = current_clip->w / 5;
-                PlayerBox.h = current_clip->h / 5;
+                PlayerBox.w = current_clip->w / 4;
+                PlayerBox.h = current_clip->h / 4;
 
                 takehit_frame++;
                 if(takehit_frame >= current_frame * 30)
@@ -302,8 +298,8 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 current_frame = DEATH_FRAMES;
                 current_clip = &Death_clip[death_frame / 30];
 
-                PlayerBox.w = current_clip->w / 5;
-                PlayerBox.h = current_clip->h / 5;
+                PlayerBox.w = current_clip->w / 4;
+                PlayerBox.h = current_clip->h / 4;
 
                 death_frame++;
                 if(death_frame >= current_frame * 30) death_frame = (current_frame - 1) * 60;
@@ -315,10 +311,10 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 current_frame = ATTACK1_FRAMES;
                 current_clip = &Attack1_clip[attack1_frame / 30];
 
-                PlayerAttackBox.x = x_pos + ((FlipType == SDL_FLIP_NONE) ? -16 * 2 : - 30 * 2);
-                PlayerAttackBox.y = y_pos;
-                PlayerAttackBox.w = current_clip->w / 5;
-                PlayerAttackBox.h = current_clip->h / 5;
+                PlayerAttackBox.x = xPos + ((FlipType == SDL_FLIP_NONE) ? -16 * 2 : - 30 * 2);
+                PlayerAttackBox.y = yPos;
+                PlayerAttackBox.w = current_clip->w / 4;
+                PlayerAttackBox.h = current_clip->h / 4;
 
                 attack1_frame++;
                 if(attack1_frame == 1)
@@ -341,10 +337,10 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 current_frame = ATTACK2_FRAMES;
                 current_clip = &Attack2_clip[attack2_frame/ 30];
 
-                PlayerAttackBox.x = x_pos + ((FlipType == SDL_FLIP_NONE) ? - 4 * 2 : - 44 * 2);
-                PlayerAttackBox.y = y_pos;
-                PlayerAttackBox.w = current_clip->w / 5;
-                PlayerAttackBox.h = current_clip->h / 5;
+                PlayerAttackBox.x = xPos + ((FlipType == SDL_FLIP_NONE) ? - 4 * 2 : - 44 * 2);
+                PlayerAttackBox.y = yPos;
+                PlayerAttackBox.w = current_clip->w / 4;
+                PlayerAttackBox.h = current_clip->h / 4;
 
                 attack2_frame++;
                 if(attack2_frame == 1 || attack2_frame == 60)
@@ -369,8 +365,8 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 current_frame = WALK_FRAMES;
                 current_clip = &Walk_clip[run_frame / 30];
 
-                PlayerBox.w = current_clip->w / 5;
-                PlayerBox.h = current_clip->h / 5;
+                PlayerBox.w = current_clip->w / 4;
+                PlayerBox.h = current_clip->h / 4;
 
                 run_frame++;
                 if(run_frame >= current_frame * 30) run_frame = 0;
@@ -384,8 +380,8 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 current_frame = IDLE_FRAMES;
                 current_clip = &Idle_clip[idle_frame / 30];
 
-                PlayerBox.w = current_clip->w / 5;
-                PlayerBox.h = current_clip->h / 5;
+                PlayerBox.w = current_clip->w / 4;
+                PlayerBox.h = current_clip->h / 4;
 
                 idle_frame++;
                 if(idle_frame >= current_frame * 30) idle_frame = 0;
@@ -398,7 +394,10 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
 void Player::RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture)
 {
         if(dead) return;
-        if(ENERGY <= 0) ENERGY = 0;
+        if(ENERGY <= 0)
+        {
+                ENERGY = 0;
+        }
 
                 SDL_Rect* current_clip;
                 current_clip = &HP_clip[HP];

@@ -10,16 +10,15 @@ public:
         Boss();
         ~Boss();
 
-        bool LoadImg(std::string path, SDL_Renderer* screen);
         void set_clips();
         void Move();
-        void Show(SDL_Renderer* des);
+        void RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, int camX, int camY);
 private:
         const float BossSpeed = 0.3;
         const int IDLE_FRAMES = 9;
         const int RUN_FRAMES = 6;
         const int ATTACK_FRAMES = 12;
-        const int TAKEHIT_RRAMES = 5;
+        const int TAKEHIT_FRAMES = 5;
         const int DEATH_FRAMES = 9;
         float VelX, VelY;
         float x_pos, y_pos;
@@ -35,9 +34,9 @@ private:
         SDL_Rect Death_clip[9];
 
         Input input_type;
-        int frame;
+        int idle_frame, run_frame, attack_frame, takehit_frame, death_frame;
 
-        bool isRunning, isAttacking, isIdling;
+        bool isRunning, isAttacking, isIdling, isTakinghit, isDead;
         bool isLeft, isRight;
 
         SDL_RendererFlip FlipType;
