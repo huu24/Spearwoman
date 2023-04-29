@@ -28,17 +28,6 @@ void Bomb::set_clips()
         BombBox.h = 64;
 }
 
-bool Bomb::CheckCollision(SDL_Rect a, SDL_Rect b)
-{
-        int x, y, u, v;
-        x = max(a.x, b.x);
-        y = max(a.y, b.y);
-        u = min(a.x + a.w, b.x + b.w);
-        v = min(a.y + a.h, b.y + b.h);
-        if (x < u && y < v) return true;
-        return false;
-}
-
 void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int map_x, int map_y)
 {
         SDL_Rect tmp;
@@ -46,7 +35,7 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
         tmp.y = PlayerBox.y + PlayerBox.h - 5;
         tmp.w = PlayerBox.w;
         tmp.h = 5;
-        if(CheckCollision(BombBox, tmp))
+        if(BaseObject::CheckCollision(BombBox, tmp))
         {
                 collide = true;
         }
@@ -54,7 +43,7 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
         {
                 SDL_Rect* current_clip = &Bomb_clip[bomb_frame / 60];
                 bomb_frame++;
-                if(CheckCollision(PlayerBox, BombBox) && bomb_frame == 4 * 60)
+                if(BaseObject::CheckCollision(PlayerBox, BombBox) && bomb_frame == 4 * 60)
                 {
                         bomb = true;
                 }

@@ -1,17 +1,65 @@
 #include "Boss.h"
 
+SharkAttack::SharkAttack()
+{
+        xpos = (MAX_MAP_X - 7) * TILE_SIZE;
+        ypos = 500;
+        frame = 0;
+        FlipType = SDL_FLIP_NONE;
+}
+
+SharkAttack::~SharkAttack()
+{
+
+}
+
+void SharkAttack::set_clips()
+{
+        int x = 0;
+        for(int i = 0; i < SHARK_FRAMES; i++)
+        {
+                Shark_clip[i] = {x, 0, 448, 160};
+                x += 448;
+        }
+        x = 0;
+}
+
+void SharkAttack::Move()
+{
+        //xpos += SharkSpeed;
+        SharkBox.x = xpos;
+        SharkBox.y = ypos;
+}
+
+void SharkAttack::RenderSharkAttack(SDL_Renderer* screen, SDL_Texture* mSharkTexture, int camX, int camY, int TimesBossIsAttacked)
+{
+        if(TimesBossIsAttacked == 0 || TimesBossIsAttacked % 3 != 0) return;
+        SDL_Rect* current_clip = &Shark_clip[frame / 60];
+        SharkBox.w = current_clip->w;
+        SharkBox.h = current_clip->h;
+        frame++;
+        if(frame >= SHARK_FRAMES * 60)
+                frame = 0;
+        SDL_Rect renderQuad = {SharkBox.x - camX, SharkBox.y - camY, SharkBox.w, SharkBox.h};
+        SDL_RenderCopyEx(screen, mSharkTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
+        SDL_RenderDrawRect(screen, &renderQuad);
+}
+
 Boss::Boss()
 {
         idle_frame = run_frame = attack_frame = takehit_frame = death_frame = 0;
-        x_pos = 200;
-        y_pos = 200;
+        x_pos = 245 * TILE_SIZE;
+        y_pos = 100;
         VelX = VelY = 0;
-        max_x_boss = x_pos + 100;
-        cnt_idle = 0;
+        min_x_boss = 230*64;
+        max_x_boss = 248*64;
+        min_y_boss = 0;
+        max_y_boss = 18*64;
+        cntAttack = 0;
         isLeft = isRight = false;
-        input_type.attack1 = 0;
-        FlipType = SDL_FLIP_NONE;
-        isRunning = isAttacking = isIdling = false;
+        FlipType = SDL_FLIP_HORIZONTAL;
+        isRunning = isAttacking = isAttacked = isTakinghit = isDead = causeDamage = false;
+        isIdling = true;
 }
 Boss::~Boss()
 {
@@ -38,6 +86,8 @@ void Boss::set_clips()
                 Attack_clip[i] = {x, 580, 540, 600};
                 x += 640;
         }
+        BossAttackBox.w = 270;
+        BossAttackBox.h = 300;
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
@@ -51,49 +101,99 @@ void Boss::set_clips()
                 x += 320;
         }
         x = 0;
+        BossBox.w = 175;
+        BossBox.h = 140;
 }
 
-void Boss::Move()
+void Boss::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack)
 {
-        isDead = true;
-//        if(x_pos <= 0)
-//        {
-//                VelX = 0;
-//                cnt_idle++;
-//                isIdling = true, isRunning = false;
-//                if(cnt_idle >= 200)
-//                {
-//                        isRunning = true, isIdling = false;
-//                        FlipType = SDL_FLIP_NONE;
-//                        VelX = BossSpeed;
-//                        cnt_idle = 0;
-//                }
-//        }
-//        else if(x_pos >= max_x_boss)
-//        {
-//                VelX = 0;
-//                cnt_idle++;
-//                isIdling = true, isRunning = false;
-//                if(cnt_idle >= 200)
-//                {
-//                        isRunning = true, isIdling = false;
-//                        FlipType = SDL_FLIP_HORIZONTAL;
-//                        VelX = -BossSpeed;
-//                        cnt_idle = 0;
-//                }
-//        }
-//        x_pos += VelX;
+        BossBox.x = x_pos;
+        BossBox.y = y_pos;
+
+        BossAttackBox.x = x_pos - BossAttackBox.w / 2 + 39;
+        BossAttackBox.y = y_pos - BossAttackBox.h / 2 + 29;
+        if(PlayerIsAttack)
+        {
+                if(BaseObject::CheckCollision(PlayerAttackBox, BossBox))
+                {
+                isTakinghit = true;
+                cntAttack++;
+                }
+                else isTakinghit = false;
+        }
+        else
+        {
+                if(BaseObject::CheckCollision(PlayerBox, BossAttackBox))
+                {
+                        isAttacking = true;
+                }
+        }
+        if(x_pos + BossBox.w >= max_x_boss)
+        {
+                isRunning = false;
+                x_pos = max_x_boss - BossBox.w;
+        }
+        else if(x_pos <= min_x_boss)
+        {
+                isRunning = false;
+                x_pos = min_x_boss;
+        }
+        if(y_pos + BossBox.h >= max_y_boss)
+        {
+                isRunning = false;
+                y_pos = max_y_boss - BossBox.h;
+        }
+        else if(y_pos <= min_y_boss)
+        {
+                isRunning = false;
+                y_pos = min_y_boss;
+        }
 }
 
-void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, int camX, int camY)
+void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect PlayerBox, int camX, int camY)
 {
 
         SDL_Rect* current_clip;
         int current_frame;
-        BossBox.x = x_pos;
-        BossBox.y = y_pos;
 
-        if(isRunning)
+        if(isTakinghit)
+        {
+                current_frame = TAKEHIT_FRAMES;
+                current_clip = &TakeHit_clip[takehit_frame / 60];
+                BossBox.w = current_clip->w / 2;
+                BossBox.h = current_clip->h / 2;
+                takehit_frame++;
+                if(takehit_frame >= current_frame * 60)
+                {
+                        takehit_frame = 0;
+                        isTakinghit = false;
+                }
+                SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
+                SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
+                SDL_RenderDrawRect(screen, &RenderQuad);
+        }
+        else if(isAttacking)
+        {
+                current_frame = ATTACK_FRAMES;
+                current_clip = &Attack_clip[attack_frame / 60];
+//                BossAttackBox.x = x_pos - BossAttackBox.w / 2 + 39;
+//                BossAttackBox.y = y_pos - BossAttackBox.h / 2 + 29;
+//                BossAttackBox.w = current_clip->w / 2;
+//                BossAttackBox.h = current_clip->h / 2;
+                attack_frame++;
+                if(attack_frame == 10 * 60 && BaseObject::CheckCollision(BossAttackBox, PlayerBox)) causeDamage = true;
+                else
+                        causeDamage = false;
+                if(attack_frame >= current_frame * 60)
+                {
+                        isAttacking = false;
+                        attack_frame = 0;
+                }
+                SDL_Rect RenderQuad = {BossAttackBox.x - camX, BossAttackBox.y - camY, BossAttackBox.w, BossAttackBox.h};
+                SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
+//                SDL_RenderDrawRect(screen, &RenderQuad);
+        }
+        else if(isRunning)
         {
                 current_frame = RUN_FRAMES;
                 current_clip = &Run_clip[run_frame / 60];
@@ -115,38 +215,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, int camX,
                 if(idle_frame >= current_frame * 60) idle_frame = 0;
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-                SDL_RenderDrawRect(screen, &RenderQuad);
-        }
-        else if(isAttacking)
-        {
-                current_frame = ATTACK_FRAMES;
-                current_clip = &Attack_clip[attack_frame / 60];
-                BossBox.w = current_clip->w / 2;
-                BossBox.h = current_clip->h / 2;
-                attack_frame++;
-                if(attack_frame >= current_frame * 60)
-                {
-                        isAttacking = false;
-                        attack_frame = 0;
-                }
-                SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
-                SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-                SDL_RenderDrawRect(screen, &RenderQuad);
-        }
-        else if(isTakinghit)
-        {
-                current_frame = TAKEHIT_FRAMES;
-                current_clip = &TakeHit_clip[takehit_frame / 60];
-                BossBox.w = current_clip->w / 2;
-                BossBox.h = current_clip->h / 2;
-                takehit_frame++;
-                if(takehit_frame >= current_frame * 60)
-                {
-                        takehit_frame = 0;
-                }
-                SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
-                SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-                SDL_RenderDrawRect(screen, &RenderQuad);
+//                SDL_RenderDrawRect(screen, &RenderQuad);
         }
         else
         {

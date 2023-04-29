@@ -48,3 +48,14 @@ void BaseObject::Free()
                 mBox.h = 0;
         }
 }
+
+bool BaseObject::CheckCollision(SDL_Rect& a, SDL_Rect& b)
+{
+        int x, y, u, v;
+        x = max(a.x, b.x);
+        y = max(a.y, b.y);
+        u = min(a.x + a.w, b.x + b.w);
+        v = min(a.y + a.h, b.y + b.h);
+        if (x < u && y < v) return true;
+        return false;
+}

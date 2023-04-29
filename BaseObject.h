@@ -16,6 +16,7 @@ public:
         virtual bool LoadImg(string path, SDL_Renderer* screen);
         void Render(SDL_Renderer* des, SDL_Rect* clip = NULL);
         void gRender(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip);
+        bool CheckCollision(SDL_Rect& a, SDL_Rect& b);
         void Free();
 protected:
         SDL_Texture* p_object_;

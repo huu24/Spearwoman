@@ -63,18 +63,6 @@ void Demon::set_clips()
         x = 0;
 }
 
-bool Demon::CheckCollision(SDL_Rect a, SDL_Rect b)
-{
-        int x, y, u, v;
-        x = max(a.x, b.x);
-        y = max(a.y, b.y);
-        u = min(a.x + a.w, b.x + b.w);
-        v = min(a.y + a.h, b.y + b.h);
-        if (x < u && y < v)
-                return true;
-        return false;
-}
-
 void Demon::CollisionWithMap(Map& map_data)
 {
         int x1 = 0, x2 = 0;
@@ -156,7 +144,7 @@ void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int ma
 {
         if(PlayerIsAttack)
         {
-                if(CheckCollision(SkeletonBox, PlayerAttackBox))
+                if(BaseObject::CheckCollision(SkeletonBox, PlayerAttackBox))
                 {
                         --HP;
                         isAttacked = true;
@@ -164,7 +152,7 @@ void Demon::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int map_x, int ma
         }
         else
         {
-                if(!PlayerIsDead && CheckCollision(SkeletonBox, PlayerBox))
+                if(!PlayerIsDead && BaseObject::CheckCollision(SkeletonBox, PlayerBox))
                 {
                         attack = true;
                 }
@@ -335,14 +323,21 @@ void Demon::RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int map
 
 SkeletonArmy::SkeletonArmy()
 {
-        skeleton.push_back(Demon(300, 300));
-        skeleton.push_back(Demon(500, 500));
-        skeleton.push_back(Demon(900, 650));
-        skeleton.push_back(Demon(700, 1000));
-        skeleton.push_back(Demon(0, 900));
-        skeleton.push_back(Demon(1500, 1500));
-        skeleton.push_back(Demon(700, 1100));
-        skeleton.push_back(Demon(800, 1100));
+
+        skeleton.push_back(Demon(10*64, 5*64));
+        skeleton.push_back(Demon(11*64, 4*64));
+        skeleton.push_back(Demon(12*64, 3*64));
+        skeleton.push_back(Demon(10*64, 8*64));
+        skeleton.push_back(Demon(11*64, 9*64));
+        skeleton.push_back(Demon(12*64, 10*64));
+        skeleton.push_back(Demon(1*64, 13*64));
+        skeleton.push_back(Demon(11*64, 15*64));
+        skeleton.push_back(Demon(11*64, 18*64));
+        skeleton.push_back(Demon(8*64, 16*64));
+        skeleton.push_back(Demon(8*64, 17*64));
+        skeleton.push_back(Demon(20*64, 14*64));
+        skeleton.push_back(Demon(25*64, 1*64));
+
         skeleton.push_back(Demon(23*64, 14*64));
         skeleton.push_back(Demon(22*64, 16*64));
         skeleton.push_back(Demon(22*64, 16*64));
@@ -374,15 +369,15 @@ SkeletonArmy::SkeletonArmy()
         skeleton.push_back(Demon(87*64, 1*64));
         skeleton.push_back(Demon(87*64, 2*64));
         skeleton.push_back(Demon(87*64, 3*64));
-        skeleton.push_back(Demon(77*64, 7*64));
-        skeleton.push_back(Demon(77*64, 9*64));
-        skeleton.push_back(Demon(77*64, 11*64));
-        skeleton.push_back(Demon(77*64, 13*64));
+        skeleton.push_back(Demon(85*64, 7*64));
+        skeleton.push_back(Demon(85*64, 9*64));
+        skeleton.push_back(Demon(85*64, 11*64));
+        skeleton.push_back(Demon(85*64, 13*64));
         skeleton.push_back(Demon(81*64, 7*64));
         skeleton.push_back(Demon(81*64, 9*64));
         skeleton.push_back(Demon(81*64, 11*64));
         skeleton.push_back(Demon(81*64, 13*64));
-        skeleton.push_back(Demon(79*64, 10*64));
+        skeleton.push_back(Demon(83*64, 10*64));
         skeleton.push_back(Demon(75*64, 17*64));
         skeleton.push_back(Demon(78*64, 17*64));
         skeleton.push_back(Demon(81*64, 17*64));

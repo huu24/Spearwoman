@@ -11,7 +11,6 @@ public:
         ~Demon();
 
         void set_clips();
-        bool CheckCollision(SDL_Rect a, SDL_Rect b);
         void CollisionWithMap(Map& map_data);
         void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
         void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y);

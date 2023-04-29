@@ -18,6 +18,7 @@ public:
         bool SetPlayer();
         bool SetSkeleton();
         bool SetBoss();
+        bool SetSharkAttack();
         bool SetBomb();
         void HandleEvents(SDL_Event &g_event);
         void RenderGame();
@@ -28,12 +29,14 @@ private:
         BaseObject BombTexture;
         BaseObject PlayerTexture;
         BaseObject BossTexture;
+        BaseObject SharkTexture;
         BaseObject Menu;
         BaseObject Button;
         GameMap game_map;
         Map map_data;
         Player MyPlayer;
         Boss boss;
+        SharkAttack shark;
         SkeletonArmy skeleton;
         BombList bomb;
 };

@@ -6,7 +6,7 @@ Player::Player()
         ENERGY = 3;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
         VelX = VelY = 0.0;
-        xPos = 0.0;
+        xPos = 235 * TILE_SIZE;
         yPos = 500.0;
         map_x = map_y = 0;
         input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
@@ -18,17 +18,6 @@ Player::Player()
 Player::~Player()
 {
 
-}
-
-bool Player::CheckCollision(SDL_Rect& a, SDL_Rect& b)
-{
-        int x, y, u, v;
-        x = max(a.x, b.x);
-        y = max(a.y, b.y);
-        u = min(a.x + a.w, b.x + b.w);
-        v = min(a.y + a.h, b.y + b.h);
-        if (x < u && y < v) return true;
-        return false;
 }
 
 void Player::set_clips()
@@ -82,6 +71,7 @@ void Player::set_clips()
                 x += 48*8;
         }
         x = 0;
+        PlayerBox.h = 96;
 }
 
 void Player::Handle(SDL_Event events)
@@ -263,9 +253,9 @@ void Player::SetCamera(Map& map_data)
         map_y = map_data.current_y_pos;
 }
 
-void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb)
+void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking)
 {
-        if(SkeletonIsAttacking || bomb)
+        if(SkeletonIsAttacking || bomb || BossIsAttacking)
         {
                 isAttacked = true;
                 --HP;

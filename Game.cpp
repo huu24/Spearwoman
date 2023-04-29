@@ -84,10 +84,17 @@ bool Game::LoadImage()
                 cout << "can not load boss image!\n";
                 return false;
         }
+        bool res6 = SharkTexture.LoadImg("image\\Game\\SharkAttack.png", g_screen);
+        if(res6 == false)
+        {
+                cout << "can not load shark image!\n";
+                return false;
+        }
         SetMap();
         SetPlayer();
         SetSkeleton();
         SetBoss();
+        SetSharkAttack();
         SetBomb();
         return true;
 }
@@ -118,6 +125,12 @@ bool Game::SetBoss()
         return true;
 }
 
+bool Game::SetSharkAttack()
+{
+        shark.set_clips();
+        return true;
+}
+
 bool Game::SetBomb()
 {
         bomb.set_clips();
@@ -141,15 +154,18 @@ void Game::RenderGame()
 
         MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
         MyPlayer.Move(map_data);
-        MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus());
+        MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus());
         MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
 
         skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
         skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
         skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
 
-        boss.Move();
-        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
+        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
+
+        shark.Move();
+        shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y(), boss.CountAttacks());
 
         bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
 

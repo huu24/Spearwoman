@@ -10,7 +10,6 @@ public:
         Bomb(int x, int y);
         ~Bomb();
         void set_clips();
-        bool CheckCollision(SDL_Rect a, SDL_Rect b);
         void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int map_x, int map_y);
         bool getBombStatus() {return bomb;}
 private:
