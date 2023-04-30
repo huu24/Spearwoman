@@ -1,6 +1,7 @@
 #ifndef COMMON_FUNCTION_H
 #define COMMON_FUNCTION_H
 
+#include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <algorithm>

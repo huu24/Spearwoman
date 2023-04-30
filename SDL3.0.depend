@@ -68,7 +68,8 @@
 1682674206 d:\codeblocks\game\spearwoman\baseobject.h
 	"CommonFunc.h"
 
-1682614779 d:\codeblocks\game\spearwoman\commonfunc.h
+1682747867 d:\codeblocks\game\spearwoman\commonfunc.h
+	<cstdlib>
 	<ctime>
 	<vector>
 	<algorithm>
@@ -80,10 +81,10 @@
 	<SDL_mixer.h>
 	<SDL_ttf.h>
 
-1682735662 source:d:\codeblocks\game\spearwoman\boss.cpp
+1682845561 source:d:\codeblocks\game\spearwoman\boss.cpp
 	"Boss.h"
 
-1682737766 d:\codeblocks\game\spearwoman\boss.h
+1682759053 d:\codeblocks\game\spearwoman\boss.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
@@ -100,7 +101,7 @@
 1682588064 source:d:\codeblocks\game\spearwoman\main.cpp
 	"Game.h"
 
-1682735064 d:\codeblocks\game\spearwoman\player.h
+1682870920 d:\codeblocks\game\spearwoman\player.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
@@ -108,10 +109,10 @@
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1682735064 source:d:\codeblocks\game\spearwoman\player.cpp
+1682845684 source:d:\codeblocks\game\spearwoman\player.cpp
 	"Player.h"
 
-1682674198 source:d:\codeblocks\game\spearwoman\skeleton.cpp
+1682860066 source:d:\codeblocks\game\spearwoman\skeleton.cpp
 	"Skeleton.h"
 
 1682674198 source:d:\codeblocks\game\spearwoman\bomb.cpp
@@ -125,10 +126,10 @@
 
 1682433776 source:d:\codeblocks\game\spearwoman\menu.cpp
 
-1682737737 source:d:\codeblocks\game\spearwoman\game.cpp
+1682871977 source:d:\codeblocks\game\spearwoman\game.cpp
 	"Game.h"
 
-1682655164 d:\codeblocks\game\spearwoman\game.h
+1682866369 d:\codeblocks\game\spearwoman\game.h
 	"BaseObject.h"
 	"CommonFunc.h"
 	"game_map.h"
@@ -136,4 +137,12 @@
 	"Skeleton.h"
 	"Bomb.h"
 	"Boss.h"
+	"Item.h"
+
+1682871907 d:\codeblocks\game\spearwoman\item.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1682871907 source:d:\codeblocks\game\spearwoman\item.cpp
+	"Item.h"
 

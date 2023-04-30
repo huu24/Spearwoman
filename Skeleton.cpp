@@ -28,8 +28,8 @@ void Demon::set_clips()
                 Idle_clip[i] = {x, 0 , 48*3, 51*3};
                 x += 48*3;
         }
-        SkeletonBox.h = 51*3;
-        SkeletonBox.w = 48*3;
+        SkeletonBox.h = 51*3 / 2;
+        SkeletonBox.w = 48*3 / 2;
         x = 0;
         for(int i = 0; i < WALK_FRAMES; i++)
         {
@@ -75,7 +75,8 @@ void Demon::CollisionWithMap(Map& map_data)
         x1 = (x_pos) / TILE_SIZE;
         x2 = (x_pos + SkeletonBox.w) / TILE_SIZE;
 
-        y1 = (y_pos + SkeletonBox.h - min_height) / TILE_SIZE;
+
+        y1 = (y_pos ) / TILE_SIZE;
         y2 = (y_pos + SkeletonBox.h) / TILE_SIZE;
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
@@ -100,7 +101,7 @@ void Demon::CollisionWithMap(Map& map_data)
         x1 = x_pos / TILE_SIZE;
         x2 = (x_pos + SkeletonBox.w) / TILE_SIZE;
 
-        y1 = (y_pos + SkeletonBox.h - min_height) / TILE_SIZE;
+        y1 = (y_pos ) / TILE_SIZE;
         y2 = (y_pos + SkeletonBox.h) / TILE_SIZE;
 
         if(x1 >= 0 && x2 <= MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
@@ -246,9 +247,9 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 current_frame = DEATH_FRAMES;
                 death_frame++;
                 if(death_frame >= current_frame * 40) death_frame = current_frame * 40;
-                SkeletonBox.w = current_clip->w / 3;
-                SkeletonBox.h = current_clip->h / 3;
-                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y,SkeletonBox.w / 3 ,SkeletonBox.h / 3 };
+                SkeletonBox.w = current_clip->w / 2;
+                SkeletonBox.h = current_clip->h / 2;
+                SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y,SkeletonBox.w ,SkeletonBox.h };
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
         else if(isAttacked)
@@ -262,8 +263,8 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                         isAttacked = false;
                 }
                 if(HP <= 0) HP = 0;
-                SkeletonBox.w = current_clip->w / 3;
-                SkeletonBox.h = current_clip->h / 3;
+                SkeletonBox.w = current_clip->w / 2;
+                SkeletonBox.h = current_clip->h / 2;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 4,SkeletonBox.w ,SkeletonBox.h};
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
@@ -281,8 +282,8 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 }
                 SkeletonAttackBox.x = x_pos + ((FlipType == SDL_FLIP_NONE) ? -7 : -38);
                 SkeletonAttackBox.y = y_pos + ((FlipType == SDL_FLIP_NONE) ? 0 : -7);
-                SkeletonAttackBox.w = current_clip->w / 3;
-                SkeletonAttackBox.h = current_clip->h / 3;
+                SkeletonAttackBox.w = current_clip->w / 2;
+                SkeletonAttackBox.h = current_clip->h / 2;
 
                 SDL_Rect RenderQuad = {SkeletonAttackBox.x - map_x, SkeletonAttackBox.y - map_y, SkeletonAttackBox.w, SkeletonAttackBox.h};
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
@@ -293,8 +294,8 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 current_frame = WALK_FRAMES;
                 run_frame++;
                 if(run_frame >= current_frame * 60) run_frame = 0;
-                SkeletonBox.w = current_clip->w / 3;
-                SkeletonBox.h = current_clip->h / 3;
+                SkeletonBox.w = current_clip->w / 2;
+                SkeletonBox.h = current_clip->h / 2;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w , SkeletonBox.h };
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
@@ -304,8 +305,8 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
                 current_frame = IDLE_FRAMES;
                 idle_frame++;
                 if(idle_frame >= current_frame * 40) idle_frame = 0;
-                SkeletonBox.w = current_clip->w / 3;
-                SkeletonBox.h = current_clip->h / 3;
+                SkeletonBox.w = current_clip->w / 2;
+                SkeletonBox.h = current_clip->h / 2;
                 SDL_Rect RenderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y, SkeletonBox.w, SkeletonBox.h };
                 SDL_RenderCopyEx(screen, SkeTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
         }
@@ -313,81 +314,151 @@ void Demon::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Playe
 
 void Demon::RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int map_x, int map_y)
 {
+        if(isDead) return;
         if(!isDead)
         {
                 SDL_Rect* current_clip = &HP_clip[HP];
-                SDL_Rect renderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 14, current_clip->w / 3, current_clip->h / 3};
+                SDL_Rect renderQuad = {SkeletonBox.x - map_x, SkeletonBox.y - map_y - 14, current_clip->w / 2, current_clip->h / 2};
                 SDL_RenderCopyEx(screen, SkeletonTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }
 }
 
 SkeletonArmy::SkeletonArmy()
 {
-
-        skeleton.push_back(Demon(10*64, 5*64));
-        skeleton.push_back(Demon(11*64, 4*64));
-        skeleton.push_back(Demon(12*64, 3*64));
-        skeleton.push_back(Demon(10*64, 8*64));
-        skeleton.push_back(Demon(11*64, 9*64));
-        skeleton.push_back(Demon(12*64, 10*64));
-        skeleton.push_back(Demon(1*64, 13*64));
-        skeleton.push_back(Demon(11*64, 15*64));
-        skeleton.push_back(Demon(11*64, 18*64));
-        skeleton.push_back(Demon(8*64, 16*64));
-        skeleton.push_back(Demon(8*64, 17*64));
-        skeleton.push_back(Demon(20*64, 14*64));
-        skeleton.push_back(Demon(25*64, 1*64));
-
-        skeleton.push_back(Demon(23*64, 14*64));
-        skeleton.push_back(Demon(22*64, 16*64));
-        skeleton.push_back(Demon(22*64, 16*64));
-        skeleton.push_back(Demon(29*64, 8*64));
-        skeleton.push_back(Demon(38*64, 4*64));
-        skeleton.push_back(Demon(39*64, 10*64));
-        skeleton.push_back(Demon(30*64, 17*64));
-        skeleton.push_back(Demon(40*64, 17*64));
-        skeleton.push_back(Demon(27*64, 6*64));
-        skeleton.push_back(Demon(44*64, 9*64));
-        skeleton.push_back(Demon(44*64, 10*64));
-        skeleton.push_back(Demon(45*64, 7*64));
-        skeleton.push_back(Demon(47*64, 7*64));
-        skeleton.push_back(Demon(49*64, 7*64));
-        skeleton.push_back(Demon(51*64, 7*64));
-        skeleton.push_back(Demon(53*64, 7*64));
-        skeleton.push_back(Demon(46*64, 11*64));
-        skeleton.push_back(Demon(48*64, 12*64));
-        skeleton.push_back(Demon(50*64, 11*64));
-        skeleton.push_back(Demon(52*64, 12*64));
-        skeleton.push_back(Demon(54*64, 11*64));
-        skeleton.push_back(Demon(20*64, 1*64));
-        skeleton.push_back(Demon(25*64, 3*64));
-        skeleton.push_back(Demon(27*64, 2*64));
-        skeleton.push_back(Demon(57*64, 14*64));
-        skeleton.push_back(Demon(60*64, 16*64));
-        skeleton.push_back(Demon(68*64, 13*64));
-        skeleton.push_back(Demon(68*64, 18*64));
-        skeleton.push_back(Demon(87*64, 1*64));
-        skeleton.push_back(Demon(87*64, 2*64));
-        skeleton.push_back(Demon(87*64, 3*64));
-        skeleton.push_back(Demon(85*64, 7*64));
-        skeleton.push_back(Demon(85*64, 9*64));
-        skeleton.push_back(Demon(85*64, 11*64));
-        skeleton.push_back(Demon(85*64, 13*64));
-        skeleton.push_back(Demon(81*64, 7*64));
-        skeleton.push_back(Demon(81*64, 9*64));
-        skeleton.push_back(Demon(81*64, 11*64));
-        skeleton.push_back(Demon(81*64, 13*64));
-        skeleton.push_back(Demon(83*64, 10*64));
+        skeleton.push_back(Demon(13*64, 2*64));
+        skeleton.push_back(Demon(13*64, 3*64));
+        skeleton.push_back(Demon(13*64, 4*64));
+        skeleton.push_back(Demon(8*64, 9*64));
+        skeleton.push_back(Demon(10*64, 9*64));
+        skeleton.push_back(Demon(12*64, 9*64));
+        skeleton.push_back(Demon(3*64, 16*64));
+        skeleton.push_back(Demon(4*64, 16*64));
+        skeleton.push_back(Demon(13*64, 15*64));
+        skeleton.push_back(Demon(12*64, 16*64));
+        skeleton.push_back(Demon(11*64, 17*64));
+        skeleton.push_back(Demon(19*64, 1*64));
+        skeleton.push_back(Demon(19*64, 6*64));
+        skeleton.push_back(Demon(19*64, 11*64));
+        skeleton.push_back(Demon(27*64, 18*64));
+        skeleton.push_back(Demon(33*64, 16*64));
+        skeleton.push_back(Demon(39*64, 18*64));
+        skeleton.push_back(Demon(29*64, 6*64));
+        skeleton.push_back(Demon(31*64, 8*64));
+        skeleton.push_back(Demon(33*64, 10*64));
+        skeleton.push_back(Demon(33*64, 6*64));
+        skeleton.push_back(Demon(29*64, 10*64));
+        skeleton.push_back(Demon(32*64, 3*64));
+        skeleton.push_back(Demon(34*64, 3*64));
+        skeleton.push_back(Demon(42*64, 8*64));
+        skeleton.push_back(Demon(42*64, 11*64));
+        skeleton.push_back(Demon(50*64, 4*64));
+        skeleton.push_back(Demon(50*64, 9*64));
+        skeleton.push_back(Demon(50*64, 14*64));
+        skeleton.push_back(Demon(57*64, 0*64));
+        skeleton.push_back(Demon(65*64, 0*64));
+        skeleton.push_back(Demon(60*64, 9*64));
+        skeleton.push_back(Demon(60*64, 13*64));
+        skeleton.push_back(Demon(60*64, 17*64));
+        skeleton.push_back(Demon(68*64, 17*64));
+        skeleton.push_back(Demon(81*64, 6*64));
+        skeleton.push_back(Demon(81*64, 8*64));
+        skeleton.push_back(Demon(81*64, 10*64));
+        skeleton.push_back(Demon(81*64, 12*64));
+        skeleton.push_back(Demon(85*64, 6*64));
+        skeleton.push_back(Demon(85*64, 8*64));
+        skeleton.push_back(Demon(85*64, 10*64));
+        skeleton.push_back(Demon(85*64, 12*64));
+        skeleton.push_back(Demon(83*64, 9*64));
+        skeleton.push_back(Demon(73*64, 2*64));
+        skeleton.push_back(Demon(76*64, 0*64));
+        skeleton.push_back(Demon(79*64, 2*64));
+        skeleton.push_back(Demon(82*64, 0*64));
+        skeleton.push_back(Demon(85*64, 2*64));
+        skeleton.push_back(Demon(75*64, 15*64));
         skeleton.push_back(Demon(75*64, 17*64));
-        skeleton.push_back(Demon(78*64, 17*64));
-        skeleton.push_back(Demon(81*64, 17*64));
-        skeleton.push_back(Demon(84*64, 17*64));
-        skeleton.push_back(Demon(90*64, 5*64));
-        skeleton.push_back(Demon(90*64, 15*64));
-        skeleton.push_back(Demon(93*64, 10*64));
-        skeleton.push_back(Demon(99*64, 10*64));
-        skeleton.push_back(Demon(96*64, 7*64));
-        skeleton.push_back(Demon(96*64, 13*64));
+        skeleton.push_back(Demon(79*64, 15*64));
+        skeleton.push_back(Demon(79*64, 17*64));
+        skeleton.push_back(Demon(83*64, 15*64));
+        skeleton.push_back(Demon(83*64, 17*64));
+        skeleton.push_back(Demon(91*64, 9*64));
+        skeleton.push_back(Demon(91*64, 1*64));
+        skeleton.push_back(Demon(96*64, 1*64));
+        skeleton.push_back(Demon(96*64, 3*64));
+        skeleton.push_back(Demon(96*64, 10*64));
+        skeleton.push_back(Demon(93*64, 16*64));
+        skeleton.push_back(Demon(96*64, 16*64));
+        skeleton.push_back(Demon(103*64, 9*64));
+        skeleton.push_back(Demon(103*64, 11*64));
+        skeleton.push_back(Demon(108*64, 6*64));
+        skeleton.push_back(Demon(113*64, 6*64));
+        skeleton.push_back(Demon(108*64, 8*64));
+        skeleton.push_back(Demon(113*64, 8*64));
+        skeleton.push_back(Demon(108*64, 10*64));
+        skeleton.push_back(Demon(113*64, 10*64));
+        skeleton.push_back(Demon(108*64, 12*64));
+        skeleton.push_back(Demon(113*64, 12*64));
+        skeleton.push_back(Demon(108*64, 14*64));
+        skeleton.push_back(Demon(113*64, 14*64));
+        skeleton.push_back(Demon(110*64, 6*64));
+        skeleton.push_back(Demon(111*64, 14*64));
+        skeleton.push_back(Demon(130*64, 12*64));
+        skeleton.push_back(Demon(132*64, 11*64));
+        skeleton.push_back(Demon(134*64, 10*64));
+        skeleton.push_back(Demon(136*64, 9*64));
+        skeleton.push_back(Demon(138*64, 8*64));
+        skeleton.push_back(Demon(145*64, 1*64));
+        skeleton.push_back(Demon(145*64, 3*64));
+        skeleton.push_back(Demon(130*64, 17*64));
+        skeleton.push_back(Demon(132*64, 17*64));
+        skeleton.push_back(Demon(134*64, 17*64));
+        skeleton.push_back(Demon(151*64, 16*64));
+        skeleton.push_back(Demon(155*64, 15*64));
+        skeleton.push_back(Demon(155*64, 17*64));
+        skeleton.push_back(Demon(155*64, 1*64));
+        skeleton.push_back(Demon(155*64, 3*64));
+        skeleton.push_back(Demon(165*64, 8*64));
+        skeleton.push_back(Demon(165*64, 10*64));
+        skeleton.push_back(Demon(165*64, 1*64));
+        skeleton.push_back(Demon(165*64, 17*64));
+        skeleton.push_back(Demon(171*64, 15*64));
+        skeleton.push_back(Demon(171*64, 17*64));
+        skeleton.push_back(Demon(175*64, 0*64));
+        skeleton.push_back(Demon(177*64, 1*64));
+        skeleton.push_back(Demon(179*64, 2*64));
+        skeleton.push_back(Demon(179*64, 8*64));
+        skeleton.push_back(Demon(180*64, 8*64));
+        skeleton.push_back(Demon(178*64, 10*64));
+        skeleton.push_back(Demon(181*64, 10*64));
+        skeleton.push_back(Demon(177*64, 12*64));
+        skeleton.push_back(Demon(182*64, 12*64));
+        skeleton.push_back(Demon(176*64, 14*64));
+        skeleton.push_back(Demon(183*64, 14*64));
+        skeleton.push_back(Demon(195*64, 9*64));
+        skeleton.push_back(Demon(198*64, 9*64));
+        skeleton.push_back(Demon(201*64, 9*64));
+        skeleton.push_back(Demon(204*64, 9*64));
+        skeleton.push_back(Demon(199*64, 1*64));
+        skeleton.push_back(Demon(199*64, 4*64));
+        skeleton.push_back(Demon(194*64, 15*64));
+        skeleton.push_back(Demon(194*64, 17*64));
+        skeleton.push_back(Demon(201*64, 17*64));
+        skeleton.push_back(Demon(206*64, 5*64));
+        skeleton.push_back(Demon(209*64, 5*64));
+        skeleton.push_back(Demon(212*64, 5*64));
+        skeleton.push_back(Demon(210*64, 15*64));
+        skeleton.push_back(Demon(210*64, 17*64));
+        skeleton.push_back(Demon(214*64, 15*64));
+        skeleton.push_back(Demon(214*64, 17*64));
+        skeleton.push_back(Demon(218*64, 5*64));
+        skeleton.push_back(Demon(222*64, 5*64));
+        skeleton.push_back(Demon(225*64, 11*64));
+        skeleton.push_back(Demon(227*64, 11*64));
+        skeleton.push_back(Demon(220*64, 7*64));
+
+
+
+
+
 
 }
 
@@ -408,7 +479,7 @@ void SkeletonArmy::Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x,
 {
         for(int i = 0; i < skeleton.size(); i++)
         {
-                skeleton[i].Move(PlayerBox, PlayerAttackBox, map_x, map_y, map_data, PlayerIsDead, PlayerIsAttack);
+                //skeleton[i].Move(PlayerBox, PlayerAttackBox, map_x, map_y, map_data, PlayerIsDead, PlayerIsAttack);
         }
 }
 

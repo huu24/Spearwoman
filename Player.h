@@ -15,8 +15,6 @@ public:
         void Handle(SDL_Event events);
         void Move(Map& map_data);
         void CollisionWithMap(Map& map_data);
-        void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking);
-        void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
         void SetMapXY(const int x, const int y) {map_x = x, map_y = y;}
         void SetCamera(Map& map_data);
         SDL_Rect GetPlayerBox() const {return PlayerBox;}
@@ -25,9 +23,11 @@ public:
         bool PlayerStatus() {return dead;}
         int Map_x() {return map_x;}
         int Map_y() {return map_y;}
+        void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking);
+        void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
 
 private:
-        const float PlayerSpeed = 0.5;
+        const float PlayerSpeed = 5;
         const int IDLE_FRAMES = 8;
         const int WALK_FRAMES = 8;
         const int ATTACK1_FRAMES = 6;
@@ -60,6 +60,7 @@ private:
         SDL_RendererFlip FlipType;
         SDL_Rect PlayerBox;
         SDL_Rect PlayerAttackBox;
+        SDL_Rect HpBox;
 };
 
 #endif // PLAYER_H

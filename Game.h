@@ -8,6 +8,7 @@
 #include "Skeleton.h"
 #include "Bomb.h"
 #include "Boss.h"
+#include "Item.h"
 
 class Game
 {
@@ -20,6 +21,7 @@ public:
         bool SetBoss();
         bool SetSharkAttack();
         bool SetBomb();
+        bool SetKey();
         void HandleEvents(SDL_Event &g_event);
         void RenderGame();
         void close();
@@ -32,6 +34,8 @@ private:
         BaseObject SharkTexture;
         BaseObject Menu;
         BaseObject Button;
+        BaseObject KeyTexture;
+        BaseObject HPTexture;
         GameMap game_map;
         Map map_data;
         Player MyPlayer;
@@ -39,6 +43,8 @@ private:
         SharkAttack shark;
         SkeletonArmy skeleton;
         BombList bomb;
+        AllKeys key;
+        AllHps hp;
 };
 
 

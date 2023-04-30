@@ -14,9 +14,11 @@ public:
         void Move();
         void RenderSharkAttack(SDL_Renderer* screen, SDL_Texture* mSharkTexture, int camX, int camY, int TimesBossIsAttacked);
 private:
+        //srand(time(0));
         const float SharkSpeed = 0.5;
         const int SHARK_FRAMES = 18;
         int frame;
+        int maxY, minY;
         float xpos, ypos;
 
         SDL_Rect Shark_clip[18];
@@ -34,6 +36,7 @@ public:
         void set_clips();
         void Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack);
         void RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect PlayerBox, int camX, int camY);
+        void RenderHP(SDL_Renderer* screen, SDL_Texture* mBossTexture);
         bool GetAttackStatus() {return causeDamage;}
         int CountAttacks() {return cntAttack;}
 private:
@@ -46,7 +49,7 @@ private:
         float VelX, VelY;
         float x_pos, y_pos;
         float max_x_boss, max_y_boss, min_x_boss, min_y_boss;
-        int cnt_idle, cntAttack;
+        int cnt_idle, cntAttack, HP, tmp;
 
         SDL_Rect BossBox;
         SDL_Rect BossAttackBox;
@@ -56,9 +59,10 @@ private:
         SDL_Rect Attack_clip[12];
         SDL_Rect TakeHit_clip[5];
         SDL_Rect Death_clip[9];
+        SDL_Rect HpBox;
 
         int idle_frame, run_frame, attack_frame, takehit_frame, death_frame;
-        bool isRunning, isAttacking, isIdling, isTakinghit, isAttacked, isDead, causeDamage;
+        bool isRunning, isAttacking, isIdling, isTakinghit, isAttacked, isDead, causeDamage, cantAttacked, renderHP;
         bool isLeft, isRight;
 
         SDL_RendererFlip FlipType;

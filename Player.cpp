@@ -6,7 +6,8 @@ Player::Player()
         ENERGY = 3;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
         VelX = VelY = 0.0;
-        xPos = 235 * TILE_SIZE;
+//        xPos = 228 * TILE_SIZE;
+        xPos = 0;
         yPos = 500.0;
         map_x = map_y = 0;
         input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
