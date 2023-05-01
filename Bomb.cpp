@@ -58,9 +58,7 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
                 }
                 SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w, Bomb_clip->h};
                 SDL_RenderCopyEx(screen, BombTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
-                SDL_RenderDrawRect(screen, &renderQuad);
         }
-        SDL_RenderDrawRect(screen, &BombBox);
 }
 
 BombList::BombList()

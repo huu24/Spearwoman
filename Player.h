@@ -13,7 +13,7 @@ public:
 
         void set_clips();
         void Handle(SDL_Event events);
-        void Move(Map& map_data);
+        void Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen);
         void CollisionWithMap(Map& map_data);
         void SetMapXY(const int x, const int y) {map_x = x, map_y = y;}
         void SetCamera(Map& map_data);
@@ -23,6 +23,7 @@ public:
         bool PlayerStatus() {return dead;}
         int Map_x() {return map_x;}
         int Map_y() {return map_y;}
+        int GetKeys() {return KEYS;}
         void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking);
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
 
@@ -35,7 +36,8 @@ private:
         const int ATTACK3_FRAMES = 5;
         const int TAKEHIT_FRAMES = 4;
         const int DEATH_FRAMES = 8;
-        int HP, ENERGY;
+        const int KEY_FRAMES = 3;
+        int HP, ENERGY, KEYS;
 
         float VelX, VelY;
         float xPos, yPos;
@@ -51,6 +53,7 @@ private:
         SDL_Rect Death_clip[8];
         SDL_Rect HP_clip[6];
         SDL_Rect Energy_clip[4];
+        SDL_Rect Key_clip[4];
 
         Input input_type;
 

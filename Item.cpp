@@ -90,6 +90,15 @@ int AllKeys::countkeys()
         return tmp;
 }
 
+bool AllKeys::touchKeys()
+{
+        for(int i = 0; i < Keys.size(); i++)
+        {
+                if(Keys[i].touchKeys()) return true;
+        }
+        return false;
+}
+
 void AllKeys::RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect PlayerBox , int camX, int camY)
 {
         for(int i = 0; i < Keys.size(); i++)
@@ -157,14 +166,13 @@ void AllHps::Check(SDL_Rect PlayerBox)
         }
 }
 
-int AllHps::countBloodJars()
+bool AllHps::touchBloodJars()
 {
-        int tmp = 0;
         for(int i = 0; i < HPs.size(); i++)
         {
-                tmp += HPs[i].countBloodJars();
+                if(HPs[i].touchBloodJars()) return true;
         }
-        return tmp;
+        return false;
 }
 
 void AllHps::RenderHP(SDL_Renderer* screen, SDL_Texture* mHPTexture, int camX, int camY)
@@ -173,4 +181,47 @@ void AllHps::RenderHP(SDL_Renderer* screen, SDL_Texture* mHPTexture, int camX, i
         {
                 HPs[i].RenderHP(screen, mHPTexture, camX, camY);
         }
+}
+
+Door::Door()
+{
+        DoorBox.x = 229 * 64;
+        DoorBox.y = 8 * 64;
+        DoorBox.w = 64;
+        DoorBox.h = 128;
+        open = false;
+}
+
+Door::~Door()
+{
+
+}
+
+void Door::set_clips()
+{
+        int x = 0;
+        for(int i = 0; i < DOOR_FRAMES; i++)
+        {
+                Door_clip[i] = {x, 0, 128, 128};
+                x += 128;
+        }
+        x = 0;
+}
+
+void Door::Check(SDL_Rect PlayerBox, int NumberOfKeys)
+{
+        if(BaseObject::CheckCollision(PlayerBox, DoorBox) && NumberOfKeys == 3)
+        {
+                open = true;
+        }
+}
+
+void Door::RenderDoor(SDL_Renderer* screen, SDL_Texture* mDoorTexture, int camX, int camY)
+{
+        int doorStatus;
+        if(open) doorStatus = 1;
+        else doorStatus = 0;
+        SDL_Rect* current_clip = &Door_clip[doorStatus];
+        SDL_Rect renderQuad = {DoorBox.x - camX, DoorBox.y - camY, DoorBox.w, DoorBox.h};
+        SDL_RenderCopyEx(screen, mDoorTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }

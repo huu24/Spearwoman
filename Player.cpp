@@ -2,12 +2,13 @@
 
 Player::Player()
 {
-        HP = 5;
+        HP = 2;
         ENERGY = 3;
+        KEYS = 0;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
         VelX = VelY = 0.0;
-//        xPos = 228 * TILE_SIZE;
-        xPos = 0;
+        xPos = 228 * TILE_SIZE;
+//        xPos = 0;
         yPos = 500.0;
         map_x = map_y = 0;
         input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
@@ -73,6 +74,14 @@ void Player::set_clips()
         }
         x = 0;
         PlayerBox.h = 96;
+        PlayerBox.w = 64;
+        int w = 0;
+        for(int i = 0; i <= 3; i++)
+        {
+                Key_clip[i] = {0, 2920, w, 32};
+                w += 32;
+        }
+        w = 0;
 }
 
 void Player::Handle(SDL_Event events)
@@ -124,8 +133,11 @@ void Player::Handle(SDL_Event events)
                 }
         }
 }
-void Player::Move(Map& map_data)
+void Player::Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen)
 {
+        if(touchHP) HP += 3;
+        if(HP >= 5) HP = 5;
+        if(touchKey) ++KEYS;
         if(dead || isAttacked || input_type.attack1 || input_type.attack2) return;
         isWalking = true;
         if(input_type.left)
@@ -154,8 +166,14 @@ void Player::Move(Map& map_data)
         }
         if(VelX  == 0 && VelY == 0) isWalking = false;
 
+        if(VelX > 0 && BaseObject::CheckCollision(PlayerBox, DoorBox) && !DoorOpen)
+        {
+                xPos -= VelX;
+        }
+
         xPos += VelX;
         yPos += VelY;
+
         CollisionWithMap(map_data);
         SetCamera(map_data);
 
@@ -321,7 +339,6 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 }
                         SDL_Rect renderQuad = {PlayerAttackBox.x - map_x, PlayerAttackBox.y - map_y, PlayerAttackBox.w, PlayerAttackBox.h};
                         SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
-                        SDL_RenderDrawRect(screen, &renderQuad);
         }
         else if(input_type.attack2)
         {
@@ -348,7 +365,6 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 }
                 SDL_Rect renderQuad = {PlayerAttackBox.x - map_x, PlayerAttackBox.y - map_y, PlayerAttackBox.w, PlayerAttackBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
-                SDL_RenderDrawRect(screen, &renderQuad);
 
         }
         else if(isWalking)
@@ -392,12 +408,17 @@ void Player::RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture)
 
                 SDL_Rect* current_clip;
                 current_clip = &HP_clip[HP];
-                SDL_Rect renderQuad = {10, 10, current_clip->w / 2, current_clip->h / 2};
+                SDL_Rect renderQuad = {10, 10, current_clip->w * 2 / 3, current_clip->h * 2 / 3};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 
                 SDL_Rect* current_clip1;
                 current_clip1 = &Energy_clip[ENERGY];
                 SDL_Rect renderQuad1 = {10, 50, 480 / 2, 90 / 2};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+
+                SDL_Rect* current_clip2;
+                current_clip2 = &Key_clip[KEYS];
+                SDL_Rect renderQuad2 = {0, 100, current_clip2->w * 3 / 2, current_clip2->h * 3 / 2};
+                SDL_RenderCopyEx(screen, mPlayerTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
 //        }
 }

@@ -479,7 +479,7 @@ void SkeletonArmy::Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x,
 {
         for(int i = 0; i < skeleton.size(); i++)
         {
-                //skeleton[i].Move(PlayerBox, PlayerAttackBox, map_x, map_y, map_data, PlayerIsDead, PlayerIsAttack);
+                skeleton[i].Move(PlayerBox, PlayerAttackBox, map_x, map_y, map_data, PlayerIsDead, PlayerIsAttack);
         }
 }
 

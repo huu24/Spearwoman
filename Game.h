@@ -22,6 +22,7 @@ public:
         bool SetSharkAttack();
         bool SetBomb();
         bool SetKey();
+        bool SetDoor();
         void HandleEvents(SDL_Event &g_event);
         void RenderGame();
         void close();
@@ -36,6 +37,7 @@ private:
         BaseObject Button;
         BaseObject KeyTexture;
         BaseObject HPTexture;
+        BaseObject DoorTexture;
         GameMap game_map;
         Map map_data;
         Player MyPlayer;
@@ -45,6 +47,7 @@ private:
         BombList bomb;
         AllKeys key;
         AllHps hp;
+        Door door;
 };
 
 

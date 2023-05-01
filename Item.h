@@ -13,6 +13,7 @@ public:
         void set_clips();
         void Check( SDL_Rect PlayerBox);
         int countkeys() {return yourkeys;}
+        bool touchKeys() {return collide;}
         void RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect PlayerBox , int camX, int camY);
 
 private:
@@ -34,6 +35,7 @@ public:
         void set_clips();
         void Check(SDL_Rect PlayerBox);
         int countkeys();
+        bool touchKeys();
         void RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect PlayerBox, int camX, int camY);
 private:
         vector <Key> Keys;
@@ -46,7 +48,7 @@ public:
         ~HP();
 
         void Check(SDL_Rect PlayerBox);
-        int countBloodJars() {return YourBloodJars;}
+        bool touchBloodJars() {return collide;}
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mHPTexture, int camX, int camY);
 
 private:
@@ -63,10 +65,28 @@ public:
         ~AllHps();
 
         void Check(SDL_Rect PlayerBox);
-        int countBloodJars();
+        bool touchBloodJars();
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mHPTexture, int camX, int camY);
 private:
         vector <HP> HPs;
+};
+
+class Door : public BaseObject
+{
+public:
+        Door();
+        ~Door();
+
+        void set_clips();
+        void Check(SDL_Rect PlayerBox, int NumberOfKeys);
+        bool DoorOpen() {return open;}
+        SDL_Rect GetDoorBox() {return DoorBox;}
+        void RenderDoor(SDL_Renderer* screen, SDL_Texture* mDoorTexture, int camX, int camY);
+private:
+        const int DOOR_FRAMES = 2;
+        bool open;
+        SDL_Rect DoorBox;
+        SDL_Rect Door_clip[2];
 };
 
 #endif // ITEM_H

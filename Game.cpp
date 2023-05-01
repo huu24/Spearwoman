@@ -102,6 +102,12 @@ bool Game::LoadImage()
                 cout << "can not load hp image!\n";
                 return false;
         }
+        bool res9 = DoorTexture.LoadImg("image\\Game\\Door.png", g_screen);
+        if(res9 == false)
+        {
+                cout << "can not load door image!\n";
+                return false;
+        }
         SetMap();
         SetPlayer();
         SetSkeleton();
@@ -109,6 +115,7 @@ bool Game::LoadImage()
         SetSharkAttack();
         SetBomb();
         SetKey();
+        SetDoor();
         return true;
 }
 
@@ -156,6 +163,12 @@ bool Game::SetKey()
         return true;
 }
 
+bool Game::SetDoor()
+{
+        door.set_clips();
+        return true;
+}
+
 void Game::HandleEvents(SDL_Event &g_event)
 {
 //        cerr << "h\n";
@@ -171,8 +184,17 @@ void Game::RenderGame()
         game_map.SetMap(map_data);
         game_map.RenderMap(g_screen);
 
+        door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
+        door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
+
+        key.Check(MyPlayer.GetPlayerBox());
+        key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
+
+        hp.Check(MyPlayer.GetPlayerBox());
+        hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
+
         MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
-        MyPlayer.Move(map_data);
+        MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen());
         MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus());
         MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
 
@@ -188,13 +210,6 @@ void Game::RenderGame()
         shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y(), boss.CountAttacks());
 
         bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
-
-        key.Check(MyPlayer.GetPlayerBox());
-        key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
-
-        hp.Check(MyPlayer.GetPlayerBox());
-        hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
-        cout << hp.countBloodJars() << '\n';
 
 //        HPTexture.Render(g_screen, NULL);
 //        Button.Render(g_screen, NULL);
