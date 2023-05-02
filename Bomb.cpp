@@ -28,7 +28,7 @@ void Bomb::set_clips()
         BombBox.h = 64;
 }
 
-void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int map_x, int map_y)
+void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY)
 {
         SDL_Rect tmp;
         tmp.x = PlayerBox.x;
@@ -56,7 +56,7 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
                         BombBox.x = 0;
                         BombBox.y = 0;
                 }
-                SDL_Rect renderQuad = {BombBox.x - map_x - BombBox.w / 2, BombBox.y - map_y - BombBox.h / 2, Bomb_clip->w, Bomb_clip->h};
+                SDL_Rect renderQuad = {BombBox.x - camX - BombBox.w / 2, BombBox.y - camY - BombBox.h / 2, Bomb_clip->w, Bomb_clip->h};
                 SDL_RenderCopyEx(screen, BombTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         }
 }
@@ -83,11 +83,11 @@ void BombList::set_clips()
                 bomblist[i].set_clips();
         }
 }
-void BombList::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int map_x, int map_y)
+void BombList::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY)
 {
         for(int i = 0; i < bomblist.size(); i++)
         {
-                bomblist[i].RenderBomb(screen, BombTexture, PlayerBox, map_x, map_y);
+                bomblist[i].RenderBomb(screen, BombTexture, PlayerBox, camX, camY);
         }
 }
 bool BombList::getBombStatus()

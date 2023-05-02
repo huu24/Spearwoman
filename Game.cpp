@@ -185,31 +185,30 @@ void Game::RenderGame()
         game_map.RenderMap(g_screen);
 
         door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
-        door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
         key.Check(MyPlayer.GetPlayerBox());
-        key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
         hp.Check(MyPlayer.GetPlayerBox());
-        hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-        MyPlayer.SetMapXY(map_data.current_x_pos, map_data.current_y_pos);
         MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen());
         MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus());
         MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
 
-        skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Map_x(), MyPlayer.Map_y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
-        skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Map_x(), MyPlayer.Map_y());
-        skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
+        skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
         boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
-        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
         boss.RenderHP(g_screen, BossTexture.GetTexture());
 
         shark.Move();
-        shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Map_x(), MyPlayer.Map_y(), boss.CountAttacks());
+        shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), boss.CountAttacks());
 
-        bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Map_x(), MyPlayer.Map_y());
+        bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
 //        HPTexture.Render(g_screen, NULL);
 //        Button.Render(g_screen, NULL);

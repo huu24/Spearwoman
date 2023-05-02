@@ -59,9 +59,8 @@ Boss::Boss()
         max_x_boss = 248*64;
         min_y_boss = 0;
         max_y_boss = 18*64;
-        cntAttack = 0, tmp = 0;;
+        cntAttack = 0, tmp = 0;
         HP = 20;
-        isLeft = isRight = false;
         FlipType = SDL_FLIP_HORIZONTAL;
         isRunning = isAttacking = isAttacked = isTakinghit = isDead = causeDamage = cantAttacked = renderHP = false;
         isIdling = true;
@@ -113,7 +112,7 @@ void Boss::set_clips()
 
 void Boss::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack)
 {
-        if(PlayerBox.x + PlayerBox.w < min_x_boss)
+        if(PlayerBox.x + PlayerBox.w < min_x_boss || PlayerBox.y > min_y_boss)
         {
                 isRunning = false;
                 return;
@@ -150,7 +149,6 @@ void Boss::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttac
                         isAttacking = true;
                 }
         }
-//        cout << cantAttacked << '\n';
 
         if(x_pos > PlayerBox.x + PlayerBox.w)
         {

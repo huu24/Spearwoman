@@ -50,14 +50,15 @@ void Key::RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect Pla
         if(frame >= KEY_FRAMES * 60) frame = 0;
         SDL_Rect renderQuad = {KeyBox.x - camX, KeyBox.y - camY, KeyBox.w, KeyBox.h};
         SDL_RenderCopyEx(screen, mKeyTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_RenderDrawRect(screen, &renderQuad);
 }
 
 AllKeys::AllKeys()
 {
-        Keys.push_back(Key(500, 100));
-        Keys.push_back(Key(300, 200));
-        Keys.push_back(Key(200, 300));
+        Keys.push_back(Key(42*64, 18*64));
+        Keys.push_back(Key(111*64, 11*64));
+        Keys.push_back(Key(214*64, 6*64));
+        Keys.push_back(Key(143*64, 29*64));
+        Keys.push_back(Key(230*64, 26*64));
 }
 
 AllKeys::~AllKeys()
@@ -78,16 +79,6 @@ void AllKeys::Check(SDL_Rect Playerbox)
         {
                 Keys[i].Check(Playerbox);
         }
-}
-
-int AllKeys::countkeys()
-{
-        int tmp = 0;
-        for(int i = 0; i < Keys.size(); i++)
-        {
-                tmp += Keys[i].countkeys();
-        }
-        return tmp;
 }
 
 bool AllKeys::touchKeys()
@@ -142,15 +133,18 @@ void HP::RenderHP(SDL_Renderer* screen, SDL_Texture* mHPTexture, int camX, int c
         }
         SDL_Rect current_clip = {0, 0, 40, 52};
 
-        SDL_Rect renderQuad = {HpBox.x - camX, HpBox.y - camY, HpBox.w * 2 / 3, HpBox.h * 2 / 3};
+        SDL_Rect renderQuad = {HpBox.x - camX, HpBox.y - camY, HpBox.w , HpBox.h };
         SDL_RenderCopyEx(screen, mHPTexture, &current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }
 
 AllHps::AllHps()
 {
-        HPs.push_back(HP(300, 400));
-        HPs.push_back(HP(400, 500));
-        HPs.push_back(HP(500, 600));
+        HPs.push_back(HP(31*64, 3*64));
+        HPs.push_back(HP(111*64, 9*64));
+        HPs.push_back(HP(228*64, 9*64));
+        HPs.push_back(HP(139*64, 29*64));
+        HPs.push_back(HP(89*64, 34*64));
+
 }
 
 AllHps::~AllHps()
@@ -210,7 +204,7 @@ void Door::set_clips()
 
 void Door::Check(SDL_Rect PlayerBox, int NumberOfKeys)
 {
-        if(BaseObject::CheckCollision(PlayerBox, DoorBox) && NumberOfKeys == 3)
+        if(BaseObject::CheckCollision(PlayerBox, DoorBox) && NumberOfKeys == 5)
         {
                 open = true;
         }

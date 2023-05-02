@@ -2,15 +2,15 @@
 
 Player::Player()
 {
-        HP = 2;
+        HP = 5;
         ENERGY = 3;
         KEYS = 0;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
         VelX = VelY = 0.0;
-        xPos = 228 * TILE_SIZE;
-//        xPos = 0;
-        yPos = 500.0;
-        map_x = map_y = 0;
+//        xPos = 228 * TILE_SIZE;
+        xPos = 0;
+        yPos = 1300.0;
+        camX = camY = 0;
         input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
         = input_type.death = isAttacking  = isWalking = isAttacked = dead = false;
         FlipType = SDL_FLIP_NONE;
@@ -76,7 +76,7 @@ void Player::set_clips()
         PlayerBox.h = 96;
         PlayerBox.w = 64;
         int w = 0;
-        for(int i = 0; i <= 3; i++)
+        for(int i = 0; i <= 5; i++)
         {
                 Key_clip[i] = {0, 2920, w, 32};
                 w += 32;
@@ -268,8 +268,8 @@ void Player::SetCamera(Map& map_data)
         if(map_data.current_y_pos < 0) map_data.current_y_pos = 0;
         if(map_data.current_y_pos + SCREEN_HEIGHT > map_data.max_y_) map_data.current_y_pos = map_data.max_y_ - SCREEN_HEIGHT;
 
-        map_x = map_data.current_x_pos;
-        map_y = map_data.current_y_pos;
+        camX = map_data.current_x_pos;
+        camY = map_data.current_y_pos;
 }
 
 void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking)
@@ -299,7 +299,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                         takehit_frame = 0;
                         isAttacked = false;
                 }
-                SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
+                SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
         else if(dead)
@@ -312,7 +312,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
 
                 death_frame++;
                 if(death_frame >= current_frame * 30) death_frame = (current_frame - 1) * 60;
-                SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
+                SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
         else if(input_type.attack1)
@@ -337,7 +337,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                         attack1_frame = 0;
                         input_type.attack1 = false;
                 }
-                        SDL_Rect renderQuad = {PlayerAttackBox.x - map_x, PlayerAttackBox.y - map_y, PlayerAttackBox.w, PlayerAttackBox.h};
+                        SDL_Rect renderQuad = {PlayerAttackBox.x - camX, PlayerAttackBox.y - camY, PlayerAttackBox.w, PlayerAttackBox.h};
                         SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
         else if(input_type.attack2)
@@ -363,7 +363,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                         attack2_frame = 0;
                         input_type.attack2 = false;
                 }
-                SDL_Rect renderQuad = {PlayerAttackBox.x - map_x, PlayerAttackBox.y - map_y, PlayerAttackBox.w, PlayerAttackBox.h};
+                SDL_Rect renderQuad = {PlayerAttackBox.x - camX, PlayerAttackBox.y - camY, PlayerAttackBox.w, PlayerAttackBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
 
         }
@@ -378,7 +378,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 run_frame++;
                 if(run_frame >= current_frame * 30) run_frame = 0;
 
-                SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
+                SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
 
         }
@@ -393,7 +393,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 idle_frame++;
                 if(idle_frame >= current_frame * 30) idle_frame = 0;
 
-                SDL_Rect renderQuad = {PlayerBox.x - map_x, PlayerBox.y - map_y, PlayerBox.w, PlayerBox.h};
+                SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
 }

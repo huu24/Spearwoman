@@ -63,7 +63,6 @@ private:
 
         int idle_frame, run_frame, attack_frame, takehit_frame, death_frame;
         bool isRunning, isAttacking, isIdling, isTakinghit, isAttacked, isDead, causeDamage, cantAttacked, renderHP;
-        bool isLeft, isRight;
 
         SDL_RendererFlip FlipType;
 };

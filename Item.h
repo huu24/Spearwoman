@@ -12,7 +12,6 @@ public:
 
         void set_clips();
         void Check( SDL_Rect PlayerBox);
-        int countkeys() {return yourkeys;}
         bool touchKeys() {return collide;}
         void RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect PlayerBox , int camX, int camY);
 
@@ -34,7 +33,6 @@ public:
 
         void set_clips();
         void Check(SDL_Rect PlayerBox);
-        int countkeys();
         bool touchKeys();
         void RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect PlayerBox, int camX, int camY);
 private:
