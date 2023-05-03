@@ -1,5 +1,17 @@
 #include "Game.h"
 
+Game::Game()
+{
+        GameState = -1;
+        InMenu = true;
+        InGame = false;
+}
+
+Game::~Game()
+{
+
+}
+
 bool Game::init()
 {
         int success = true;
@@ -66,16 +78,16 @@ bool Game::LoadImage()
                 cout << "can not load Player image!\n";
                 return false;
         }
-        bool res3 = Menu.LoadImg("image\\Game\\maki(1).png", g_screen);
+        bool res3 = BGMenuTexture.LoadImg("image\\Game\\maki(1).png", g_screen);
         if(res3 == false)
         {
-                cout << "can not load Menu image!\n";
+                cout << "can not load BGMenuTexture image!\n";
                 return false;
         }
-        bool res4 = Button.LoadImg("image\\Game\\Button1.png", g_screen);
+        bool res4 = ButtonTexture.LoadImg("image\\Game\\Button1.png", g_screen);
         if(res4 == false)
         {
-                cout << "can not load Button image!\n";
+                cout << "can not load ButtonTexture image!\n";
                 return false;
         }
         bool res5 = BossTexture.LoadImg("image\\Game\\Boss-export.png", g_screen);
@@ -171,47 +183,61 @@ bool Game::SetDoor()
 
 void Game::HandleEvents(SDL_Event &g_event)
 {
-//        cerr << "h\n";
-        MyPlayer.Handle(g_event);
+        menu.Handle(g_event, GameState);
+        if(GameState == 1)
+        {
+                InGame = true;
+                InMenu = false;
+                GameState = -1;
+        }
+        if(InGame)
+        {
+                MyPlayer.Handle(g_event);
+        }
 }
 
 void Game::RenderGame()
 {
-//        cerr << "h\n";
         SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
         SDL_RenderClear(g_screen);
 
-        game_map.SetMap(map_data);
-        game_map.RenderMap(g_screen);
+        if(InMenu)
+        {
+                menu.Render(g_screen, BGMenuTexture.GetTexture(), ButtonTexture.GetTexture());
+//                cout << "huu\n";
+        }
 
-        door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
-        door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        if(InGame)
+        {
+                game_map.SetMap(map_data);
+                game_map.RenderMap(g_screen);
 
-        key.Check(MyPlayer.GetPlayerBox());
-        key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+                door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
+                door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-        hp.Check(MyPlayer.GetPlayerBox());
-        hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+                key.Check(MyPlayer.GetPlayerBox());
+                key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-        MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen());
-        MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus());
-        MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
+                hp.Check(MyPlayer.GetPlayerBox());
+                hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-        skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
-        skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
-        skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+                MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen());
+                MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus());
+                MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
 
-        boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
-        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
-        boss.RenderHP(g_screen, BossTexture.GetTexture());
+                skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
+                skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+                skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-        shark.Move();
-        shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), boss.CountAttacks());
+                boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
+                boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+                boss.RenderHP(g_screen, BossTexture.GetTexture());
 
-        bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+//                shark.Move();
+//                shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), boss.CountAttacks());
 
-//        HPTexture.Render(g_screen, NULL);
-//        Button.Render(g_screen, NULL);
+                bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        }
 
         SDL_RenderPresent(g_screen);
 }

@@ -3,9 +3,12 @@
 SharkAttack::SharkAttack()
 {
         xpos = (MAX_MAP_X - 7) * TILE_SIZE;
+        ypos = 500;
+
+        xpos = 0;
+        ypos = 0;
         minY = 64;
         maxY = 18 * 64 - 160;
-        ypos = 500;
         cout << ypos << '\n';
         frame = 0;
         FlipType = SDL_FLIP_NONE;
@@ -52,8 +55,8 @@ void SharkAttack::RenderSharkAttack(SDL_Renderer* screen, SDL_Texture* mSharkTex
 Boss::Boss()
 {
         idle_frame = run_frame = attack_frame = takehit_frame = death_frame = 0;
-        x_pos = 245 * TILE_SIZE;
-        y_pos = 100;
+        x_pos = 240 * TILE_SIZE;
+        y_pos = 500;
         VelX = VelY = 0;
         min_x_boss = 230*64;
         max_x_boss = 248*64;
@@ -64,6 +67,8 @@ Boss::Boss()
         FlipType = SDL_FLIP_HORIZONTAL;
         isRunning = isAttacking = isAttacked = isTakinghit = isDead = causeDamage = cantAttacked = renderHP = false;
         isIdling = true;
+        BossBox.x = x_pos;
+        BossBox.y = y_pos;
 }
 Boss::~Boss()
 {
@@ -112,7 +117,7 @@ void Boss::set_clips()
 
 void Boss::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack)
 {
-        if(PlayerBox.x + PlayerBox.w < min_x_boss || PlayerBox.y > min_y_boss)
+        if(PlayerBox.x + PlayerBox.w < min_x_boss || PlayerBox.y > max_y_boss)
         {
                 isRunning = false;
                 return;
@@ -210,7 +215,10 @@ void Boss::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttac
 
 void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect PlayerBox, int camX, int camY)
 {
-
+        if(mBossTexture == NULL)
+        {
+                cout << "fuck\n";
+        }
         SDL_Rect* current_clip;
         int current_frame;
 
@@ -227,7 +235,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 }
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-//                SDL_RenderDrawRect(screen, &RenderQuad);
+                SDL_RenderDrawRect(screen, &RenderQuad);
         }
         else if(isTakinghit)
         {
@@ -243,7 +251,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 }
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-//                SDL_RenderDrawRect(screen, &RenderQuad);
+                SDL_RenderDrawRect(screen, &RenderQuad);
         }
         else if(isAttacking)
         {
@@ -262,7 +270,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 }
                 SDL_Rect RenderQuad = {BossAttackBox.x - camX, BossAttackBox.y - camY, BossAttackBox.w, BossAttackBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-//                SDL_RenderDrawRect(screen, &RenderQuad);
+                SDL_RenderDrawRect(screen, &RenderQuad);
         }
         else if(isRunning)
         {
@@ -274,7 +282,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 if(run_frame >= current_frame * 60) run_frame = 0;
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-//                SDL_RenderDrawRect(screen, &RenderQuad);
+                SDL_RenderDrawRect(screen, &RenderQuad);
         }
         else if(isIdling)
         {
@@ -286,7 +294,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 if(idle_frame >= current_frame * 60) idle_frame = 0;
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
-//                SDL_RenderDrawRect(screen, &RenderQuad);
+                SDL_RenderDrawRect(screen, &RenderQuad);
         }
 
 }

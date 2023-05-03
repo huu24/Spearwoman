@@ -9,10 +9,13 @@
 #include "Bomb.h"
 #include "Boss.h"
 #include "Item.h"
+#include "Menu.h"
 
 class Game
 {
 public:
+        Game();
+        ~Game();
         bool init();
         bool LoadImage();
         bool SetMap();
@@ -33,8 +36,8 @@ private:
         BaseObject PlayerTexture;
         BaseObject BossTexture;
         BaseObject SharkTexture;
-        BaseObject Menu;
-        BaseObject Button;
+        BaseObject BGMenuTexture;
+        BaseObject ButtonTexture;
         BaseObject KeyTexture;
         BaseObject HPTexture;
         BaseObject DoorTexture;
@@ -48,6 +51,11 @@ private:
         AllKeys key;
         AllHps hp;
         Door door;
+        Menu menu;
+
+        int GameState;
+        bool InMenu;
+        bool InGame;
 };
 
 

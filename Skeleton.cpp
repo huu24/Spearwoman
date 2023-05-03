@@ -56,7 +56,7 @@ void Skeleton::set_clips()
         x = 0;
         for(int i = 1; i <= 3; i++)
         {
-                HP_clip[i] = {x, 263*3, 48*3, 6*3};
+                HP_clip[i] = {x, 275*3, 48*3, 6*3};
                 x += 48*3;
         }
         x = 0;
