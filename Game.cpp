@@ -5,6 +5,8 @@ Game::Game()
         GameState = -1;
         InMenu = true;
         InGame = false;
+        InGuide = false;
+        inEndGameMenu = false;
 }
 
 Game::~Game()
@@ -120,11 +122,29 @@ bool Game::LoadImage()
                 cout << "can not load door image!\n";
                 return false;
         }
+        bool res10 = GuideTexture.LoadImg("image\\Game\\Guide.png", g_screen);
+        if(res10 == false)
+        {
+                cout << "can not load door image!\n";
+                return false;
+        }
+        bool res11 = EGBGTexture.LoadImg("image\\Game\\SubMenuBG.png", g_screen);
+        if(res11 == false)
+        {
+                cout << "can not load end game menu image!\n";
+                return false;
+        }
+        bool res12 = EGButtonTexture.LoadImg("image\\Game\\button - Copy.png", g_screen);
+        if(res12 == false)
+        {
+                cout << "can not load end game menu image!\n";
+                return false;
+        }
         SetMap();
         SetPlayer();
         SetSkeleton();
         SetBoss();
-        SetSharkAttack();
+//        SetSharkAttack();
         SetBomb();
         SetKey();
         SetDoor();
@@ -157,11 +177,11 @@ bool Game::SetBoss()
         return true;
 }
 
-bool Game::SetSharkAttack()
-{
-        shark.set_clips();
-        return true;
-}
+//bool Game::SetSharkAttack()
+//{
+//        shark.set_clips();
+//        return true;
+//}
 
 bool Game::SetBomb()
 {
@@ -183,17 +203,46 @@ bool Game::SetDoor()
 
 void Game::HandleEvents(SDL_Event &g_event)
 {
-        menu.Handle(g_event, GameState);
-        if(GameState == 1)
+        if(InMenu)
         {
-                InGame = true;
-                InMenu = false;
-                GameState = -1;
+                menu.Handle(g_event, GameState);
         }
-        if(InGame)
+        else if(InGame)
         {
                 MyPlayer.Handle(g_event);
         }
+        if(MyPlayer.PlayerStatus())
+                inEndGameMenu = true;
+                egmenu.Handle(g_event, GameState);
+        if(GameState == PLAY_STATE)
+        {
+                InGame = true;
+                InMenu = false;
+                InGuide = false;
+                inEndGameMenu = false;
+                GameState = -1;
+        }
+        if(GameState == GUIDE_STATE)
+        {
+                InGuide = true;
+                InGame = false;
+                InMenu = false;
+                inEndGameMenu = false;
+                GameState = -1;
+        }
+        if(GameState == QUIT_STATE)
+        {
+                g_event.type = SDL_QUIT;
+        }
+        if(GameState == HOME_STATE)
+        {
+                InMenu = true;
+                InGuide = false;
+                InGame = false;
+                inEndGameMenu = false;
+                GameState = -1;
+        }
+//        cout << GameState << '\n';
 }
 
 void Game::RenderGame()
@@ -206,8 +255,11 @@ void Game::RenderGame()
                 menu.Render(g_screen, BGMenuTexture.GetTexture(), ButtonTexture.GetTexture());
 //                cout << "huu\n";
         }
-
-        if(InGame)
+        else if(InGuide)
+        {
+                GuideTexture.Render(g_screen, NULL);
+        }
+        else if(InGame)
         {
                 game_map.SetMap(map_data);
                 game_map.RenderMap(g_screen);
@@ -237,6 +289,27 @@ void Game::RenderGame()
 //                shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), boss.CountAttacks());
 
                 bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+
+                if(inEndGameMenu)
+                {
+                        egmenu.Render(g_screen, EGBGTexture.GetTexture(), EGButtonTexture.GetTexture());
+                        if(egmenu.GetRestart())
+                        {
+                                egmenu = EndGameMenu();
+                                skeleton = SkeletonArmy();
+                                SetSkeleton();
+                                bomb = BombList();
+                                SetBomb();
+                                door = Door();
+                                SetDoor();
+                                boss = Boss();
+                                SetBoss();
+                                key = AllKeys();
+                                SetKey();
+                                MyPlayer = Player();
+                                SetPlayer();
+                        }
+                }
         }
 
         SDL_RenderPresent(g_screen);

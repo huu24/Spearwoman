@@ -16,7 +16,7 @@ public:
         void RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect PlayerBox , int camX, int camY);
 
 private:
-        const int KEY_FRAMES = 12;
+        int KEY_FRAMES = 12;
         SDL_Rect Key_clip[12];
         SDL_Rect KeyBox;
         int frame;
@@ -81,7 +81,7 @@ public:
         SDL_Rect GetDoorBox() {return DoorBox;}
         void RenderDoor(SDL_Renderer* screen, SDL_Texture* mDoorTexture, int camX, int camY);
 private:
-        const int DOOR_FRAMES = 2;
+        int DOOR_FRAMES = 2;
         bool open;
         SDL_Rect DoorBox;
         SDL_Rect Door_clip[2];

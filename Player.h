@@ -27,15 +27,15 @@ public:
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
 
 private:
-        const float PlayerSpeed = 3;
-        const int IDLE_FRAMES = 8;
-        const int WALK_FRAMES = 8;
-        const int ATTACK1_FRAMES = 6;
-        const int ATTACK2_FRAMES = 12;
-        const int ATTACK3_FRAMES = 5;
-        const int TAKEHIT_FRAMES = 4;
-        const int DEATH_FRAMES = 8;
-        const int KEY_FRAMES = 3;
+        float PlayerSpeed = 0.5;
+        int IDLE_FRAMES = 8;
+        int WALK_FRAMES = 8;
+        int ATTACK1_FRAMES = 6;
+        int ATTACK2_FRAMES = 12;
+        int ATTACK3_FRAMES = 5;
+        int TAKEHIT_FRAMES = 4;
+        int DEATH_FRAMES = 8;
+        int KEY_FRAMES = 3;
 
         SDL_Rect Idle_clip[8];
         SDL_Rect Walk_clip[8];

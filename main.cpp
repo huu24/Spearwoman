@@ -25,11 +25,11 @@ int main(int argc, char* argv[])
                                 while(SDL_PollEvent(&g_event) != 0)
                                 {
 //                                        cerr << "h\n";
+                                        game.HandleEvents(g_event);
                                         if(g_event.type == SDL_QUIT)
                                         {
                                                 quit = true;
                                         }
-                                        game.HandleEvents(g_event);
                                 }
                                 game.RenderGame();
                         }

@@ -41,21 +41,27 @@ private:
         BaseObject KeyTexture;
         BaseObject HPTexture;
         BaseObject DoorTexture;
+        BaseObject GuideTexture;
+        BaseObject EGBGTexture;
+        BaseObject EGButtonTexture;
         GameMap game_map;
         Map map_data;
         Player MyPlayer;
         Boss boss;
-        SharkAttack shark;
+//        SharkAttack shark;
         SkeletonArmy skeleton;
         BombList bomb;
         AllKeys key;
         AllHps hp;
         Door door;
         Menu menu;
+        EndGameMenu egmenu;
 
         int GameState;
         bool InMenu;
         bool InGame;
+        bool InGuide;
+        bool inEndGameMenu;
 };
 
 

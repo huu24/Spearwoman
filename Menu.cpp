@@ -46,11 +46,15 @@ void Menu::Handle(SDL_Event events, int& state)
                                 case SDL_MOUSEBUTTONDOWN:
                                         if(i == PLAY)
                                         {
-                                                state = 1;
+                                                state = PLAY_STATE;
                                         }
                                         if(i == QUIT)
                                         {
-                                                state = 0;
+                                                state = QUIT_STATE;
+                                        }
+                                        if(i == GUIDE)
+                                        {
+                                                state = GUIDE_STATE;
                                         }
                                         break;
                                 case SDL_MOUSEMOTION:
@@ -77,6 +81,76 @@ void Menu::Render(SDL_Renderer* screen, SDL_Texture* mBGMenuTexture, SDL_Texture
                 SDL_Rect renderQuad2 = {ButtonBox[i].x, ButtonBox[i].y, BUTTON_WIDTH , BUTTON_HEIGHT};
                 SDL_RenderCopyEx(screen, mButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
         }
+}
 
+EndGameMenu::EndGameMenu()
+{
+        for(int i = 0; i < TOTAL_BUTTON; i++)
+        {
+                buttonBox[i] = {0, 160*i, Button_Width, Button_Height};
+        }
+        for(int i = 0; i < TOTAL_BUTTON; i++)
+        {
+                button_clip[i][0] = {0, 320*i, Button_Width, Button_Height};
+                button_clip[i][1] = {160, 320*i, Button_Width, Button_Height};
+                mouseOver[i] = 0;
+        }
+}
 
+void EndGameMenu::Handle(SDL_Event events, int& state)
+{
+        if(events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEMOTION)
+        {
+                for(int i = 0; i < TOTAL_BUTTON; i++)
+                {
+                        mouseOver[i] = 0;
+                }
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                for(int i = 0; i < TOTAL_BUTTON; i++)
+                {
+                        bool inside = false;
+                        if(buttonBox[i].x < x && x < buttonBox[i].x + Button_Width && buttonBox[i].y < y && y < buttonBox[i].y + Button_Height)
+                        {
+                                inside = true;
+                        }
+                        if(inside)
+                        {
+                                switch(events.type)
+                                {
+                                case SDL_MOUSEBUTTONDOWN:
+                                        if(i == PLAY_AGAIN)
+                                        {
+                                                state = PLAY_STATE;
+                                                restart = true;
+                                        }
+                                        if(i == HOME)
+                                        {
+                                                state = HOME_STATE;
+                                        }
+                                        break;
+                                case SDL_MOUSEMOTION:
+                                        mouseOver[i] = 1;
+                                        break;
+                                default:
+                                        break;
+                                }
+                        }
+                }
+        }
+}
+
+void EndGameMenu::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture)
+{
+//        if(mBGMenuTexture == NULL || mButtonTexture == NULL) cout << "fuck you\n";
+        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
+        SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+
+        for(int i = 0; i < TOTAL_BUTTON; i++)
+        {
+                SDL_Rect* current_clip2 = &button_clip[i][mouseOver[i]];
+                SDL_Rect renderQuad2 = {buttonBox[i].x, buttonBox[i].y, Button_Width , Button_Height};
+                SDL_RenderCopyEx(screen, ButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
+        }
 }

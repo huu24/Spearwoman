@@ -14,7 +14,7 @@ public:
         bool getBombStatus() {return bomb;}
 private:
         int bomb_x, bomb_y;
-        const int BOMB_FRAMES = 14;
+        int BOMB_FRAMES = 14;
         int bomb_frame;
         SDL_Rect Bomb_clip[14];
         SDL_Rect BombBox;
@@ -32,7 +32,7 @@ public:
         bool getBombStatus();
 
 private:
-        const int TOTAL_BOMB = 100;
+        int TOTAL_BOMB = 100;
         vector<Bomb> bomblist;
 };
 

@@ -19,12 +19,12 @@ public:
         SDL_Rect GetSkeletonAttackBox() {return SkeletonAttackBox;}
         bool getAttackStatus() {return isAttacking;}
 private:
-        const float DemonSpeed = 0.25;
-        const int IDLE_FRAMES = 4;
-        const int WALK_FRAMES = 4;
-        const int ATTACK_FRAMES = 8;
-        const int TAKEHIT_FRAMES = 3;
-        const int DEATH_FRAMES = 17;
+        float DemonSpeed = 0.25;
+        int IDLE_FRAMES = 4;
+        int WALK_FRAMES = 4;
+        int ATTACK_FRAMES = 8;
+        int TAKEHIT_FRAMES = 3;
+        int DEATH_FRAMES = 17;
 
         SDL_Rect Idle_clip[4];
         SDL_Rect Walk_clip[4];

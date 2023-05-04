@@ -29,6 +29,12 @@ const int COLOR_KEY_B = 0;
 
 const int RENDER_DRAW_COLOR = 255;
 
+const int QUIT_STATE = 0;
+const int PLAY_STATE = 1;
+const int GUIDE_STATE = 2;
+const int PLAY_AGAIN_STATE = 3;
+const int HOME_STATE = 4;
+
 #define TILE_SIZE 64
 
 #define MAX_MAP_X 250

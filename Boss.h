@@ -40,12 +40,12 @@ public:
         bool GetAttackStatus() {return causeDamage;}
         int CountAttacks() {return cntAttack;}
 private:
-        const float BossSpeed = 0.5;
-        const int IDLE_FRAMES = 9;
-        const int RUN_FRAMES = 6;
-        const int ATTACK_FRAMES = 12;
-        const int TAKEHIT_FRAMES = 5;
-        const int DEATH_FRAMES = 9;
+        float BossSpeed = 0.5;
+        int IDLE_FRAMES = 9;
+        int RUN_FRAMES = 6;
+        int ATTACK_FRAMES = 12;
+        int TAKEHIT_FRAMES = 5;
+        int DEATH_FRAMES = 9;
         float VelX, VelY;
         float x_pos, y_pos;
         float max_x_boss, max_y_boss, min_x_boss, min_y_boss;

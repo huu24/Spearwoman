@@ -68,7 +68,7 @@
 1682674206 d:\codeblocks\game\spearwoman\baseobject.h
 	"CommonFunc.h"
 
-1683017372 d:\codeblocks\game\spearwoman\commonfunc.h
+1683168012 d:\codeblocks\game\spearwoman\commonfunc.h
 	<cstdlib>
 	<ctime>
 	<vector>
@@ -81,10 +81,10 @@
 	<SDL_mixer.h>
 	<SDL_ttf.h>
 
-1683127058 source:d:\codeblocks\game\spearwoman\boss.cpp
+1683127510 source:d:\codeblocks\game\spearwoman\boss.cpp
 	"Boss.h"
 
-1683037228 d:\codeblocks\game\spearwoman\boss.h
+1683191806 d:\codeblocks\game\spearwoman\boss.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
@@ -98,18 +98,18 @@
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1682588064 source:d:\codeblocks\game\spearwoman\main.cpp
+1683191019 source:d:\codeblocks\game\spearwoman\main.cpp
 	"Game.h"
 
-1683038907 d:\codeblocks\game\spearwoman\player.h
+1683189310 d:\codeblocks\game\spearwoman\player.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1683039726 d:\codeblocks\game\spearwoman\skeleton.h
+1683191188 d:\codeblocks\game\spearwoman\skeleton.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1683127201 source:d:\codeblocks\game\spearwoman\player.cpp
+1683193162 source:d:\codeblocks\game\spearwoman\player.cpp
 	"Player.h"
 
 1683107333 source:d:\codeblocks\game\spearwoman\skeleton.cpp
@@ -118,19 +118,19 @@
 1683037809 source:d:\codeblocks\game\spearwoman\bomb.cpp
 	"Bomb.h"
 
-1683037809 d:\codeblocks\game\spearwoman\bomb.h
+1683191922 d:\codeblocks\game\spearwoman\bomb.h
 	"BaseObject.h"
 	"CommonFunc.h"
 
 1682427837 source:d:\codeblocks\game\spearwoman\menu,h.c
 
-1683126007 source:d:\codeblocks\game\spearwoman\menu.cpp
+1683193482 source:d:\codeblocks\game\spearwoman\menu.cpp
 	"Menu.h"
 
-1683127085 source:d:\codeblocks\game\spearwoman\game.cpp
+1683197504 source:d:\codeblocks\game\spearwoman\game.cpp
 	"Game.h"
 
-1683122644 d:\codeblocks\game\spearwoman\game.h
+1683191806 d:\codeblocks\game\spearwoman\game.h
 	"BaseObject.h"
 	"CommonFunc.h"
 	"game_map.h"
@@ -141,14 +141,14 @@
 	"Item.h"
 	"Menu.h"
 
-1683039154 d:\codeblocks\game\spearwoman\item.h
+1683191893 d:\codeblocks\game\spearwoman\item.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
 1683039161 source:d:\codeblocks\game\spearwoman\item.cpp
 	"Item.h"
 
-1683121335 d:\codeblocks\game\spearwoman\menu.h
+1683191422 d:\codeblocks\game\spearwoman\menu.h
 	"BaseObject.h"
 	"CommonFunc.h"
 
