@@ -327,7 +327,7 @@ void Game::RenderGuideMenu()
 {
         SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
         SDL_RenderClear(g_screen);
-        guide.Render(g_screen, GuideTexture.GetTexture(), BackButtonTexture.GetTexture());
+        guide.Render(g_screen, GuideTexture.GetTexture(), EGButtonTexture.GetTexture());
         SDL_RenderPresent(g_screen);
 }
 

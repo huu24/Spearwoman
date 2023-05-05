@@ -82,13 +82,13 @@ class Guide
 public:
         Guide();
         void Handle(SDL_Event events, int& state);
-        void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* BackButtonTexture);
+        void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
 private:
        SDL_Rect backButtonBox;
        SDL_Rect button_clip[2];
        bool mouseOver;
-       int Button_Width = 106;
-       int Button_Height = 100;
+       int Button_Width = 80;
+       int Button_Height = 80;
 };
 
 #endif //MENU_H

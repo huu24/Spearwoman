@@ -162,7 +162,7 @@ PauseMenu::PauseMenu()
 {
         for(int i = 0; i < Total_Button; i++)
         {
-                buttonBox[i] = {393 + Button_Width*i, 245, Button_Width, Button_Height};
+                buttonBox[i] = {398 + Button_Width*i, 245, Button_Width, Button_Height};
         }
         for(int i = 0; i < Total_Button; i++)
         {
@@ -237,8 +237,8 @@ void PauseMenu::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture
 Guide::Guide()
 {
         backButtonBox = {10, 10, Button_Width, Button_Height};
-        button_clip[0] = {0, 0, Button_Width, Button_Height};
-        button_clip[1] = {106, 0, Button_Width, Button_Height};
+        button_clip[0] = {0, 320, Button_Width * 2, Button_Height * 2};
+        button_clip[1] = {160, 320, Button_Width * 2, Button_Height * 2};
         mouseOver = 0;
 }
 
@@ -272,13 +272,14 @@ void Guide::Handle(SDL_Event events, int& state)
         }
 }
 
-void Guide::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* BackButtonTexture)
+void Guide::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture)
 {
+//        if(ButtonTexture != NULL) cout << "fuck you\n";
         SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
         SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
         SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
 
         SDL_Rect* current_clip2 = &button_clip[mouseOver];
         SDL_Rect renderQuad2 = {backButtonBox.x, backButtonBox.y, Button_Width , Button_Height};
-        SDL_RenderCopyEx(screen, BackButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(screen, ButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
 }
