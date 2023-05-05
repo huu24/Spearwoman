@@ -225,13 +225,13 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
         if(HP <= 0)
         {
                 current_frame = DEATH_FRAMES;
-                current_clip = &Death_clip[death_frame / 60];
+                current_clip = &Death_clip[death_frame / 10];
                 BossBox.w = current_clip->w / 2;
                 BossBox.h = current_clip->h / 2;
                 death_frame++;
-                if(death_frame >= current_frame * 60)
+                if(death_frame >= current_frame * 10)
                 {
-                        death_frame = current_frame * 60 - 60;
+                        death_frame = current_frame * 10 - 10;
                 }
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
@@ -240,11 +240,11 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
         else if(isTakinghit)
         {
                 current_frame = TAKEHIT_FRAMES;
-                current_clip = &TakeHit_clip[takehit_frame / 60];
+                current_clip = &TakeHit_clip[takehit_frame / 10];
                 BossBox.w = current_clip->w / 2;
                 BossBox.h = current_clip->h / 2;
                 takehit_frame++;
-                if(takehit_frame >= current_frame * 60)
+                if(takehit_frame >= current_frame * 10)
                 {
                         takehit_frame = 0;
                         isTakinghit = false;
@@ -256,14 +256,14 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
         else if(isAttacking)
         {
                 current_frame = ATTACK_FRAMES;
-                current_clip = &Attack_clip[attack_frame / 60];
+                current_clip = &Attack_clip[attack_frame / 12];
                 attack_frame++;
-                if(attack_frame >= 2* 60 && attack_frame <= ATTACK_FRAMES * 60) cantAttacked = true;
+                if(attack_frame >= 2* 12 && attack_frame <= ATTACK_FRAMES * 12) cantAttacked = true;
                 else cantAttacked = false;
-                if(attack_frame == 10 * 60 && BaseObject::CheckCollision(BossAttackBox, PlayerBox)) causeDamage = true;
+                if(attack_frame == 12 * 12 && BaseObject::CheckCollision(BossAttackBox, PlayerBox)) causeDamage = true;
                 else
                         causeDamage = false;
-                if(attack_frame >= current_frame * 60)
+                if(attack_frame >= current_frame * 12)
                 {
                         isAttacking = false;
                         attack_frame = 0;
@@ -275,11 +275,11 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
         else if(isRunning)
         {
                 current_frame = RUN_FRAMES;
-                current_clip = &Run_clip[run_frame / 60];
+                current_clip = &Run_clip[run_frame / 10];
                 BossBox.w = current_clip->w / 2;
                 BossBox.h = current_clip->h / 2;
                 run_frame++;
-                if(run_frame >= current_frame * 60) run_frame = 0;
+                if(run_frame >= current_frame * 10) run_frame = 0;
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                 SDL_RenderDrawRect(screen, &RenderQuad);
@@ -287,11 +287,11 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
         else if(isIdling)
         {
                 current_frame = IDLE_FRAMES;
-                current_clip = &Idle_clip[idle_frame / 60];
+                current_clip = &Idle_clip[idle_frame / 10];
                 BossBox.w = current_clip->w / 2;
                 BossBox.h = current_clip->h / 2;
                 idle_frame++;
-                if(idle_frame >= current_frame * 60) idle_frame = 0;
+                if(idle_frame >= current_frame * 10) idle_frame = 0;
                 SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY, BossBox.w, BossBox.h};
                 SDL_RenderCopyEx(screen, mBossTexture, current_clip, &RenderQuad, 0.0, NULL, FlipType);
                 SDL_RenderDrawRect(screen, &RenderQuad);

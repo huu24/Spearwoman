@@ -68,6 +68,8 @@ void Menu::Handle(SDL_Event events, int& state)
         }
 }
 
+//245
+
 void Menu::Render(SDL_Renderer* screen, SDL_Texture* mBGMenuTexture, SDL_Texture* mButtonTexture)
 {
 //        if(mBGMenuTexture == NULL || mButtonTexture == NULL) cout << "fuck you\n";
@@ -87,7 +89,7 @@ EndGameMenu::EndGameMenu()
 {
         for(int i = 0; i < TOTAL_BUTTON; i++)
         {
-                buttonBox[i] = {0, 160*i, Button_Width, Button_Height};
+                buttonBox[i] = {480 + 160*i, 245, Button_Width, Button_Height};
         }
         for(int i = 0; i < TOTAL_BUTTON; i++)
         {
@@ -121,12 +123,12 @@ void EndGameMenu::Handle(SDL_Event events, int& state)
                                 case SDL_MOUSEBUTTONDOWN:
                                         if(i == PLAY_AGAIN)
                                         {
-                                                state = PLAY_STATE;
+                                                state = AGAIN_STATE;
                                                 restart = true;
                                         }
                                         if(i == HOME)
                                         {
-                                                state = HOME_STATE;
+                                                state = MENU_STATE;
                                         }
                                         break;
                                 case SDL_MOUSEMOTION:
@@ -153,4 +155,130 @@ void EndGameMenu::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Textu
                 SDL_Rect renderQuad2 = {buttonBox[i].x, buttonBox[i].y, Button_Width , Button_Height};
                 SDL_RenderCopyEx(screen, ButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
         }
+}
+
+
+PauseMenu::PauseMenu()
+{
+        for(int i = 0; i < Total_Button; i++)
+        {
+                buttonBox[i] = {393 + Button_Width*i, 245, Button_Width, Button_Height};
+        }
+        for(int i = 0; i < Total_Button; i++)
+        {
+                button_clip[i][0] = {0, 160*i, Button_Width, Button_Height};
+                button_clip[i][1] = {160, 160*i, Button_Width, Button_Height};
+                mouseOver[i] = 0;
+        }
+}
+
+void PauseMenu::Handle(SDL_Event events, int& state)
+{
+        if(events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEMOTION)
+        {
+                for(int i = 0; i < Total_Button; i++)
+                {
+                        mouseOver[i] = 0;
+                }
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                for(int i = 0; i < Total_Button; i++)
+                {
+                        bool inside = false;
+                        if(buttonBox[i].x < x && x < buttonBox[i].x + Button_Width && buttonBox[i].y < y && y < buttonBox[i].y + Button_Height)
+                        {
+                                inside = true;
+                        }
+                        if(inside)
+                        {
+                                switch(events.type)
+                                {
+                                case SDL_MOUSEBUTTONDOWN:
+                                        if(i == Play_Again)
+                                        {
+                                                state = AGAIN_STATE;
+                                                restart = true;
+                                        }
+                                        if(i == Resume)
+                                        {
+                                                state = PLAY_STATE;
+                                        }
+                                        if(i == Home)
+                                        {
+                                                state = MENU_STATE;
+                                        }
+                                        break;
+                                case SDL_MOUSEMOTION:
+                                        mouseOver[i] = 1;
+                                        break;
+                                default:
+                                        break;
+                                }
+                        }
+                }
+        }
+}
+
+void PauseMenu::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture)
+{
+//        if(mBGMenuTexture == NULL || mButtonTexture == NULL) cout << "fuck you\n";
+        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
+        SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+
+        for(int i = 0; i < Total_Button; i++)
+        {
+                SDL_Rect* current_clip2 = &button_clip[i][mouseOver[i]];
+                SDL_Rect renderQuad2 = {buttonBox[i].x, buttonBox[i].y, Button_Width , Button_Height};
+                SDL_RenderCopyEx(screen, ButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
+        }
+}
+
+Guide::Guide()
+{
+        backButtonBox = {10, 10, Button_Width, Button_Height};
+        button_clip[0] = {0, 0, Button_Width, Button_Height};
+        button_clip[1] = {106, 0, Button_Width, Button_Height};
+        mouseOver = 0;
+}
+
+void Guide::Handle(SDL_Event events, int& state)
+{
+        if(events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEMOTION)
+        {
+                mouseOver = 0;
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                bool inside = false;
+                if(backButtonBox.x < x && x < backButtonBox.x + Button_Width && backButtonBox.y < y && y < backButtonBox.y + Button_Height)
+                {
+                        inside = true;
+                }
+                if(inside)
+                {
+                        switch(events.type)
+                        {
+                        case SDL_MOUSEBUTTONDOWN:
+                                state = MENU_STATE;
+                                break;
+                        case SDL_MOUSEMOTION:
+                                        mouseOver = 1;
+                                break;
+                        default:
+                                break;
+
+                        }
+                }
+        }
+}
+
+void Guide::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* BackButtonTexture)
+{
+        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
+        SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+
+        SDL_Rect* current_clip2 = &button_clip[mouseOver];
+        SDL_Rect renderQuad2 = {backButtonBox.x, backButtonBox.y, Button_Width , Button_Height};
+        SDL_RenderCopyEx(screen, BackButtonTexture, current_clip2, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
 }

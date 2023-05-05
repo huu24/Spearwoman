@@ -12,7 +12,7 @@ public:
         ~Player();
 
         void set_clips();
-        void Handle(SDL_Event events);
+        void Handle(SDL_Event events, int& state);
         void Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen);
         void CollisionWithMap(Map& map_data);
         void SetCamera(Map& map_data);
@@ -27,7 +27,7 @@ public:
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
 
 private:
-        float PlayerSpeed = 0.5;
+        float PlayerSpeed = 3;
         int IDLE_FRAMES = 8;
         int WALK_FRAMES = 8;
         int ATTACK1_FRAMES = 6;

@@ -7,6 +7,8 @@ Game::Game()
         InGame = false;
         InGuide = false;
         inEndGameMenu = false;
+        GameState = MENU_STATE;
+        running = true;
 }
 
 Game::~Game()
@@ -140,6 +142,12 @@ bool Game::LoadImage()
                 cout << "can not load end game menu image!\n";
                 return false;
         }
+        bool res13 = BackButtonTexture.LoadImg("image\\Game\\backButton.png", g_screen);
+        if(res13 == false)
+        {
+                cout << "can not load back button image!\n";
+                return false;
+        }
         SetMap();
         SetPlayer();
         SetSkeleton();
@@ -161,18 +169,21 @@ bool Game::SetMap()
 
 bool Game::SetPlayer()
 {
+        MyPlayer = Player();
         MyPlayer.set_clips();
         return true;
 }
 
 bool Game::SetSkeleton()
 {
+        skeleton = SkeletonArmy();
         skeleton.set_clips();
         return true;
 }
 
 bool Game::SetBoss()
 {
+        boss = Boss();
         boss.set_clips();
         return true;
 }
@@ -185,64 +196,146 @@ bool Game::SetBoss()
 
 bool Game::SetBomb()
 {
+        bomb = BombList();
         bomb.set_clips();
         return true;
 }
 
 bool Game::SetKey()
 {
+        key = AllKeys();
         key.set_clips();
         return true;
 }
 
+bool Game::SetHP()
+{
+        hp = AllHps();
+        return true;
+}
 bool Game::SetDoor()
 {
+        door = Door();
         door.set_clips();
         return true;
 }
 
-void Game::HandleEvents(SDL_Event &g_event)
+bool Game::SetObject()
 {
-        if(InMenu)
+        if(!SetPlayer())
         {
-                menu.Handle(g_event, GameState);
+                cout << "can not set player.\n";
+                return false;
         }
-        else if(InGame)
+        if(!SetSkeleton())
         {
-                MyPlayer.Handle(g_event);
+                cout << "can not set skeleton.\n";
+                return false;
         }
-        if(MyPlayer.PlayerStatus())
-                inEndGameMenu = true;
-                egmenu.Handle(g_event, GameState);
+        if(!SetBoss())
+        {
+                cout << "can not set boss.\n";
+                return false;
+        }
+//        bool SetSharkAttack();
+        if(!SetBomb())
+        {
+                cout << "can not set bomb.\n";
+                return false;
+        }
+        if(!SetKey())
+        {
+                cout << "can not set key.\n";
+                return false;
+        }
+        if(!SetHP())
+        {
+                cout << "can not set blood jar.\n";
+                return false;
+        }
+        if(!SetDoor())
+        {
+                cout << "can not set door\n";
+                return false;
+        }
+        return true;
+}
+
+void Game::HandleMenuEvents(SDL_Event &g_event)
+{
+        if(g_event.type == SDL_QUIT)
+                running = false;
+        menu.Handle(g_event, GameState);
         if(GameState == PLAY_STATE)
         {
-                InGame = true;
-                InMenu = false;
-                InGuide = false;
-                inEndGameMenu = false;
-                GameState = -1;
+                SetObject();
         }
-        if(GameState == GUIDE_STATE)
+}
+void Game::RenderMenu()
+{
+        SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+        SDL_RenderClear(g_screen);
+        menu.Render(g_screen, BGMenuTexture.GetTexture(), ButtonTexture.GetTexture());
+        SDL_RenderPresent(g_screen);
+}
+
+void Game::HandlePauseMenuEvents(SDL_Event &g_event)
+{
+        if(g_event.type == SDL_QUIT)
+                running = false;
+        pauseMenu.Handle(g_event, GameState);
+        if(GameState == AGAIN_STATE)
         {
-                InGuide = true;
-                InGame = false;
-                InMenu = false;
-                inEndGameMenu = false;
-                GameState = -1;
+                GameState = PLAY_STATE;
+                SetObject();
         }
-        if(GameState == QUIT_STATE)
+}
+void Game::RenderPauseMenu()
+{
+        SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+        SDL_RenderClear(g_screen);
+        pauseMenu.Render(g_screen, EGBGTexture.GetTexture(), EGButtonTexture.GetTexture());
+        SDL_RenderPresent(g_screen);
+}
+
+void Game::HandleGameOverEvents(SDL_Event &g_event)
+{
+        if(g_event.type == SDL_QUIT)
+                running = false;
+        egmenu.Handle(g_event, GameState);
+        if(GameState == AGAIN_STATE)
         {
-                g_event.type = SDL_QUIT;
+                GameState = PLAY_STATE;
+                SetObject();
         }
-        if(GameState == HOME_STATE)
-        {
-                InMenu = true;
-                InGuide = false;
-                InGame = false;
-                inEndGameMenu = false;
-                GameState = -1;
-        }
-//        cout << GameState << '\n';
+}
+void Game::RenderGameOverMenu()
+{
+        SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+        SDL_RenderClear(g_screen);
+        egmenu.Render(g_screen, EGBGTexture.GetTexture(), EGButtonTexture.GetTexture());
+        SDL_RenderPresent(g_screen);
+}
+
+void Game::HandleGuideMenuEvents(SDL_Event &g_event)
+{
+        if(g_event.type == SDL_QUIT)
+                running = false;
+        guide.Handle(g_event, GameState);
+}
+void Game::RenderGuideMenu()
+{
+        SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+        SDL_RenderClear(g_screen);
+        guide.Render(g_screen, GuideTexture.GetTexture(), BackButtonTexture.GetTexture());
+        SDL_RenderPresent(g_screen);
+}
+
+void Game::HandleGameEvents(SDL_Event &g_event)
+{
+        if(g_event.type == SDL_QUIT)
+                running = false;
+        MyPlayer.Handle(g_event, GameState);
 }
 
 void Game::RenderGame()
@@ -250,17 +343,7 @@ void Game::RenderGame()
         SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
         SDL_RenderClear(g_screen);
 
-        if(InMenu)
-        {
-                menu.Render(g_screen, BGMenuTexture.GetTexture(), ButtonTexture.GetTexture());
-//                cout << "huu\n";
-        }
-        else if(InGuide)
-        {
-                GuideTexture.Render(g_screen, NULL);
-        }
-        else if(InGame)
-        {
+
                 game_map.SetMap(map_data);
                 game_map.RenderMap(g_screen);
 
@@ -290,27 +373,8 @@ void Game::RenderGame()
 
                 bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-                if(inEndGameMenu)
-                {
-                        egmenu.Render(g_screen, EGBGTexture.GetTexture(), EGButtonTexture.GetTexture());
-                        if(egmenu.GetRestart())
-                        {
-                                egmenu = EndGameMenu();
-                                skeleton = SkeletonArmy();
-                                SetSkeleton();
-                                bomb = BombList();
-                                SetBomb();
-                                door = Door();
-                                SetDoor();
-                                boss = Boss();
-                                SetBoss();
-                                key = AllKeys();
-                                SetKey();
-                                MyPlayer = Player();
-                                SetPlayer();
-                        }
-                }
-        }
+                if(MyPlayer.PlayerStatus())
+                        GameState = GAME_OVER_MENU_STATE;
 
         SDL_RenderPresent(g_screen);
 }
@@ -320,6 +384,17 @@ void Game::close()
         SkeletonTexture.Free();
         BombTexture.Free();
         PlayerTexture.Free();
+        BossTexture.Free();
+        SharkTexture.Free();
+        BGMenuTexture.Free();
+        ButtonTexture.Free();
+        KeyTexture.Free();
+        HPTexture.Free();
+        DoorTexture.Free();
+        GuideTexture.Free();
+        EGBGTexture.Free();
+        EGButtonTexture.Free();
+
 
         SDL_DestroyRenderer(g_screen);
         g_screen = NULL;

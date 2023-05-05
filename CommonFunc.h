@@ -21,7 +21,6 @@ static SDL_Event g_event;
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 640;
-const int SCREEN_BPP = 32;
 
 const int COLOR_KEY_R = 0;
 const int COLOR_KEY_G = 0;
@@ -32,8 +31,13 @@ const int RENDER_DRAW_COLOR = 255;
 const int QUIT_STATE = 0;
 const int PLAY_STATE = 1;
 const int GUIDE_STATE = 2;
-const int PLAY_AGAIN_STATE = 3;
-const int HOME_STATE = 4;
+const int AGAIN_STATE = 3;
+const int MENU_STATE = 4;
+const int PAUSE_MENU_STATE = 5;
+const int GAME_OVER_MENU_STATE = 6;
+
+const int SCREEN_FPS = 120;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
 #define TILE_SIZE 64
 

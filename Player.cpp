@@ -2,12 +2,12 @@
 
 Player::Player()
 {
-        HP = 1;
+        HP = 5;
         ENERGY = 3;
         KEYS = 5;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
         VelX = VelY = 0.0;
-        xPos = 228 * TILE_SIZE;
+        xPos = 232 * TILE_SIZE;
 //        xPos = 0.0;
         yPos = 1300.0;
         camX = camY = 0;
@@ -84,7 +84,7 @@ void Player::set_clips()
         w = 0;
 }
 
-void Player::Handle(SDL_Event events)
+void Player::Handle(SDL_Event events, int& state)
 {
         if(events.type == SDL_KEYDOWN && events.key.repeat == 0)
         {
@@ -111,6 +111,9 @@ void Player::Handle(SDL_Event events)
                         break;
                 case SDLK_l:
                         input_type.attack2 = true;
+                        break;
+                case SDLK_ESCAPE:
+                        state = PAUSE_MENU_STATE;
                         break;
                 }
         }
@@ -288,13 +291,13 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
         {
                 isWalking = false;
                 current_frame = TAKEHIT_FRAMES;
-                current_clip = &Takehit_clip[takehit_frame / 30];
+                current_clip = &Takehit_clip[takehit_frame / 10];
 
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
                 takehit_frame++;
-                if(takehit_frame >= current_frame * 30)
+                if(takehit_frame >= current_frame * 10)
                 {
                         takehit_frame = 0;
                         isAttacked = false;
@@ -305,20 +308,20 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
         else if(dead)
         {
                 current_frame = DEATH_FRAMES;
-                current_clip = &Death_clip[death_frame / 30];
+                current_clip = &Death_clip[death_frame / 10];
 
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
                 death_frame++;
-                if(death_frame >= current_frame * 30) death_frame = (current_frame - 1) * 60;
+                if(death_frame >= current_frame * 10) death_frame = (current_frame - 1) * 10;
                 SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
         }
         else if(input_type.attack1)
         {
                 current_frame = ATTACK1_FRAMES;
-                current_clip = &Attack1_clip[attack1_frame / 30];
+                current_clip = &Attack1_clip[attack1_frame / 10];
 
                 PlayerAttackBox.x = xPos + ((FlipType == SDL_FLIP_NONE) ? -16 * 2 : - 30 * 2);
                 PlayerAttackBox.y = yPos;
@@ -332,7 +335,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                         --ENERGY;
                 }
                 else isAttacking = false;
-                if(attack1_frame >= current_frame * 30)
+                if(attack1_frame >= current_frame * 10)
                 {
                         attack1_frame = 0;
                         input_type.attack1 = false;
@@ -343,7 +346,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
         else if(input_type.attack2)
         {
                 current_frame = ATTACK2_FRAMES;
-                current_clip = &Attack2_clip[attack2_frame/ 30];
+                current_clip = &Attack2_clip[attack2_frame/ 10];
 
                 PlayerAttackBox.x = xPos + ((FlipType == SDL_FLIP_NONE) ? - 4 * 2 : - 44 * 2);
                 PlayerAttackBox.y = yPos;
@@ -351,14 +354,14 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 PlayerAttackBox.h = current_clip->h / 4;
 
                 attack2_frame++;
-                if(attack2_frame == 1 || attack2_frame == 60)
+                if(attack2_frame == 1 || attack2_frame == 6)
                 {
                         isAttacking = true;
                         --ENERGY;
                 }
                 else isAttacking = false;
 
-                if(attack2_frame >= current_frame * 30)
+                if(attack2_frame >= current_frame * 10)
                 {
                         attack2_frame = 0;
                         input_type.attack2 = false;
@@ -370,13 +373,13 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
         else if(isWalking)
         {
                 current_frame = WALK_FRAMES;
-                current_clip = &Walk_clip[run_frame / 30];
+                current_clip = &Walk_clip[run_frame / 10];
 
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
                 run_frame++;
-                if(run_frame >= current_frame * 30) run_frame = 0;
+                if(run_frame >= current_frame * 10) run_frame = 0;
 
                 SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
@@ -385,13 +388,13 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
         else
         {
                 current_frame = IDLE_FRAMES;
-                current_clip = &Idle_clip[idle_frame / 30];
+                current_clip = &Idle_clip[idle_frame / 10];
 
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
                 idle_frame++;
-                if(idle_frame >= current_frame * 30) idle_frame = 0;
+                if(idle_frame >= current_frame * 10) idle_frame = 0;
 
                 SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
                 SDL_RenderCopyEx(screen, mPlayerTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);

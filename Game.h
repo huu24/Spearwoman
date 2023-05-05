@@ -10,6 +10,7 @@
 #include "Boss.h"
 #include "Item.h"
 #include "Menu.h"
+#include "Timer.h"
 
 class Game
 {
@@ -25,9 +26,21 @@ public:
         bool SetSharkAttack();
         bool SetBomb();
         bool SetKey();
+        bool SetHP();
         bool SetDoor();
-        void HandleEvents(SDL_Event &g_event);
+        bool SetObject();
+        bool isRunning() {return running;};
+        int GetState() {return GameState;};
+        void HandleGameEvents(SDL_Event &g_event);
+        void HandleMenuEvents(SDL_Event &g_event);
+        void HandlePauseMenuEvents(SDL_Event &g_event);
+        void HandleGameOverEvents(SDL_Event &g_event);
+        void HandleGuideMenuEvents(SDL_Event &g_event);
         void RenderGame();
+        void RenderMenu();
+        void RenderPauseMenu();
+        void RenderGameOverMenu();
+        void RenderGuideMenu();
         void close();
 
 private:
@@ -44,6 +57,7 @@ private:
         BaseObject GuideTexture;
         BaseObject EGBGTexture;
         BaseObject EGButtonTexture;
+        BaseObject BackButtonTexture;
         GameMap game_map;
         Map map_data;
         Player MyPlayer;
@@ -56,12 +70,15 @@ private:
         Door door;
         Menu menu;
         EndGameMenu egmenu;
+        PauseMenu pauseMenu;
+        Guide guide;
 
         int GameState;
         bool InMenu;
         bool InGame;
         bool InGuide;
         bool inEndGameMenu;
+        bool running;
 };
 
 

@@ -45,9 +45,9 @@ void Key::RenderKey(SDL_Renderer* screen, SDL_Texture* mKeyTexture, SDL_Rect Pla
                 yourkeys++;
                 return;
         }
-        SDL_Rect* current_clip = &Key_clip[frame / 60];
+        SDL_Rect* current_clip = &Key_clip[frame / 14];
         frame++;
-        if(frame >= KEY_FRAMES * 60) frame = 0;
+        if(frame >= KEY_FRAMES * 14) frame = 0;
         SDL_Rect renderQuad = {KeyBox.x - camX, KeyBox.y - camY, KeyBox.w, KeyBox.h};
         SDL_RenderCopyEx(screen, mKeyTexture, current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }

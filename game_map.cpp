@@ -1,8 +1,8 @@
 #include "game_map.h"
 
-void GameMap::LoadFileMap(string name)
+void GameMap::LoadFileMap(const string& name)
 {
-        std::ifstream file(name); // mở file với tên được truyền vào hàm
+        std::ifstream file(name.c_str()); // mở file với tên được truyền vào hàm
 
         if (file)   // nếu file mở thành công
         {

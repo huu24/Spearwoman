@@ -36,16 +36,59 @@ public:
         void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
         bool GetRestart() {return restart;}
 private:
-        int PLAY_AGAIN = 0;
-        int HOME = 1;
-        int TOTAL_BUTTON = 2;
+        enum Button
+        {
+                PLAY_AGAIN,
+                HOME,
+                TOTAL_BUTTON
+        };
+
        float xPos, yPos;
-       SDL_Rect buttonBox[2];
-       SDL_Rect button_clip[2][2];
-       bool mouseOver[2];
+       SDL_Rect buttonBox[TOTAL_BUTTON];
+       SDL_Rect button_clip[TOTAL_BUTTON][2];
+       bool mouseOver[TOTAL_BUTTON];
        int Button_Width = 160;
        int Button_Height = 160;
        bool restart;
+};
+
+class PauseMenu
+{
+public:
+        PauseMenu();
+        void Handle(SDL_Event events,int& state);
+        void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
+        bool GetRestart() {return restart;}
+private:
+        enum Button
+        {
+                Play_Again,
+                Resume,
+                Home,
+                Total_Button
+        };
+
+       float xPos, yPos;
+       SDL_Rect buttonBox[Total_Button];
+       SDL_Rect button_clip[Total_Button][2];
+       bool mouseOver[Total_Button];
+       int Button_Width = 160;
+       int Button_Height = 160;
+       bool restart;
+};
+
+class Guide
+{
+public:
+        Guide();
+        void Handle(SDL_Event events, int& state);
+        void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* BackButtonTexture);
+private:
+       SDL_Rect backButtonBox;
+       SDL_Rect button_clip[2];
+       bool mouseOver;
+       int Button_Width = 106;
+       int Button_Height = 100;
 };
 
 #endif //MENU_H

@@ -41,14 +41,14 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
         }
         if(collide)
         {
-                SDL_Rect* current_clip = &Bomb_clip[bomb_frame / 60];
+                SDL_Rect* current_clip = &Bomb_clip[bomb_frame / 10];
                 bomb_frame++;
-                if(BaseObject::CheckCollision(PlayerBox, BombBox) && bomb_frame == 4 * 60)
+                if(BaseObject::CheckCollision(PlayerBox, BombBox) && bomb_frame == 4 * 10)
                 {
                         bomb = true;
                 }
                 else bomb = false;
-                if(bomb_frame >= BOMB_FRAMES * 60)
+                if(bomb_frame >= BOMB_FRAMES * 10)
                 {
                         collide = false;
                         BombBox.h = 0;

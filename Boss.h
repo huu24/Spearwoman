@@ -40,7 +40,7 @@ public:
         bool GetAttackStatus() {return causeDamage;}
         int CountAttacks() {return cntAttack;}
 private:
-        float BossSpeed = 0.5;
+        float BossSpeed = 3;
         int IDLE_FRAMES = 9;
         int RUN_FRAMES = 6;
         int ATTACK_FRAMES = 12;

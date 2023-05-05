@@ -242,15 +242,15 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
 
         if(isDead)
         {
-                current_clip = &Death_clip[death_frame / 40];
+                current_clip = &Death_clip[death_frame / 10];
                 current_frame = DEATH_FRAMES;
                 death_frame++;
-                if(death_frame == 9 * 60 && BaseObject::CheckCollision(PlayerBox, SkeletonBox))
+                if(death_frame == 9 * 10 && BaseObject::CheckCollision(PlayerBox, SkeletonBox))
                 {
                         isAttacking = true;
                 }
                 else isAttacking = false;
-                if(death_frame >= current_frame * 40) death_frame = current_frame * 40;
+                if(death_frame >= current_frame * 10) death_frame = current_frame * 10;
                 SkeletonBox.w = current_clip->w / 2;
                 SkeletonBox.h = current_clip->h / 2;
                 SDL_Rect RenderQuad = {SkeletonBox.x - camX, SkeletonBox.y - camY,SkeletonBox.w ,SkeletonBox.h };
@@ -258,10 +258,10 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
         }
         else if(isAttacked)
         {
-                current_clip = &TakeHit_clip[takehit_frame / 48];
+                current_clip = &TakeHit_clip[takehit_frame / 10];
                 current_frame = TAKEHIT_FRAMES;
                 takehit_frame++;
-                if(takehit_frame >= current_frame * 48)
+                if(takehit_frame >= current_frame * 10)
                 {
                         takehit_frame = 0;
                         isAttacked = false;
@@ -274,12 +274,12 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
         }
         else if(attack)
         {
-                current_clip = &Attack_clip[attack_frame / 60];
+                current_clip = &Attack_clip[attack_frame / 12];
                 current_frame = ATTACK_FRAMES;
                 attack_frame++;
-                if(attack_frame == (current_frame - 1) * 60 && CheckCollision(PlayerBox, SkeletonAttackBox)) isAttacking = true;
+                if(attack_frame == (current_frame - 1) * 12 && CheckCollision(PlayerBox, SkeletonAttackBox)) isAttacking = true;
                 else isAttacking = false;
-                if(attack_frame >= current_frame * 60)
+                if(attack_frame >= current_frame * 12)
                 {
                         attack_frame = 0;
                         attack = false;
@@ -294,10 +294,10 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
         }
         else if(isWalking)
         {
-                current_clip = &Walk_clip[run_frame / 60];
+                current_clip = &Walk_clip[run_frame / 10];
                 current_frame = WALK_FRAMES;
                 run_frame++;
-                if(run_frame >= current_frame * 60) run_frame = 0;
+                if(run_frame >= current_frame * 10) run_frame = 0;
                 SkeletonBox.w = current_clip->w / 2;
                 SkeletonBox.h = current_clip->h / 2;
                 SDL_Rect RenderQuad = {SkeletonBox.x - camX, SkeletonBox.y - camY, SkeletonBox.w , SkeletonBox.h };
@@ -305,10 +305,10 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
         }
         else
         {
-                current_clip = &Idle_clip[idle_frame / 40];
+                current_clip = &Idle_clip[idle_frame / 10];
                 current_frame = IDLE_FRAMES;
                 idle_frame++;
-                if(idle_frame >= current_frame * 40) idle_frame = 0;
+                if(idle_frame >= current_frame * 10) idle_frame = 0;
                 SkeletonBox.w = current_clip->w / 2;
                 SkeletonBox.h = current_clip->h / 2;
                 SDL_Rect RenderQuad = {SkeletonBox.x - camX, SkeletonBox.y - camY, SkeletonBox.w, SkeletonBox.h };

@@ -50,6 +50,8 @@
 		<Unit filename="Player.h" />
 		<Unit filename="Skeleton.cpp" />
 		<Unit filename="Skeleton.h" />
+		<Unit filename="Timer.cpp" />
+		<Unit filename="Timer.h" />
 		<Unit filename="game_map.cpp" />
 		<Unit filename="game_map.h" />
 		<Unit filename="main.cpp" />
