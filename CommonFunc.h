@@ -15,6 +15,11 @@
 
 using namespace std;
 
+#define TILE_SIZE 64
+
+#define MAX_MAP_X 250
+#define MAX_MAP_Y 40
+
 static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
 static SDL_Event g_event;
@@ -39,10 +44,22 @@ const int GAME_OVER_MENU_STATE = 6;
 const int SCREEN_FPS = 120;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
-#define TILE_SIZE 64
+enum MenuSoundEffect
+{
+    SELECT_BUTTON_SOUND,
+    TOTAL_MENU_SOUND_EFFECT
+};
 
-#define MAX_MAP_X 250
-#define MAX_MAP_Y 40
+enum PlayerSoundEffect
+{
+    ATTACK_SOUND,
+    WALK_SOUND,
+    TAKE_HIT_SOUND,
+    HEALING_SOUND,
+    DEATH_SOUND,
+    PAUSE_SOUND,
+    TOTAL_PLAYER_SOUND_EFFECT
+};
 
 struct Map
 {

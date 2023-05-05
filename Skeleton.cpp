@@ -227,7 +227,7 @@ void Skeleton::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int camX, int 
         y_pos += VelY;
 }
 
-void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int camX, int camY)
+void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int camX, int camY )
 {
         if(HP <= 0) isDead = true;
 

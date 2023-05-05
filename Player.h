@@ -12,7 +12,7 @@ public:
         ~Player();
 
         void set_clips();
-        void Handle(SDL_Event events, int& state);
+        void Handle(SDL_Event events, int& state, Mix_Chunk *sound[]);
         void Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen);
         void CollisionWithMap(Map& map_data);
         void SetCamera(Map& map_data);
@@ -23,7 +23,7 @@ public:
         int Cam_X() const {return camX;}
         int Cam_Y() const {return camY;}
         int GetKeys() {return KEYS;}
-        void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking);
+        void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking, Mix_Chunk *sound[]);
         void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
 
 private:

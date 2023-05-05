@@ -18,44 +18,49 @@ Game::~Game()
 
 bool Game::init()
 {
-        int success = true;
-        int res = SDL_Init(SDL_INIT_VIDEO);
-        if(res < 0)
+        bool success = 1;
+        if (SDL_Init(SDL_INIT_VIDEO) < 0)
         {
-                std::cout << "failed to initialize\n";
-                return false;
-        }
-
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-
-        g_window = SDL_CreateWindow("Hoang Cong Huu", SDL_WINDOWPOS_UNDEFINED,
-                                                                                        SDL_WINDOWPOS_UNDEFINED,
-                                                                                        SCREEN_WIDTH, SCREEN_HEIGHT,
-                                                                                        SDL_WINDOW_SHOWN);
-        if(g_window == NULL)
-        {
-                {
-                        std::cout << "failed to create window\n";
-                        success = false;
-                }
-
+                printf("Failed to init SDL, error: %s\n", SDL_GetError());
+                success = 0;
         }
         else
         {
-                g_screen = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
-                if(g_screen == NULL)
+                g_window = SDL_CreateWindow("hoang cong huu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+                if (g_window == NULL)
                 {
-                        cout << "can not create renderer\n";
-                           success = false;
+                        printf("Failed to create window, error: %s\n", SDL_GetError());
+                        success = 0;
                 }
                 else
                 {
-                        SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
-                        int imgFlags = IMG_INIT_PNG;
-                        if(!(IMG_Init(imgFlags) && imgFlags))
+                        g_screen = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
+                        if (g_screen == NULL)
                         {
-                                cout << "can not set render draw color\n";
-                                success = false;
+                                printf("Failed to render, error: %s\n", SDL_GetError());
+                                success = 0;
+                        }
+                        else
+                        {
+
+                                SDL_SetRenderDrawColor(g_screen, 0xFF, 0xFF, 0xFF, 0xFF);
+                                SDL_SetRenderDrawBlendMode(g_screen, SDL_BLENDMODE_BLEND);
+                                int imgFlags = IMG_INIT_PNG;
+                                if (!(IMG_Init(imgFlags) & imgFlags))
+                                {
+                                        printf("Failed to init SDL_image, error: %sn", IMG_GetError());
+                                        success = 0;
+                                }
+                                if (TTF_Init() == -1)
+                                {
+                                        printf("Failed to init SDL_ttf, error: %s\n", TTF_GetError());
+                                        success = 0;
+                                }
+                                if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+                                {
+                                        printf("Failed to init SDL_mixer, error: %s\n", Mix_GetError());
+                                        success = 0;
+                                }
                         }
                 }
         }
@@ -149,14 +154,64 @@ bool Game::LoadImage()
                 return false;
         }
         SetMap();
-        SetPlayer();
-        SetSkeleton();
-        SetBoss();
-//        SetSharkAttack();
-        SetBomb();
-        SetKey();
-        SetDoor();
         return true;
+}
+bool Game::loadSound()
+{
+    bool success = true;
+
+    // menu sound
+    MenuSound[SELECT_BUTTON_SOUND] = Mix_LoadWAV("sounds\\sounds_select-button.wav");
+    if (MenuSound[SELECT_BUTTON_SOUND] == NULL)
+    {
+        printf("Failed to load select button sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    // player sounds
+    PlayerSound[ATTACK_SOUND] = Mix_LoadWAV("sounds/player/attack3.wav");
+    if (PlayerSound[ATTACK_SOUND] == NULL)
+    {
+        printf("Failed to load player attack sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    PlayerSound[TAKE_HIT_SOUND] = Mix_LoadWAV("sounds/player/damaged3.wav");
+    if (PlayerSound[TAKE_HIT_SOUND] == NULL)
+    {
+        printf("Failed to load player take hit sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    PlayerSound[WALK_SOUND] = Mix_LoadWAV("sounds/player/walk2.wav");
+    if (PlayerSound[WALK_SOUND] == NULL)
+    {
+        printf("Failed to load player walk sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    PlayerSound[HEALING_SOUND] = Mix_LoadWAV("sounds/player/healed3.wav");
+    if (PlayerSound[HEALING_SOUND] == NULL)
+    {
+        printf("Failed to load player healing effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    MenuSound[DEATH_SOUND] = Mix_LoadWAV("sounds/player/death.wav");
+    if (MenuSound[DEATH_SOUND] == NULL)
+    {
+        printf("Failed to load death sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    PlayerSound[PAUSE_SOUND] = Mix_LoadWAV("sounds/sounds_select-button.wav");
+    if (PlayerSound[PAUSE_SOUND] == NULL)
+    {
+        printf("Failed to load player pause sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        success = false;
+    }
+
+    return success;
 }
 
 bool Game::SetMap()
@@ -265,7 +320,7 @@ void Game::HandleMenuEvents(SDL_Event &g_event)
 {
         if(g_event.type == SDL_QUIT)
                 running = false;
-        menu.Handle(g_event, GameState);
+        menu.Handle(g_event, GameState, MenuSound);
         if(GameState == PLAY_STATE)
         {
                 SetObject();
@@ -283,7 +338,7 @@ void Game::HandlePauseMenuEvents(SDL_Event &g_event)
 {
         if(g_event.type == SDL_QUIT)
                 running = false;
-        pauseMenu.Handle(g_event, GameState);
+        pauseMenu.Handle(g_event, GameState, MenuSound);
         if(GameState == AGAIN_STATE)
         {
                 GameState = PLAY_STATE;
@@ -302,7 +357,7 @@ void Game::HandleGameOverEvents(SDL_Event &g_event)
 {
         if(g_event.type == SDL_QUIT)
                 running = false;
-        egmenu.Handle(g_event, GameState);
+        egmenu.Handle(g_event, GameState, MenuSound);
         if(GameState == AGAIN_STATE)
         {
                 GameState = PLAY_STATE;
@@ -321,7 +376,7 @@ void Game::HandleGuideMenuEvents(SDL_Event &g_event)
 {
         if(g_event.type == SDL_QUIT)
                 running = false;
-        guide.Handle(g_event, GameState);
+        guide.Handle(g_event, GameState, MenuSound);
 }
 void Game::RenderGuideMenu()
 {
@@ -335,7 +390,7 @@ void Game::HandleGameEvents(SDL_Event &g_event)
 {
         if(g_event.type == SDL_QUIT)
                 running = false;
-        MyPlayer.Handle(g_event, GameState);
+        MyPlayer.Handle(g_event, GameState, PlayerSound);
 }
 
 void Game::RenderGame()
@@ -344,37 +399,37 @@ void Game::RenderGame()
         SDL_RenderClear(g_screen);
 
 
-                game_map.SetMap(map_data);
-                game_map.RenderMap(g_screen);
+        game_map.SetMap(map_data);
+        game_map.RenderMap(g_screen);
 
-                door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
-                door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
+        door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-                key.Check(MyPlayer.GetPlayerBox());
-                key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        key.Check(MyPlayer.GetPlayerBox());
+        key.RenderKey(g_screen, KeyTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-                hp.Check(MyPlayer.GetPlayerBox());
-                hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        hp.Check(MyPlayer.GetPlayerBox());
+        hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-                MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen());
-                MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus());
-                MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
+        MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen());
+        MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus(), PlayerSound);
+        MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
 
-                skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
-                skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
-                skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
+        skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-                boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
-                boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
-                boss.RenderHP(g_screen, BossTexture.GetTexture());
+        boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
+        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        boss.RenderHP(g_screen, BossTexture.GetTexture());
 
 //                shark.Move();
 //                shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), boss.CountAttacks());
 
-                bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-                if(MyPlayer.PlayerStatus())
-                        GameState = GAME_OVER_MENU_STATE;
+        if(MyPlayer.PlayerStatus())
+                GameState = GAME_OVER_MENU_STATE;
 
         SDL_RenderPresent(g_screen);
 }
@@ -402,6 +457,17 @@ void Game::close()
         SDL_DestroyWindow(g_window);
         g_window = NULL;
 
-        IMG_Quit();
-        SDL_Quit();
+        for (Mix_Chunk *mSound : MenuSound)
+        {
+                Mix_FreeChunk(mSound);
+                mSound = NULL;
+        }
+        for (Mix_Chunk *mSound : PlayerSound)
+        {
+                Mix_FreeChunk(mSound);
+                mSound = NULL;
+        }
+                Mix_Quit();
+                IMG_Quit();
+                SDL_Quit();
 }

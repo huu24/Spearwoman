@@ -19,6 +19,7 @@ public:
         ~Game();
         bool init();
         bool LoadImage();
+        bool loadSound();
         bool SetMap();
         bool SetPlayer();
         bool SetSkeleton();
@@ -72,6 +73,9 @@ private:
         EndGameMenu egmenu;
         PauseMenu pauseMenu;
         Guide guide;
+
+        Mix_Chunk *MenuSound[TOTAL_MENU_SOUND_EFFECT];
+        Mix_Chunk *PlayerSound[TOTAL_PLAYER_SOUND_EFFECT];
 
         int GameState;
         bool InMenu;

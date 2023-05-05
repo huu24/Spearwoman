@@ -84,26 +84,30 @@ void Player::set_clips()
         w = 0;
 }
 
-void Player::Handle(SDL_Event events, int& state)
+void Player::Handle(SDL_Event events, int& state, Mix_Chunk *sound[])
 {
         if(events.type == SDL_KEYDOWN && events.key.repeat == 0)
         {
                 switch(events.key.keysym.sym)
                 {
                 case SDLK_RIGHT:
+                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.right = true;
                         input_type.left = false;
                         FlipType = SDL_FLIP_NONE;
                         break;
                 case SDLK_LEFT:
+                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.left = true;
                         input_type.right = false;
                         FlipType = SDL_FLIP_HORIZONTAL;
                         break;
                 case SDLK_UP:
+                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.up = true;
                         break;
                 case SDLK_DOWN:
+                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.down = true;
                         break;
                 case SDLK_k:
@@ -113,6 +117,7 @@ void Player::Handle(SDL_Event events, int& state)
                         input_type.attack2 = true;
                         break;
                 case SDLK_ESCAPE:
+                        Mix_PlayChannel(-1, sound[PAUSE_SOUND], 0);
                         state = PAUSE_MENU_STATE;
                         break;
                 }
@@ -275,7 +280,7 @@ void Player::SetCamera(Map& map_data)
         camY = map_data.current_y_pos;
 }
 
-void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking)
+void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking, Mix_Chunk *sound[])
 {
         if(SkeletonIsAttacking || bomb || BossIsAttacking)
         {
@@ -296,6 +301,10 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
+                if(takehit_frame == 0)
+                {
+                        Mix_PlayChannel(-1, sound[TAKE_HIT_SOUND], 0);
+                }
                 takehit_frame++;
                 if(takehit_frame >= current_frame * 10)
                 {
@@ -312,7 +321,10 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
 
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
-
+                if(death_frame == 0)
+                {
+                        Mix_PlayChannel(-1, sound[DEATH_SOUND], 0);
+                }
                 death_frame++;
                 if(death_frame >= current_frame * 10) death_frame = (current_frame - 1) * 10;
                 SDL_Rect renderQuad = {PlayerBox.x - camX, PlayerBox.y - camY, PlayerBox.w, PlayerBox.h};
@@ -331,6 +343,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 attack1_frame++;
                 if(attack1_frame == 1)
                 {
+                        Mix_PlayChannel(-1, sound[ATTACK_SOUND], 0);
                         isAttacking = true;
                         --ENERGY;
                 }
@@ -378,6 +391,10 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
+                if(run_frame == 0)
+                {
+                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
+                }
                 run_frame++;
                 if(run_frame >= current_frame * 10) run_frame = 0;
 

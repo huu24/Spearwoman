@@ -14,8 +14,12 @@ int main(int argc, char* argv[])
         {
                 if(game.LoadImage() == false)
                 {
-                        cout << "can not load image\n";
+                        cout << "can not load images\n";
                         return -1;
+                }
+                else if(game.loadSound() == false)
+                {
+                        cout << "can not load sounds\n";
                 }
                 else
                 {
