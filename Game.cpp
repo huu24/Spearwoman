@@ -270,14 +270,8 @@ bool Game::loadSound()
                 success = false;
         }
 
-        GameSound = Mix_LoadMUS("sounds/gametheme.wav");
+        GameSound = Mix_LoadMUS("sounds/menutheme.wav");
         if(GameSound == NULL)
-        {
-                printf("Failed to load game sound! SDL_mixer Error: %s\n", Mix_GetError());
-                success = false;
-        }
-        MenuSound = Mix_LoadMUS("sounds/menutheme.wav");
-        if(MenuSound == NULL)
         {
                 printf("Failed to load menu sound! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
@@ -392,7 +386,7 @@ void Game::HandleMenuEvents(SDL_Event &g_event)
 {
         if(Mix_PlayingMusic() == 0)
         {
-                Mix_PlayMusic(MenuSound, -1);
+                Mix_PlayMusic(GameSound, -1);
                 Mix_VolumeMusic(32);
         }
         if(g_event.type == SDL_QUIT)
@@ -400,7 +394,6 @@ void Game::HandleMenuEvents(SDL_Event &g_event)
         menu.Handle(g_event, GameState, OtherSound);
         if(GameState == PLAY_STATE)
         {
-                Mix_HaltMusic();
                 SetObject();
         }
 }
@@ -474,11 +467,6 @@ void Game::RenderGuideMenu()
 
 void Game::HandleGameEvents(SDL_Event &g_event)
 {
-        if(Mix_PlayingMusic() == 0)
-        {
-                Mix_PlayMusic(GameSound, -1);
-        }
-        Mix_VolumeMusic(64);
         if(g_event.type == SDL_QUIT)
                 running = false;
         MyPlayer.Handle(g_event, GameState, PlayerSound);

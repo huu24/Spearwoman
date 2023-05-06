@@ -245,12 +245,12 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
                 current_frame = DEATH_FRAMES;
                 if(death_frame == 0)
                 {
-                        Mix_PlayChannel(-1, skeSound[DEATH_SOUND_], 0);
+                        Mix_PlayChannel(1, skeSound[DEATH_SOUND_], 0);
                 }
                 death_frame++;
                 if(death_frame == 7 * 10)
                 {
-                        Mix_PlayChannel(-1, skeSound[BOOM_SOUND_], 0);
+                        Mix_PlayChannel(1, skeSound[BOOM_SOUND_], 0);
                 }
                 if(death_frame == 9 * 10 && BaseObject::CheckCollision(PlayerBox, SkeletonBox))
                 {
@@ -286,8 +286,9 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
                 attack_frame++;
                 if(attack_frame == 6 * 12)
                 {
-                        Mix_PlayChannel(-1, skeSound[ATTACK_SOUND_], 0);
+                        Mix_PlayChannel(1, skeSound[ATTACK_SOUND_], 0);
                 }
+                Mix_VolumeChunk(skeSound[ATTACK_SOUND_], 32);
                 if(attack_frame == (current_frame - 1) * 12 && CheckCollision(PlayerBox, SkeletonAttackBox)) isAttacking = true;
                 else isAttacking = false;
                 if(attack_frame >= current_frame * 12)

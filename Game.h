@@ -79,7 +79,6 @@ private:
         Mix_Chunk *SkeletonSound[TOTAL_SKELETON_SOUND];
         Mix_Chunk *OtherSound[TOTAL_OTHER_SOUND_EFFECT];
         Mix_Chunk *BossSound[Total_Boss_Sound_Effect];
-        Mix_Music *MenuSound;
         Mix_Music *GameSound;
 
         int GameState;

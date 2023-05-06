@@ -239,7 +239,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 takehit_frame++;
                 if(takehit_frame == 1)
                 {
-                        Mix_PlayChannel(-1, sound[TakeHit_Sound], 0);
+                        Mix_PlayChannel(12, sound[TakeHit_Sound], 0);
                 }
                 if(takehit_frame >= current_frame * 10)
                 {
@@ -258,7 +258,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 else cantAttacked = false;
                 if(attack_frame == 9 * 12)
                 {
-                        Mix_PlayChannel(-1, sound[Attack_Sound], 0);
+                        Mix_PlayChannel(13, sound[Attack_Sound], 0);
                 }
                 if(attack_frame == 9 * 12 && BaseObject::CheckCollision(BossAttackBox, PlayerBox)) causeDamage = true;
                 else
