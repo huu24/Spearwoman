@@ -13,7 +13,7 @@ public:
 
         void set_clips();
         void Handle(SDL_Event events, int& state, Mix_Chunk *sound[]);
-        void Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen);
+        void Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen, Mix_Chunk *sound[]);
         void CollisionWithMap(Map& map_data);
         void SetCamera(Map& map_data);
         SDL_Rect GetPlayerBox() const {return PlayerBox;}

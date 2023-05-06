@@ -7,8 +7,8 @@ Player::Player()
         KEYS = 5;
         attack1_frame = attack2_frame = idle_frame = takehit_frame = run_frame = death_frame = 0;
         VelX = VelY = 0.0;
-        xPos = 232 * TILE_SIZE;
-//        xPos = 0.0;
+//        xPos = 232 * TILE_SIZE;
+        xPos = 0.0;
         yPos = 1300.0;
         camX = camY = 0;
         input_type.left = input_type.right = input_type.up = input_type.down = input_type.attack1 = input_type.attack2 = input_type.take_hit
@@ -91,23 +91,19 @@ void Player::Handle(SDL_Event events, int& state, Mix_Chunk *sound[])
                 switch(events.key.keysym.sym)
                 {
                 case SDLK_RIGHT:
-                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.right = true;
                         input_type.left = false;
                         FlipType = SDL_FLIP_NONE;
                         break;
                 case SDLK_LEFT:
-                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.left = true;
                         input_type.right = false;
                         FlipType = SDL_FLIP_HORIZONTAL;
                         break;
                 case SDLK_UP:
-                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.up = true;
                         break;
                 case SDLK_DOWN:
-                        Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                         input_type.down = true;
                         break;
                 case SDLK_k:
@@ -141,11 +137,19 @@ void Player::Handle(SDL_Event events, int& state, Mix_Chunk *sound[])
                 }
         }
 }
-void Player::Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen)
+void Player::Move(Map& map_data, bool touchHP, bool touchKey, SDL_Rect DoorBox, bool DoorOpen, Mix_Chunk *sound[])
 {
-        if(touchHP) HP += 3;
+        if(touchHP)
+        {
+                Mix_PlayChannel(-1, sound[HEALING_SOUND], 0);
+                HP += 3;
+        }
         if(HP >= 5) HP = 5;
-        if(touchKey) ++KEYS;
+        if(touchKey)
+        {
+                Mix_PlayChannel(-1, sound[GET_KEY_SOUND], 0);
+                ++KEYS;
+        }
         if(dead || isAttacked || input_type.attack1 || input_type.attack2) return;
         isWalking = true;
         if(input_type.left)
@@ -391,7 +395,7 @@ void Player::RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, boo
                 PlayerBox.w = current_clip->w / 4;
                 PlayerBox.h = current_clip->h / 4;
 
-                if(run_frame == 0)
+                if(run_frame == 0 || run_frame == 4 * 10)
                 {
                         Mix_PlayChannel(-1, sound[WALK_SOUND], 0);
                 }

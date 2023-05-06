@@ -58,7 +58,8 @@ private:
         BaseObject GuideTexture;
         BaseObject EGBGTexture;
         BaseObject EGButtonTexture;
-        BaseObject BackButtonTexture;
+        BaseObject BackGroundWin;
+        BaseObject BackGroundLose;
         GameMap game_map;
         Map map_data;
         Player MyPlayer;
@@ -74,8 +75,10 @@ private:
         PauseMenu pauseMenu;
         Guide guide;
 
-        Mix_Chunk *MenuSound[TOTAL_MENU_SOUND_EFFECT];
         Mix_Chunk *PlayerSound[TOTAL_PLAYER_SOUND_EFFECT];
+        Mix_Chunk *SkeletonSound[TOTAL_SKELETON_SOUND];
+        Mix_Chunk *OtherSound[TOTAL_OTHER_SOUND_EFFECT];
+        Mix_Chunk *BossSound[Total_Boss_Sound_Effect];
 
         int GameState;
         bool InMenu;

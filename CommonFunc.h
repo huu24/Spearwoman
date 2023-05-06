@@ -44,10 +44,28 @@ const int GAME_OVER_MENU_STATE = 6;
 const int SCREEN_FPS = 120;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
-enum MenuSoundEffect
+enum OtherSoundEffect
 {
     SELECT_BUTTON_SOUND,
-    TOTAL_MENU_SOUND_EFFECT
+    BOOM_SOUND,
+    TOTAL_OTHER_SOUND_EFFECT
+};
+
+enum BossSoundEffect
+{
+        Attack_Sound,
+        Walk_Sound,
+        TakeHit_Sound,
+        Total_Boss_Sound_Effect
+};
+
+enum SkeletonSoundEffect
+{
+        ATTACK_SOUND_,
+        WALK_SOUND_,
+        DEATH_SOUND_,
+        BOOM_SOUND_,
+        TOTAL_SKELETON_SOUND
 };
 
 enum PlayerSoundEffect
@@ -58,6 +76,7 @@ enum PlayerSoundEffect
     HEALING_SOUND,
     DEATH_SOUND,
     PAUSE_SOUND,
+    GET_KEY_SOUND,
     TOTAL_PLAYER_SOUND_EFFECT
 };
 

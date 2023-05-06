@@ -35,12 +35,12 @@ public:
 
         void set_clips();
         void Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttack);
-        void RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect PlayerBox, int camX, int camY);
-        void RenderHP(SDL_Renderer* screen, SDL_Texture* mBossTexture);
+        void RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *sound[]);
+        void RenderHP(SDL_Renderer* screen, SDL_Texture* mBossTexture, int camX, int camY);
         bool GetAttackStatus() {return causeDamage;}
-        int CountAttacks() {return cntAttack;}
+        bool BossIsDead() {return isDead;}
 private:
-        float BossSpeed = 3;
+        float BossSpeed = 2;
         int IDLE_FRAMES = 9;
         int RUN_FRAMES = 6;
         int ATTACK_FRAMES = 12;
@@ -49,7 +49,7 @@ private:
         float VelX, VelY;
         float x_pos, y_pos;
         float max_x_boss, max_y_boss, min_x_boss, min_y_boss;
-        int cnt_idle, cntAttack, HP, tmp;
+        int HP;
 
         SDL_Rect BossBox;
         SDL_Rect BossAttackBox;

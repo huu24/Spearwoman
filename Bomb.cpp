@@ -28,7 +28,7 @@ void Bomb::set_clips()
         BombBox.h = 64;
 }
 
-void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY)
+void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *sound[])
 {
         SDL_Rect tmp;
         tmp.x = PlayerBox.x;
@@ -38,6 +38,7 @@ void Bomb::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect P
         if(BaseObject::CheckCollision(BombBox, tmp))
         {
                 collide = true;
+                Mix_PlayChannel(-1, sound[BOOM_SOUND], 0);
         }
         if(collide)
         {
@@ -83,11 +84,11 @@ void BombList::set_clips()
                 bomblist[i].set_clips();
         }
 }
-void BombList::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY)
+void BombList::RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *sound[])
 {
         for(int i = 0; i < bomblist.size(); i++)
         {
-                bomblist[i].RenderBomb(screen, BombTexture, PlayerBox, camX, camY);
+                bomblist[i].RenderBomb(screen, BombTexture, PlayerBox, camX, camY, sound);
         }
 }
 bool BombList::getBombStatus()
