@@ -21,6 +21,10 @@ int main(int argc, char* argv[])
                 {
                         cout << "can not load sounds\n";
                 }
+                else if(game.loadFont() == false)
+                {
+                        cout << "can not load fonts\n";
+                }
                 else
                 {
 //                        cerr << "h\n";

@@ -1,57 +1,5 @@
 #include "Boss.h"
 
-SharkAttack::SharkAttack()
-{
-        xpos = (MAX_MAP_X - 7) * TILE_SIZE;
-        ypos = 500;
-
-        xpos = 0;
-        ypos = 0;
-        minY = 64;
-        maxY = 18 * 64 - 160;
-        cout << ypos << '\n';
-        frame = 0;
-        FlipType = SDL_FLIP_NONE;
-}
-
-SharkAttack::~SharkAttack()
-{
-
-}
-
-void SharkAttack::set_clips()
-{
-        int x = 0;
-        for(int i = 0; i < SHARK_FRAMES; i++)
-        {
-                Shark_clip[i] = {x, 0, 448, 160};
-                x += 448;
-        }
-        x = 0;
-}
-
-void SharkAttack::Move()
-{
-//        cout << rand() % (maxY - minY + 1) + minY << '\n';
-        //xpos += SharkSpeed;
-        SharkBox.x = xpos;
-        SharkBox.y = ypos;
-}
-
-void SharkAttack::RenderSharkAttack(SDL_Renderer* screen, SDL_Texture* mSharkTexture, int camX, int camY, int TimesBossIsAttacked)
-{
-//        if(TimesBossIsAttacked == 0 || TimesBossIsAttacked % 3 != 0) return;
-        SDL_Rect* current_clip = &Shark_clip[frame / 60];
-        SharkBox.w = current_clip->w;
-        SharkBox.h = current_clip->h;
-        frame++;
-        if(frame >= SHARK_FRAMES * 60)
-                frame = 0;
-        SDL_Rect renderQuad = {SharkBox.x - camX, SharkBox.y - camY, SharkBox.w, SharkBox.h};
-        SDL_RenderCopyEx(screen, mSharkTexture, current_clip, &renderQuad, 0.0, NULL, FlipType);
-        SDL_RenderDrawRect(screen, &renderQuad);
-}
-
 Boss::Boss()
 {
         idle_frame = run_frame = attack_frame = takehit_frame = death_frame = 0;
@@ -62,7 +10,7 @@ Boss::Boss()
         max_x_boss = 248*64;
         min_y_boss = 0;
         max_y_boss = 18*64;
-        HP = 2;
+        HP = 25;
         FlipType = SDL_FLIP_HORIZONTAL;
         isRunning = isAttacking = isAttacked = isTakinghit = isDead = causeDamage = cantAttacked = renderHP = false;
         isIdling = true;
@@ -94,8 +42,6 @@ void Boss::set_clips()
                 Attack_clip[i] = {x, 580, 540, 600};
                 x += 640;
         }
-        BossAttackBox.w = 270;
-        BossAttackBox.h = 300;
         x = 0;
         for(int i = 0; i < TAKEHIT_FRAMES; i++)
         {
@@ -110,6 +56,8 @@ void Boss::set_clips()
         }
         x = 0;
         HpBox = {0, 1840, 200, 16};
+        BossAttackBox.w = 270;
+        BossAttackBox.h = 300;
         BossBox.w = 175;
         BossBox.h = 140;
 }
@@ -121,6 +69,7 @@ void Boss::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, bool PlayerIsAttac
                 isRunning = false;
                 return;
         }
+        isIdling = false;
         renderHP = true;
         BossBox.x = x_pos;
         BossBox.y = y_pos;
@@ -222,6 +171,10 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 BossBox.w = current_clip->w / 2;
                 BossBox.h = current_clip->h / 2;
                 death_frame++;
+                if(death_frame == 1)
+                {
+                        Mix_PlayChannel(-1, sound[TakeHit_Sound], 0);
+                }
                 if(death_frame >= current_frame * 10)
                 {
                         death_frame = current_frame * 10 - 10;
@@ -239,7 +192,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 takehit_frame++;
                 if(takehit_frame == 1)
                 {
-                        Mix_PlayChannel(12, sound[TakeHit_Sound], 0);
+                        Mix_PlayChannel(-1, sound[TakeHit_Sound], 0);
                 }
                 if(takehit_frame >= current_frame * 10)
                 {
@@ -258,7 +211,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
                 else cantAttacked = false;
                 if(attack_frame == 9 * 12)
                 {
-                        Mix_PlayChannel(13, sound[Attack_Sound], 0);
+                        Mix_PlayChannel(-1, sound[Attack_Sound], 0);
                 }
                 if(attack_frame == 9 * 12 && BaseObject::CheckCollision(BossAttackBox, PlayerBox)) causeDamage = true;
                 else
@@ -302,7 +255,7 @@ void Boss::RenderBoss(SDL_Renderer* screen, SDL_Texture* mBossTexture, SDL_Rect 
 void Boss::RenderHP(SDL_Renderer* screen, SDL_Texture* mBossTexture, int camX, int camY)
 {
         if(!renderHP || HP == 0) return;
-        SDL_Rect RenderQuad = {BossBox.x - camX, BossBox.y - camY - 35, HP * 10, HpBox.h};
+        SDL_Rect RenderQuad = {BossBox.x - camX - 50, BossBox.y - camY - 40, HP * 10, HpBox.h};
         SDL_RenderCopyEx(screen, mBossTexture, &HpBox, &RenderQuad, 0.0, NULL, SDL_FLIP_HORIZONTAL);
 
 }

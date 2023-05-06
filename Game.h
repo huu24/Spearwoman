@@ -20,6 +20,7 @@ public:
         bool init();
         bool LoadImage();
         bool loadSound();
+        bool loadFont();
         bool SetMap();
         bool SetPlayer();
         bool SetSkeleton();
@@ -32,6 +33,7 @@ public:
         bool SetObject();
         bool isRunning() {return running;};
         int GetState() {return GameState;};
+        void RenderEnemiesKilled();
         void HandleGameEvents(SDL_Event &g_event);
         void HandleMenuEvents(SDL_Event &g_event);
         void HandlePauseMenuEvents(SDL_Event &g_event);
@@ -45,6 +47,7 @@ public:
         void close();
 
 private:
+        BaseObject text;
         BaseObject SkeletonTexture;
         BaseObject BombTexture;
         BaseObject PlayerTexture;
@@ -81,7 +84,11 @@ private:
         Mix_Chunk *BossSound[Total_Boss_Sound_Effect];
         Mix_Music *GameSound;
 
+        TTF_Font *font[TOTAL_FONT];
+        stringstream scoreText;
+
         int GameState;
+        int EnemiesKilled;
         bool running;
 };
 

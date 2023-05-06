@@ -5,8 +5,11 @@
 #include <ctime>
 #include <vector>
 #include <algorithm>
+#include <sstream>
 #include <fstream>
 #include <iostream>
+#include <random>
+#include <chrono>
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -78,6 +81,12 @@ enum PlayerSoundEffect
     PAUSE_SOUND,
     GET_KEY_SOUND,
     TOTAL_PLAYER_SOUND_EFFECT
+};
+
+enum Font
+{
+    FONT_16,
+    TOTAL_FONT
 };
 
 struct Map

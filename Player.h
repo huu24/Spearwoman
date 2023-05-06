@@ -24,10 +24,10 @@ public:
         int Cam_Y() const {return camY;}
         int GetKeys() {return KEYS;}
         void RenderPlayer(SDL_Renderer* screen, SDL_Texture* mPlayerTexture, bool SkeletonIsAttacking, bool bomb, bool BossIsAttacking, Mix_Chunk *playerSound[]);
-        void RenderHP(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
+        void RenderHPAndKeys(SDL_Renderer* screen, SDL_Texture* mPlayerTexture);
 
 private:
-        float PlayerSpeed = 3;
+        float PlayerSpeed = 3.5;
         int IDLE_FRAMES = 8;
         int WALK_FRAMES = 8;
         int ATTACK1_FRAMES = 6;
@@ -45,7 +45,6 @@ private:
         SDL_Rect Takehit_clip[4];
         SDL_Rect Death_clip[8];
         SDL_Rect HP_clip[6];
-        SDL_Rect Energy_clip[4];
         SDL_Rect Key_clip[6];
 
         SDL_Rect PlayerBox;
@@ -54,7 +53,7 @@ private:
 
         float VelX, VelY;
         float xPos, yPos;
-        int HP, ENERGY, KEYS;
+        int HP, KEYS;
         int camX, camY;
         int idle_frame, attack1_frame, attack2_frame, run_frame, takehit_frame, death_frame;
 

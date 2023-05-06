@@ -3,6 +3,7 @@
 Game::Game()
 {
         GameState = -1;
+        EnemiesKilled = 0;
         GameState = MENU_STATE;
         running = true;
 }
@@ -280,6 +281,18 @@ bool Game::loadSound()
         return success;
 }
 
+bool Game::loadFont()
+{
+        bool success = true;
+        font[FONT_16] = TTF_OpenFont("fonts/Pixel-UniCode.ttf", 40);
+        if (font[FONT_16] == NULL)
+        {
+                printf("Failed to load font 16, error: %s\n", TTF_GetError());
+                success = false;
+        }
+        return success;
+}
+
 bool Game::SetMap()
 {
         game_map.LoadFileMap("map\\map.txt");
@@ -309,12 +322,6 @@ bool Game::SetBoss()
         return true;
 }
 
-//bool Game::SetSharkAttack()
-//{
-//        shark.set_clips();
-//        return true;
-//}
-
 bool Game::SetBomb()
 {
         bomb = BombList();
@@ -343,6 +350,7 @@ bool Game::SetDoor()
 
 bool Game::SetObject()
 {
+        EnemiesKilled = 0;
         if(!SetPlayer())
         {
                 cout << "can not set player.\n";
@@ -358,7 +366,6 @@ bool Game::SetObject()
                 cout << "can not set boss.\n";
                 return false;
         }
-//        bool SetSharkAttack();
         if(!SetBomb())
         {
                 cout << "can not set bomb.\n";
@@ -380,6 +387,12 @@ bool Game::SetObject()
                 return false;
         }
         return true;
+}
+void Game::RenderEnemiesKilled()
+{
+    scoreText.str("");
+    scoreText << "Enemies Killed: " << EnemiesKilled;
+    text.renderText(g_screen, scoreText.str().c_str(), font[FONT_16], 20, 50);
 }
 
 void Game::HandleMenuEvents(SDL_Event &g_event)
@@ -481,7 +494,7 @@ void Game::RenderGame()
         game_map.SetMap(map_data);
         game_map.RenderMap(g_screen);
 
-        door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys());
+        door.Check(MyPlayer.GetPlayerBox(), MyPlayer.GetKeys(), EnemiesKilled);
         door.RenderDoor(g_screen, DoorTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
         key.Check(MyPlayer.GetPlayerBox());
@@ -490,25 +503,24 @@ void Game::RenderGame()
         hp.Check(MyPlayer.GetPlayerBox());
         hp.RenderHP(g_screen, HPTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
-        MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen(), PlayerSound);
-        MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus(), PlayerSound);
-        MyPlayer.RenderHP(g_screen, PlayerTexture.GetTexture());
-
         skeleton.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), map_data, MyPlayer.PlayerStatus(), MyPlayer.GetAttackStatus());
-        skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), SkeletonSound);
+        skeleton.Render(g_screen, SkeletonTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(),
+                         MyPlayer.GetAttackStatus(), MyPlayer.PlayerStatus(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), SkeletonSound, EnemiesKilled);
         skeleton.RenderHP(g_screen, SkeletonTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
 
         boss.Move(MyPlayer.GetPlayerBox(), MyPlayer.GetPlayerAttackBox(), MyPlayer.GetAttackStatus());
-        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), BossSound);
         boss.RenderHP(g_screen, BossTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y());
+        boss.RenderBoss(g_screen, BossTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), BossSound);
 
-//                shark.Move();
-//                shark.RenderSharkAttack(g_screen, SharkTexture.GetTexture(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), boss.CountAttacks());
+        MyPlayer.Move(map_data, hp.touchBloodJars(), key.touchKeys(), door.GetDoorBox(), door.DoorOpen(), PlayerSound);
+        MyPlayer.RenderPlayer(g_screen, PlayerTexture.GetTexture(), skeleton.getAttackStatus(), bomb.getBombStatus(), boss.GetAttackStatus(), PlayerSound);
+        MyPlayer.RenderHPAndKeys(g_screen, PlayerTexture.GetTexture());
 
         bomb.RenderBomb(g_screen, BombTexture.GetTexture(), MyPlayer.GetPlayerBox(), MyPlayer.Cam_X(), MyPlayer.Cam_Y(), OtherSound);
 
         if(MyPlayer.PlayerStatus() || boss.BossIsDead())
                 GameState = GAME_OVER_MENU_STATE;
+        RenderEnemiesKilled();
 
         SDL_RenderPresent(g_screen);
 }
@@ -556,7 +568,12 @@ void Game::close()
                 Mix_FreeChunk(mSound);
                 mSound = NULL;
         }
-
+        for(TTF_Font *mFont : font)
+        {
+                TTF_CloseFont(mFont);
+                mFont = NULL;
+        }
+                TTF_Quit();
                 Mix_Quit();
                 IMG_Quit();
                 SDL_Quit();

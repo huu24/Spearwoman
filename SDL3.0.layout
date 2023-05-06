@@ -2,99 +2,34 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="Item.h" open="0" top="0" tabpos="20" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Item.h" open="1" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1967" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="Player.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4580" topLine="139" />
-		</Cursor>
-	</File>
-	<File name="CommonFunc.h" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="378" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1842" topLine="54" />
-		</Cursor>
-	</File>
-	<File name="Menu.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="200" topLine="2" />
-		</Cursor>
-	</File>
-	<File name="Item.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="737" topLine="35" />
-		</Cursor>
-	</File>
-	<File name="Bomb.h" open="1" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="886" topLine="4" />
-		</Cursor>
-	</File>
-	<File name="BaseObject.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="581" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Menu.h" open="1" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1482" topLine="77" />
-		</Cursor>
-	</File>
-	<File name="Game.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2233" topLine="74" />
-		</Cursor>
-	</File>
-	<File name="Player.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1014" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="Boss.h" open="1" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1176" topLine="48" />
-		</Cursor>
-	</File>
-	<File name="game_map.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3587" topLine="83" />
-		</Cursor>
-	</File>
-	<File name="Skeleton.h" open="1" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="837" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="CommonFunc.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="25" topLine="0" />
+			<Cursor1 position="1780" topLine="73" />
 		</Cursor>
 	</File>
 	<File name="Skeleton.cpp" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="9139" topLine="298" />
+			<Cursor1 position="9251" topLine="280" />
 		</Cursor>
 	</File>
-	<File name="BaseObject.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Player.cpp" open="1" top="1" tabpos="10" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1123" topLine="32" />
+			<Cursor1 position="12861" topLine="378" />
 		</Cursor>
 	</File>
-	<File name="Game.cpp" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+	<File name="BaseObject.h" open="1" top="0" tabpos="20" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="11882" topLine="328" />
+			<Cursor1 position="579" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="Skeleton.h" open="1" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="195" topLine="11" />
 		</Cursor>
 	</File>
 	<File name="Boss.cpp" open="1" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7870" topLine="228" />
+			<Cursor1 position="1517" topLine="49" />
 		</Cursor>
 	</File>
 	<File name="game_map.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
@@ -102,14 +37,79 @@
 			<Cursor1 position="188" topLine="11" />
 		</Cursor>
 	</File>
-	<File name="Bomb.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+	<File name="Game.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="889" topLine="60" />
+			<Cursor1 position="1287" topLine="77" />
+		</Cursor>
+	</File>
+	<File name="Menu.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="200" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="CommonFunc.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="25" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Game.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16512" topLine="492" />
+		</Cursor>
+	</File>
+	<File name="Bomb.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="889" topLine="15" />
 		</Cursor>
 	</File>
 	<File name="Timer.cpp" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1143" topLine="47" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="716" topLine="3" />
+		</Cursor>
+	</File>
+	<File name="Item.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4562" topLine="86" />
+		</Cursor>
+	</File>
+	<File name="BaseObject.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1309" topLine="35" />
+		</Cursor>
+	</File>
+	<File name="Player.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1145" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="Bomb.h" open="1" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="886" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Boss.h" open="1" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="645" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="game_map.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3587" topLine="77" />
+		</Cursor>
+	</File>
+	<File name="Menu.h" open="1" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1482" topLine="77" />
+		</Cursor>
+	</File>
+	<File name="CommonFunc.h" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1644" topLine="77" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

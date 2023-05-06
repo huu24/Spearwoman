@@ -76,7 +76,7 @@ public:
         ~Door();
 
         void set_clips();
-        void Check(SDL_Rect PlayerBox, int NumberOfKeys);
+        void Check(SDL_Rect PlayerBox, int NumberOfKeys, int EnemiesKilled);
         bool DoorOpen() {return open;}
         SDL_Rect GetDoorBox() {return DoorBox;}
         void RenderDoor(SDL_Renderer* screen, SDL_Texture* mDoorTexture, int camX, int camY);

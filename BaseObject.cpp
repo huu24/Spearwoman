@@ -38,6 +38,28 @@ void BaseObject::Render(SDL_Renderer* des, SDL_Rect* clip)
         SDL_RenderCopy(des, p_object_, clip, &renderquad);
 }
 
+void BaseObject::renderText(SDL_Renderer* screen, const char *text, TTF_Font *font, int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+        SDL_Color textColor = {r, g, b, a};
+        SDL_Surface *textSurface = TTF_RenderText_Solid(font, text, textColor);
+        if (textSurface == NULL)
+        {
+                printf("Failed to create text surface, error: %s\n", TTF_GetError());
+                return;
+        }
+        SDL_Texture *textTexture = SDL_CreateTextureFromSurface(screen, textSurface);
+        if (textTexture == NULL)
+        {
+                printf("Failed to create texture, error: %s\n", SDL_GetError());
+                return;
+        }
+        SDL_Rect textRect = {x, y, 0, 0};
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h); // lấy kích thước của texture
+        SDL_RenderCopy(screen, textTexture, NULL, &textRect);
+        SDL_FreeSurface(textSurface);
+        SDL_DestroyTexture(textTexture);
+}
+
 void BaseObject::Free()
 {
         if(p_object_ != NULL)

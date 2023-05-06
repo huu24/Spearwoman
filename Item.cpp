@@ -202,9 +202,9 @@ void Door::set_clips()
         x = 0;
 }
 
-void Door::Check(SDL_Rect PlayerBox, int NumberOfKeys)
+void Door::Check(SDL_Rect PlayerBox, int NumberOfKeys, int EnemiesKilled)
 {
-        if(BaseObject::CheckCollision(PlayerBox, DoorBox) && NumberOfKeys == 5)
+        if(BaseObject::CheckCollision(PlayerBox, DoorBox) && NumberOfKeys >= 3 && EnemiesKilled >= 77)
         {
                 open = true;
         }

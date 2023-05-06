@@ -4,29 +4,6 @@
 #include "CommonFunc.h"
 #include "BaseObject.h"
 
-class SharkAttack : public BaseObject
-{
-public:
-        SharkAttack();
-        ~SharkAttack();
-
-        void set_clips();
-        void Move();
-        void RenderSharkAttack(SDL_Renderer* screen, SDL_Texture* mSharkTexture, int camX, int camY, int TimesBossIsAttacked);
-private:
-        //srand(time(0));
-        const float SharkSpeed = 0.5;
-        const int SHARK_FRAMES = 18;
-        int frame;
-        int maxY, minY;
-        float xpos, ypos;
-
-        SDL_Rect Shark_clip[18];
-        SDL_Rect SharkBox;
-
-        SDL_RendererFlip FlipType;
-};
-
 class Boss : public BaseObject
 {
 public:

@@ -13,7 +13,8 @@ public:
         void set_clips();
         void CollisionWithMap(Map& map_data);
         void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
-        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y, Mix_Chunk *skeSound[]);
+        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox,
+                    bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y, Mix_Chunk *skeSound[], int& killed);
         void RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int map_x, int map_y);
         SDL_Rect GetSkeletonBox() {return SkeletonBox;}
         SDL_Rect GetSkeletonAttackBox() {return SkeletonAttackBox;}
@@ -53,7 +54,8 @@ public:
 
         void set_clips();
         void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int camX, int camY, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
-        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture,  SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int camX, int camY, Mix_Chunk *skeSound[]);
+        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture,  SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox,
+                     bool PlayerIsAttack, bool PlayerIsDead, int camX, int camY, Mix_Chunk *skeSound[], int& killed);
         void RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int camX, int camY);
         bool getAttackStatus();
 private:
