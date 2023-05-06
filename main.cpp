@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
                                         break;
                                 case GAME_OVER_MENU_STATE:
                                         while(SDL_PollEvent(&g_event))
-                                                game.HandleGameOverEvents(g_event);
-                                        game.RenderGameOverMenu();
+                                                game.HandleEndGameEvents(g_event);
+                                        game.RenderEndGameMenu();
                                         break;
                                 case GUIDE_STATE:
                                         while(SDL_PollEvent(&g_event))

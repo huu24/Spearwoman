@@ -3,10 +3,6 @@
 Game::Game()
 {
         GameState = -1;
-        InMenu = true;
-        InGame = false;
-        InGuide = false;
-        inEndGameMenu = false;
         GameState = MENU_STATE;
         running = true;
 }
@@ -216,32 +212,32 @@ bool Game::loadSound()
         }
 
         // skeleton
-        SkeletonSound[ATTACK_SOUND_] = Mix_LoadWAV("sounds/skeleton/sword-hit.mp3");
+        SkeletonSound[ATTACK_SOUND_] = Mix_LoadWAV("sounds/skeleton/sword-hit.wav");
         if(SkeletonSound[ATTACK_SOUND_] == NULL)
         {
                  printf("Failed to load skeleton attack sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
-        SkeletonSound[WALK_SOUND_] = Mix_LoadWAV("sounds/skeleton/Skeletonwalk.mp3");
+        SkeletonSound[WALK_SOUND_] = Mix_LoadWAV("sounds/skeleton/Skeletonwalk.wav");
         if(SkeletonSound[WALK_SOUND_] == NULL)
         {
                  printf("Failed to load skeleton walk sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
-        SkeletonSound[DEATH_SOUND_] = Mix_LoadWAV("sounds/skeleton/bone-crack.mp3");
+        SkeletonSound[DEATH_SOUND_] = Mix_LoadWAV("sounds/skeleton/bone-crack.wav");
         if(SkeletonSound[DEATH_SOUND_] == NULL)
         {
                  printf("Failed to load skeleton death sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
-        SkeletonSound[BOOM_SOUND_] = Mix_LoadWAV("sounds/skeleton/boom1.mp3");
+        SkeletonSound[BOOM_SOUND_] = Mix_LoadWAV("sounds/skeleton/boom1.wav");
         if(SkeletonSound[BOOM_SOUND_] == NULL)
         {
                  printf("Failed to load skeleton boom sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
         //boss sound
-        BossSound[Attack_Sound] = Mix_LoadWAV("sounds/boss/bossattack.mp3");
+        BossSound[Attack_Sound] = Mix_LoadWAV("sounds/boss/bossattack.wav");
         if (BossSound[Attack_Sound] == NULL)
         {
                 printf("Failed to load boss attack sound effect! SDL_mixer Error: %s\n", Mix_GetError());
@@ -267,10 +263,23 @@ bool Game::loadSound()
                 printf("Failed to load select button sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
-        OtherSound[BOOM_SOUND] = Mix_LoadWAV("sounds/other/boom1.mp3");
+        OtherSound[BOOM_SOUND] = Mix_LoadWAV("sounds/other/boom1.wav");
         if (OtherSound[BOOM_SOUND] == NULL)
         {
                 printf("Failed to load select button sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+                success = false;
+        }
+
+        GameSound = Mix_LoadMUS("sounds/gametheme.wav");
+        if(GameSound == NULL)
+        {
+                printf("Failed to load game sound! SDL_mixer Error: %s\n", Mix_GetError());
+                success = false;
+        }
+        MenuSound = Mix_LoadMUS("sounds/menutheme.wav");
+        if(MenuSound == NULL)
+        {
+                printf("Failed to load menu sound! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
 
@@ -381,11 +390,17 @@ bool Game::SetObject()
 
 void Game::HandleMenuEvents(SDL_Event &g_event)
 {
+        if(Mix_PlayingMusic() == 0)
+        {
+                Mix_PlayMusic(MenuSound, -1);
+                Mix_VolumeMusic(32);
+        }
         if(g_event.type == SDL_QUIT)
                 running = false;
         menu.Handle(g_event, GameState, OtherSound);
         if(GameState == PLAY_STATE)
         {
+                Mix_HaltMusic();
                 SetObject();
         }
 }
@@ -416,7 +431,7 @@ void Game::RenderPauseMenu()
         SDL_RenderPresent(g_screen);
 }
 
-void Game::HandleGameOverEvents(SDL_Event &g_event)
+void Game::HandleEndGameEvents(SDL_Event &g_event)
 {
         if(g_event.type == SDL_QUIT)
                 running = false;
@@ -427,7 +442,7 @@ void Game::HandleGameOverEvents(SDL_Event &g_event)
                 SetObject();
         }
 }
-void Game::RenderGameOverMenu()
+void Game::RenderEndGameMenu()
 {
         SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
         SDL_RenderClear(g_screen);
@@ -459,6 +474,11 @@ void Game::RenderGuideMenu()
 
 void Game::HandleGameEvents(SDL_Event &g_event)
 {
+        if(Mix_PlayingMusic() == 0)
+        {
+                Mix_PlayMusic(GameSound, -1);
+        }
+        Mix_VolumeMusic(64);
         if(g_event.type == SDL_QUIT)
                 running = false;
         MyPlayer.Handle(g_event, GameState, PlayerSound);

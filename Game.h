@@ -35,12 +35,12 @@ public:
         void HandleGameEvents(SDL_Event &g_event);
         void HandleMenuEvents(SDL_Event &g_event);
         void HandlePauseMenuEvents(SDL_Event &g_event);
-        void HandleGameOverEvents(SDL_Event &g_event);
+        void HandleEndGameEvents(SDL_Event &g_event);
         void HandleGuideMenuEvents(SDL_Event &g_event);
         void RenderGame();
         void RenderMenu();
         void RenderPauseMenu();
-        void RenderGameOverMenu();
+        void RenderEndGameMenu();
         void RenderGuideMenu();
         void close();
 
@@ -79,12 +79,10 @@ private:
         Mix_Chunk *SkeletonSound[TOTAL_SKELETON_SOUND];
         Mix_Chunk *OtherSound[TOTAL_OTHER_SOUND_EFFECT];
         Mix_Chunk *BossSound[Total_Boss_Sound_Effect];
+        Mix_Music *MenuSound;
+        Mix_Music *GameSound;
 
         int GameState;
-        bool InMenu;
-        bool InGame;
-        bool InGuide;
-        bool inEndGameMenu;
         bool running;
 };
 

@@ -10,7 +10,7 @@ public:
         Menu();
         ~Menu();
 
-        void Handle(SDL_Event events, int& state, Mix_Chunk *gSound[]);
+        void Handle(SDL_Event events, int& state, Mix_Chunk *mSound[]);
         void Render(SDL_Renderer* screen, SDL_Texture* mBGMenuTexture, SDL_Texture* mButtonTexture);
 
 private:
@@ -32,7 +32,7 @@ class EndGameMenu
 {
 public:
         EndGameMenu();
-        void Handle(SDL_Event events,int& state, Mix_Chunk *gSound[]);
+        void Handle(SDL_Event events,int& state, Mix_Chunk *eSound[]);
         void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
         bool GetRestart() {return restart;}
 private:
@@ -56,7 +56,7 @@ class PauseMenu
 {
 public:
         PauseMenu();
-        void Handle(SDL_Event events,int& state, Mix_Chunk *gSound[]);
+        void Handle(SDL_Event events,int& state, Mix_Chunk *pSound[]);
         void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
         bool GetRestart() {return restart;}
 private:

@@ -8,7 +8,6 @@ Menu::Menu()
                 ButtonBox[i]= {0, y, 319, 73};
                 y += 73;
         }
-        int x = 0;
         for(int i = 0; i < TOTAL_BUTTONS; i++)
         {
                 ButtonClip[i][0] = {0, 73*i, 319, 73};
@@ -22,7 +21,7 @@ Menu::~Menu()
 
 }
 
-void Menu::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
+void Menu::Handle(SDL_Event events, int& state, Mix_Chunk *mSound[])
 {
         if(events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEMOTION)
         {
@@ -44,7 +43,7 @@ void Menu::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
                                 switch(events.type)
                                 {
                                 case SDL_MOUSEBUTTONDOWN:
-                                        Mix_PlayChannel(-1, gSound[SELECT_BUTTON_SOUND], 0);
+                                        Mix_PlayChannel(-1, mSound[SELECT_BUTTON_SOUND], 0);
                                         if(i == PLAY)
                                         {
                                                 state = PLAY_STATE;
@@ -100,7 +99,7 @@ EndGameMenu::EndGameMenu()
         }
 }
 
-void EndGameMenu::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
+void EndGameMenu::Handle(SDL_Event events, int& state, Mix_Chunk *eSound[])
 {
         if(events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEMOTION)
         {
@@ -122,7 +121,7 @@ void EndGameMenu::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
                                 switch(events.type)
                                 {
                                 case SDL_MOUSEBUTTONDOWN:
-                                        Mix_PlayChannel(-1, gSound[SELECT_BUTTON_SOUND], 0);
+                                        Mix_PlayChannel(-1, eSound[SELECT_BUTTON_SOUND], 0);
                                         if(i == PLAY_AGAIN)
                                         {
                                                 state = AGAIN_STATE;
@@ -174,7 +173,7 @@ PauseMenu::PauseMenu()
         }
 }
 
-void PauseMenu::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
+void PauseMenu::Handle(SDL_Event events, int& state, Mix_Chunk *pSound[])
 {
         if(events.type == SDL_MOUSEBUTTONDOWN || events.type == SDL_MOUSEMOTION)
         {
@@ -196,7 +195,7 @@ void PauseMenu::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
                                 switch(events.type)
                                 {
                                 case SDL_MOUSEBUTTONDOWN:
-                                        Mix_PlayChannel(-1, gSound[SELECT_BUTTON_SOUND], 0);
+                                        Mix_PlayChannel(-1, pSound[SELECT_BUTTON_SOUND], 0);
                                         if(i == Play_Again)
                                         {
                                                 state = AGAIN_STATE;

@@ -13,7 +13,7 @@ public:
         void set_clips();
         void CollisionWithMap(Map& map_data);
         void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int map_x, int map_y, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
-        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y, Mix_Chunk *sound[]);
+        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture, SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int map_x, int map_y, Mix_Chunk *skeSound[]);
         void RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int map_x, int map_y);
         SDL_Rect GetSkeletonBox() {return SkeletonBox;}
         SDL_Rect GetSkeletonAttackBox() {return SkeletonAttackBox;}
@@ -39,7 +39,7 @@ private:
         int HP;
         float VelX, VelY;
         float x_pos, max_x, min_x, y_pos, max_y, min_y;
-        int attack_frame, idle_frame, run_frame, takehit_frame, death_frame;
+        int attack_frame, idle_frame, walk_frame, takehit_frame, death_frame;
         bool isWalking, isAttacking, isDead, isIdling, isAttacked, attack;
 
         SDL_RendererFlip FlipType;
@@ -53,7 +53,7 @@ public:
 
         void set_clips();
         void Move(SDL_Rect PlayerBox ,SDL_Rect PlayerAttackBox, int camX, int camY, Map& map_data, bool PlayerIsDead, bool PlayerIsAttack);
-        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture,  SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int camX, int camY, Mix_Chunk *sound[]);
+        void Render(SDL_Renderer* screen, SDL_Texture* SkeTexture,  SDL_Rect PlayerBox,  SDL_Rect PlayerAttackBox, bool PlayerIsAttack, bool PlayerIsDead, int camX, int camY, Mix_Chunk *skeSound[]);
         void RenderHP(SDL_Renderer* screen, SDL_Texture* SkeletonTexture, int camX, int camY);
         bool getAttackStatus();
 private:

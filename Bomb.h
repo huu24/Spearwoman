@@ -10,7 +10,7 @@ public:
         Bomb(int x, int y);
         ~Bomb();
         void set_clips();
-        void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *sound[]);
+        void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *bombSound[]);
         bool getBombStatus() {return bomb;}
 private:
         int bomb_x, bomb_y;
@@ -28,11 +28,11 @@ public:
         ~BombList();
 
         void set_clips();
-        void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *sound[]);
+        void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *bombSound[]);
         bool getBombStatus();
 
 private:
-        int TOTAL_BOMB = 100;
+        int TOTAL_BOMB = 111;
         vector<Bomb> bomblist;
 };
 
