@@ -102,12 +102,7 @@ bool Game::LoadImage()
                 cout << "can not load boss image!\n";
                 return false;
         }
-        bool res6 = SharkTexture.LoadImg("image\\Game\\SharkAttack.png", g_screen);
-        if(res6 == false)
-        {
-                cout << "can not load shark image!\n";
-                return false;
-        }
+
         bool res7 = KeyTexture.LoadImg("image\\Game\\key-blue.png", g_screen);
         if(res7 == false)
         {
@@ -231,7 +226,7 @@ bool Game::loadSound()
                  printf("Failed to load skeleton death sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
-        SkeletonSound[BOOM_SOUND_] = Mix_LoadWAV("sounds/skeleton/boom1.wav");
+        SkeletonSound[BOOM_SOUND_] = Mix_LoadWAV("sounds/skeleton/boom1.mp3");
         if(SkeletonSound[BOOM_SOUND_] == NULL)
         {
                  printf("Failed to load skeleton boom sound effect! SDL_mixer Error: %s\n", Mix_GetError());
@@ -264,7 +259,7 @@ bool Game::loadSound()
                 printf("Failed to load select button sound effect! SDL_mixer Error: %s\n", Mix_GetError());
                 success = false;
         }
-        OtherSound[BOOM_SOUND] = Mix_LoadWAV("sounds/other/boom1.wav");
+        OtherSound[BOOM_SOUND] = Mix_LoadWAV("sounds/other/boom1.mp3");
         if (OtherSound[BOOM_SOUND] == NULL)
         {
                 printf("Failed to load select button sound effect! SDL_mixer Error: %s\n", Mix_GetError());
@@ -400,7 +395,7 @@ void Game::HandleMenuEvents(SDL_Event &g_event)
         if(Mix_PlayingMusic() == 0)
         {
                 Mix_PlayMusic(GameSound, -1);
-                Mix_VolumeMusic(32);
+                Mix_VolumeMusic(48);
         }
         if(g_event.type == SDL_QUIT)
                 running = false;
@@ -531,7 +526,6 @@ void Game::close()
         BombTexture.Free();
         PlayerTexture.Free();
         BossTexture.Free();
-        SharkTexture.Free();
         BGMenuTexture.Free();
         ButtonTexture.Free();
         KeyTexture.Free();

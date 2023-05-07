@@ -18,7 +18,6 @@ private:
         {
                 PLAY, GUIDE, QUIT, TOTAL_BUTTONS
         };
-//        SDL_Rect BackGroundTexture;
         SDL_Rect ButtonBox[TOTAL_BUTTONS];
         SDL_Rect Button[TOTAL_BUTTONS];
         SDL_Rect ButtonClip[TOTAL_BUTTONS][2];
@@ -34,7 +33,6 @@ public:
         EndGameMenu();
         void Handle(SDL_Event events,int& state, Mix_Chunk *eSound[]);
         void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
-        bool GetRestart() {return restart;}
 private:
         enum Button
         {
@@ -49,7 +47,6 @@ private:
        bool mouseOver[TOTAL_BUTTON];
        int Button_Width = 160;
        int Button_Height = 160;
-       bool restart;
 };
 
 class PauseMenu
@@ -58,7 +55,6 @@ public:
         PauseMenu();
         void Handle(SDL_Event events,int& state, Mix_Chunk *pSound[]);
         void Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture);
-        bool GetRestart() {return restart;}
 private:
         enum Button
         {
@@ -74,7 +70,6 @@ private:
        bool mouseOver[Total_Button];
        int Button_Width = 160;
        int Button_Height = 160;
-       bool restart;
 };
 
 class Guide

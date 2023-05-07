@@ -68,14 +68,11 @@ void Menu::Handle(SDL_Event events, int& state, Mix_Chunk *mSound[])
         }
 }
 
-//245
 
 void Menu::Render(SDL_Renderer* screen, SDL_Texture* mBGMenuTexture, SDL_Texture* mButtonTexture)
 {
-//        if(mBGMenuTexture == NULL || mButtonTexture == NULL) cout << "fuck you\n";
-        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
         SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
-        SDL_RenderCopyEx(screen, mBGMenuTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(screen, mBGMenuTexture, NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
 
         for(int i = 0; i < TOTAL_BUTTONS; i++)
         {
@@ -125,7 +122,6 @@ void EndGameMenu::Handle(SDL_Event events, int& state, Mix_Chunk *eSound[])
                                         if(i == PLAY_AGAIN)
                                         {
                                                 state = AGAIN_STATE;
-                                                restart = true;
                                         }
                                         if(i == HOME)
                                         {
@@ -145,10 +141,8 @@ void EndGameMenu::Handle(SDL_Event events, int& state, Mix_Chunk *eSound[])
 
 void EndGameMenu::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture)
 {
-//        if(mBGMenuTexture == NULL || mButtonTexture == NULL) cout << "fuck you\n";
-        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
         SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
-        SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(screen, BGTexture, NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
 
         for(int i = 0; i < TOTAL_BUTTON; i++)
         {
@@ -199,7 +193,6 @@ void PauseMenu::Handle(SDL_Event events, int& state, Mix_Chunk *pSound[])
                                         if(i == Play_Again)
                                         {
                                                 state = AGAIN_STATE;
-                                                restart = true;
                                         }
                                         if(i == Resume)
                                         {
@@ -223,10 +216,8 @@ void PauseMenu::Handle(SDL_Event events, int& state, Mix_Chunk *pSound[])
 
 void PauseMenu::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture)
 {
-//        if(mBGMenuTexture == NULL || mButtonTexture == NULL) cout << "fuck you\n";
-        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
         SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
-        SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(screen, BGTexture, NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
 
         for(int i = 0; i < Total_Button; i++)
         {
@@ -277,10 +268,8 @@ void Guide::Handle(SDL_Event events, int& state, Mix_Chunk *gSound[])
 
 void Guide::Render(SDL_Renderer* screen, SDL_Texture* BGTexture, SDL_Texture* ButtonTexture)
 {
-//        if(ButtonTexture != NULL) cout << "fuck you\n";
-        SDL_Rect current_clip1 = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
         SDL_Rect renderQuad1 = {0, 0, SCREEN_WIDTH , SCREEN_HEIGHT};
-        SDL_RenderCopyEx(screen, BGTexture, &current_clip1, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(screen, BGTexture, NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
 
         SDL_Rect* current_clip2 = &button_clip[mouseOver];
         SDL_Rect renderQuad2 = {backButtonBox.x, backButtonBox.y, Button_Width , Button_Height};

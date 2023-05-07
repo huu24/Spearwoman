@@ -2,8 +2,8 @@
 
 Bomb::Bomb(int x, int y)
 {
-        bomb_x = x;
-        bomb_y = y;
+        BombBox.x = x;
+        BombBox.y = y;
         bomb_frame = 0;
         bomb = collide = false;
 }
@@ -22,8 +22,6 @@ void Bomb::set_clips()
                 x += 80*2;
         }
         x = 0;
-        BombBox.x = bomb_x;
-        BombBox.y = bomb_y;
         BombBox.w = 80;
         BombBox.h = 64;
 }

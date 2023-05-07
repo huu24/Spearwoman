@@ -13,13 +13,13 @@ BaseObject::~BaseObject()
         Free();
 }
 
-bool BaseObject::LoadImg(std::string path, SDL_Renderer* screen)
+bool BaseObject::LoadImg(string path, SDL_Renderer* screen)
 {
         SDL_Texture* new_texture = NULL;
         SDL_Surface* load_surface = IMG_Load(path.c_str());
         if(load_surface != NULL)
         {
-                SDL_SetColorKey(load_surface, SDL_TRUE, SDL_MapRGB(load_surface->format, 7, 7, 7));
+                SDL_SetColorKey(load_surface, SDL_TRUE, SDL_MapRGB(load_surface->format, 10, 10, 10));
                 new_texture = SDL_CreateTextureFromSurface(screen, load_surface);
                 if(new_texture != NULL)
                 {
@@ -73,11 +73,40 @@ void BaseObject::Free()
 
 bool BaseObject::CheckCollision(SDL_Rect& a, SDL_Rect& b)
 {
-        int x, y, u, v;
-        x = max(a.x, b.x);
-        y = max(a.y, b.y);
-        u = min(a.x + a.w, b.x + b.w);
-        v = min(a.y + a.h, b.y + b.h);
-        if (x < u && y < v) return true;
-        return false;
+        int leftA, leftB;
+        int rightA, rightB;
+        int topA, topB;
+        int bottomA, bottomB;
+
+        leftA = a.x;
+        rightA = a.x + a.w;
+        topA = a.y;
+        bottomA = a.y + a.h;
+
+        leftB = b.x;
+        rightB = b.x + b.w;
+        topB = b.y;
+        bottomB = b.y + b.h;
+
+        if( bottomA <= topB )
+        {
+                return false;
+        }
+
+        if( topA >= bottomB )
+        {
+                return false;
+        }
+
+        if( rightA <= leftB )
+        {
+                return false;
+        }
+
+        if( leftA >= rightB )
+        {
+                return false;
+        }
+
+    return true;
 }

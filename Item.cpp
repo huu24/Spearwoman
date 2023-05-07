@@ -131,10 +131,9 @@ void HP::RenderHP(SDL_Renderer* screen, SDL_Texture* mHPTexture, int camX, int c
                 HpBox.x = HpBox.y = HpBox.w = HpBox.h = 0;
                 return;
         }
-        SDL_Rect current_clip = {0, 0, 40, 52};
 
         SDL_Rect renderQuad = {HpBox.x - camX, HpBox.y - camY, HpBox.w , HpBox.h };
-        SDL_RenderCopyEx(screen, mHPTexture, &current_clip, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(screen, mHPTexture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }
 
 AllHps::AllHps()

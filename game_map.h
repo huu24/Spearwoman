@@ -6,11 +6,11 @@
 
 #define MAX_TILES 20
 
-class TileMat :  public BaseObject
+class TileMap :  public BaseObject
 {
 public:
-        TileMat() {;};
-        ~TileMat() {;}
+        TileMap() {;};
+        ~TileMap() {;}
 };
 
 class GameMap
@@ -27,7 +27,7 @@ public:
 
 private:
         Map game_map_;
-        TileMat tile_mat[MAX_TILES];
+        TileMap tile_map[MAX_TILES];
         SDL_Rect TileBox;
 };
 

@@ -161,10 +161,8 @@ void Skeleton::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int camX, int 
                 isWalking = false;
                 return;
         }
-        SkeletonBox.x = x_pos;
-        SkeletonBox.y = y_pos;
 
-        if(PlayerBox.x > SkeletonBox.x)
+        if(PlayerBox.x > x_pos)
         {
                 if(FlipType == SDL_FLIP_HORIZONTAL) FlipType = SDL_FLIP_NONE;
         }
@@ -173,7 +171,7 @@ void Skeleton::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int camX, int 
                 if(FlipType == SDL_FLIP_NONE) FlipType = SDL_FLIP_HORIZONTAL;
         }
 
-        if(SkeletonBox.x <= min_x || SkeletonBox.x >= max_x)
+        if(x_pos <= min_x || x_pos >= max_x)
         {
                 VelX = 0;
         }
@@ -181,7 +179,7 @@ void Skeleton::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int camX, int 
         {
                 if(FlipType == SDL_FLIP_NONE)
                 {
-                        if(SkeletonBox.x  + SkeletonBox.w <= PlayerBox.x)
+                        if(x_pos  + SkeletonBox.w <= PlayerBox.x)
                         {
                                 VelX = DemonSpeed;
                         }
@@ -189,7 +187,7 @@ void Skeleton::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int camX, int 
                 }
                 else
                 {
-                        if(SkeletonBox.x >= PlayerBox.x + PlayerBox.w)
+                        if(x_pos >= PlayerBox.x + PlayerBox.w)
                         {
                                 VelX = -DemonSpeed;
                         }
@@ -200,17 +198,17 @@ void Skeleton::Move(SDL_Rect PlayerBox, SDL_Rect PlayerAttackBox, int camX, int 
                         VelX = 0;
                 }
         }
-        if(SkeletonBox.y <= min_y || SkeletonBox.y >= max_y)
+        if(y_pos <= min_y || y_pos >= max_y)
         {
                 VelY = 0;
         }
         else
         {
-                if(SkeletonBox.y  + SkeletonBox.h < PlayerBox.y + PlayerBox.h)
+                if(y_pos  + SkeletonBox.h < PlayerBox.y + PlayerBox.h)
                 {
                         VelY = DemonSpeed;
                 }
-                else if(SkeletonBox.y  + SkeletonBox.h > PlayerBox.y + PlayerBox.h)
+                else if(y_pos  + SkeletonBox.h > PlayerBox.y + PlayerBox.h)
                 {
                         VelY = - DemonSpeed;
                 }
@@ -239,9 +237,6 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
 
         SkeletonBox.x = x_pos;
         SkeletonBox.y = y_pos;
-
-        SkeletonAttackBox.x = x_pos;
-        SkeletonAttackBox.y = y_pos;
 
         if(isDead)
         {
@@ -313,10 +308,7 @@ void Skeleton::Render(SDL_Renderer* screen, SDL_Texture* SkeTexture ,SDL_Rect Pl
         {
                 current_clip = &Walk_clip[walk_frame / 10];
                 current_frame = WALK_FRAMES;
-//                if(walk_frame == 0)
-//                {
-//                        Mix_PlayChannel(-1, skeSound[WALK_SOUND_], 0);
-//                }
+
                 walk_frame++;
                 if(walk_frame >= current_frame * 10) walk_frame = 0;
                 SkeletonBox.w = current_clip->w / 2;

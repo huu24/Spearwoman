@@ -13,7 +13,6 @@ public:
         void RenderBomb(SDL_Renderer* screen, SDL_Texture* BombTexture, SDL_Rect PlayerBox, int camX, int camY, Mix_Chunk *bombSound[]);
         bool getBombStatus() {return bomb;}
 private:
-        int bomb_x, bomb_y;
         int BOMB_FRAMES = 14;
         int bomb_frame;
         SDL_Rect Bomb_clip[14];

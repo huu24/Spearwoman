@@ -30,7 +30,7 @@ static SDL_Event g_event;
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 640;
 
-const int COLOR_KEY_R = 0;
+const int COLOR_KEY_R = 9;
 const int COLOR_KEY_G = 0;
 const int COLOR_KEY_B = 0;
 
@@ -98,13 +98,12 @@ struct Map
         int max_y_;
 
         int TileType[MAX_MAP_Y][MAX_MAP_X];
-        string file_name_;
 
 };
 
 struct Input
 {
-        bool left, right, up, down,  attack1, attack2, attack3, take_hit, death;
+        bool left, right, up, down,  attack1, attack2;
 };
 
 #endif // COMMON_FUNCTION_H_

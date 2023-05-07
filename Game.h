@@ -25,7 +25,6 @@ public:
         bool SetPlayer();
         bool SetSkeleton();
         bool SetBoss();
-        bool SetSharkAttack();
         bool SetBomb();
         bool SetKey();
         bool SetHP();
@@ -52,7 +51,6 @@ private:
         BaseObject BombTexture;
         BaseObject PlayerTexture;
         BaseObject BossTexture;
-        BaseObject SharkTexture;
         BaseObject BGMenuTexture;
         BaseObject ButtonTexture;
         BaseObject KeyTexture;

@@ -39,7 +39,7 @@ private:
         SDL_Rect HpBox;
 
         int idle_frame, run_frame, attack_frame, takehit_frame, death_frame;
-        bool isRunning, isAttacking, isIdling, isTakinghit, isAttacked, isDead, causeDamage, cantAttacked, renderHP;
+        bool isRunning, isAttacking, isIdling, isTakinghit, isAttacked, isDead, causeDamage, cantAttacked;
 
         SDL_RendererFlip FlipType;
 };
